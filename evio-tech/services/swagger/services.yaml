@@ -1,0 +1,182 @@
+openapi: 3.0.0
+info:
+  title: Evio-Tech - Services Module API
+  version: 1.0.0
+  description: Universal services catalog with company tier pricing (segmented routes)
+servers:
+  - url: http://localhost:4000
+tags:
+  - name: Company
+    description: Endpoints for companies (B2B)
+  - name: Consumer
+    description: Read-only endpoints for end customers
+
+paths:
+  /api/v1/company/services:
+    post:
+      tags: [Company]
+      summary: Create a new universal service definition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+  /api/v1/company/services/{serviceId}:
+    put:
+      tags: [Company]
+      summary: Update an existing service (admin/company)
+      parameters:
+        - name: serviceId
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceUpdate'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+    delete:
+      tags: [Company]
+      summary: Disable a service
+      parameters:
+        - name: serviceId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '204':
+          description: Deleted
+
+  /api/v1/consumer/services:
+    get:
+      tags: [Consumer]
+      summary: List public services
+      parameters:
+        - in: query
+          name: category
+          schema: { type: string }
+        - in: query
+          name: q
+          schema: { type: string }
+        - in: query
+          name: page
+          schema: { type: integer }
+        - in: query
+          name: limit
+          schema: { type: integer }
+      responses:
+        '200':
+          description: List of services
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServiceList'
+
+  /api/v1/consumer/services/{serviceId}:
+    get:
+      tags: [Consumer]
+      summary: Get service details
+      parameters:
+        - name: serviceId
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Service details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Service'
+
+components:
+  schemas:
+    Tier:
+      type: object
+      properties:
+        name: { type: string, example: "Basic" }
+        description: { type: string }
+        durationMinutes: { type: integer, example: 60 }
+    CompanyTierPrice:
+      type: object
+      properties:
+        companyId: { type: string }
+        tiers:
+          type: array
+          items:
+            type: object
+            properties:
+              tierName: { type: string }
+              priceCents: { type: integer }
+              meta: { type: object }
+
+    Service:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        categoryId: { type: string }
+        description: { type: string }
+        baseTiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tier'
+        globalBasePriceCents: { type: integer }
+        globalTags:
+          type: array
+          items: { type: string }
+        companyPricing:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyTierPrice'
+        sla: { type: object }
+        active: { type: boolean }
+
+    ServiceCreate:
+      type: object
+      required: [name, categoryId]
+      properties:
+        name: { type: string }
+        categoryId: { type: string }
+        description: { type: string }
+        baseTiers:
+          type: array
+          items: { $ref: '#/components/schemas/Tier' }
+        globalBasePriceCents: { type: integer }
+        globalTags: { type: array, items: { type: string } }
+
+    ServiceUpdate:
+      type: object
+      properties:
+        name: { type: string }
+        description: { type: string }
+        baseTiers:
+          type: array
+          items: { $ref: '#/components/schemas/Tier' }
+        globalBasePriceCents: { type: integer }
+        globalTags: { type: array, items: { type: string } }
+        active: { type: boolean }
+
+    ServiceList:
+      type: object
+      properties:
+        total: { type: integer }
+        items:
+          type: array
+          items: { $ref: '#/components/schemas/Service' }
