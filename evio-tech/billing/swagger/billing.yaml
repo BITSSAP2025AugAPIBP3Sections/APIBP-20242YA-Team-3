@@ -1,0 +1,86 @@
+openapi: 3.0.3
+info:
+  title: Evio-Tech Billing API
+  version: 1.0.0
+servers:
+  - url: https://billing.evio.tech/v1
+paths:
+  /bills:
+    post:
+      summary: Create invoice for booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillCreate'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+  /bills/{billId}:
+    parameters:
+      - in: path
+        name: billId
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get bill by id
+      responses:
+        '200':
+          description: Bill retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bill'
+  /bills/{billId}/send:
+    post:
+      summary: Send invoice to customer (email/SMS)
+      responses:
+        '200':
+          description: Sent
+components:
+  schemas:
+    BillCreate:
+      type: object
+      required:
+        - bookingId
+      properties:
+        bookingId:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              description:
+                type: string
+              amountCents:
+                type: integer
+        taxCents:
+          type: integer
+        discountCents:
+          type: integer
+    Bill:
+      type: object
+      properties:
+        id:
+          type: string
+        bookingId:
+          type: string
+        totalAmountCents:
+          type: integer
+        status:
+          type: string
+          enum:
+            - DRAFT
+            - PENDING
+            - PAID
+            - CANCELLED
+        createdAt:
+          type: string
+          format: date-time

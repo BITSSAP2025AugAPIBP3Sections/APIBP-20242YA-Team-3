@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  billing:
+    build: .
+    ports:
+      - "4000:4000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/billing
+      - PORT=4000
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:5.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/db:/data/db
+
