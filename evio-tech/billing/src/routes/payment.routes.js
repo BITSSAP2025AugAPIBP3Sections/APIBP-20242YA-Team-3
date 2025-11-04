@@ -9,7 +9,7 @@ router.put('/:id', paymentController.update);
 router.delete('/:id', paymentController.delete);
 
 module.exports = router;
-MONGO_URI=mongodb://localhost:27017/billing
-PORT=4000
-LOG_LEVEL=info
+// MONGO_URI=mongodb;//localhost:27017/billing
+//PORT=4000
+//LOG_LEVEL=info
 
