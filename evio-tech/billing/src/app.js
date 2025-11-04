@@ -1,3 +1,5 @@
+require('dotenv').config({ path: '.env.billing' });
+
 const express = require('express');
 const dotenv = require('dotenv');
 const pino = require('pino');
@@ -21,7 +23,8 @@ app.get('/health', (req, res) => res.json({ status: 'ok' }));
 app.use('/invoices', invoiceRoutes);
 app.use('/payments', paymentRoutes);
 
-const swaggerFile = fs.readFileSync(path.join(__dirname, '../../swagger/billing.yaml'), 'utf8');
+const swaggerFile = fs.readFileSync(path.join(__dirname, '../swagger/billing.yaml'), 'utf8');
+
 const swaggerDocument = require('js-yaml').load(swaggerFile);
 app.use('/api-docs/billing', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
