@@ -1,0 +1,343 @@
+openapi: 3.0.0
+info:
+  title: EVIO Authentication & Identity Service
+  description: API documentation for user authentication, company registration, and KYC verification
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local development server
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    UserRegistration:
+      type: object
+      required:
+        - email
+        - password
+        - firstName
+        - lastName
+        - phone
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+        firstName:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+
+    CompanyRegistration:
+      type: object
+      required:
+        - name
+        - email
+        - password
+        - businessType
+        - registrationNumber
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+        businessType:
+          type: string
+          enum: [individual, corporation, partnership, llc]
+        registrationNumber:
+          type: string
+        address:
+          type: object
+          properties:
+            street:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            postalCode:
+              type: string
+            country:
+              type: string
+        contactPerson:
+          type: object
+          properties:
+            firstName:
+              type: string
+            lastName:
+              type: string
+            position:
+              type: string
+            phone:
+              type: string
+            email:
+              type: string
+
+    Login:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+
+    PasswordReset:
+      type: object
+      required:
+        - email
+        - type
+      properties:
+        email:
+          type: string
+          format: email
+        type:
+          type: string
+          enum: [user, company]
+
+    KYCVerification:
+      type: object
+      required:
+        - verificationType
+      properties:
+        verificationType:
+          type: string
+          enum: [identity, address, business, professional]
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+        requestId:
+          type: string
+
+paths:
+  /auth/users/register:
+    post:
+      summary: Register a new user
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistration'
+      responses:
+        201:
+          description: User registered successfully
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/users/login:
+    post:
+      summary: User login
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        200:
+          description: Login successful
+        401:
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/companies/register:
+    post:
+      summary: Register a new company
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyRegistration'
+      responses:
+        201:
+          description: Company registered successfully
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/companies/login:
+    post:
+      summary: Company login
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        200:
+          description: Login successful
+        401:
+          description: Authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/password-reset:
+    post:
+      summary: Request password reset
+      tags: [Authentication]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordReset'
+      responses:
+        200:
+          description: Password reset email sent
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /kyc/initiate:
+    post:
+      summary: Initiate KYC verification
+      tags: [KYC]
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KYCVerification'
+      responses:
+        201:
+          description: KYC verification initiated
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /kyc/upload/{verificationId}:
+    post:
+      summary: Upload KYC documents
+      tags: [KYC]
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: verificationId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                documents:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        200:
+          description: Documents uploaded successfully
+        400:
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /kyc/status:
+    get:
+      summary: Get KYC verification status
+      tags: [KYC]
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: KYC status retrieved successfully
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /kyc/pending:
+    get:
+      summary: List pending KYC verifications
+      tags: [KYC]
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+            enum: [pending, in-progress]
+      responses:
+        200:
+          description: Pending verifications retrieved successfully
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: Forbidden - Admin access required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
