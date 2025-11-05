@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "address": "123 Main Street, Apt 4B, New York, NY 10001",
+    "email": "john.doe@email.com",
+    "phone": "+1-555-123-4567",
+    "password": "password1"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "address": "456 Park Avenue, Suite 201, Boston, MA 02108",
+    "email": "jane.smith@email.com",
+    "phone": "+1-555-234-5678",
+    "password": "password2"
+  },
+  {
+    "id": 3,
+    "name": "Robert Johnson",
+    "address": "789 Oak Road, San Francisco, CA 94105",
+    "email": "robert.j@email.com",
+    "phone": "+1-555-345-6789",
+    "password": "password3"
+  },
+  {
+    "id": 4,
+    "name": "Sarah Williams",
+    "address": "321 Pine Street, Chicago, IL 60601",
+    "email": "sarah.w@email.com",
+    "phone": "+1-555-456-7890",
+    "password": "password4"
+  },
+  {
+    "id": 5,
+    "name": "Michael Brown",
+    "address": "654 Maple Avenue, Seattle, WA 98101",
+    "email": "michael.b@email.com",
+    "phone": "+1-555-567-8901",
+    "password": "password5"
+  }
+]

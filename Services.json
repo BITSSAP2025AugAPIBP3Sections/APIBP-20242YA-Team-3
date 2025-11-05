@@ -1,0 +1,225 @@
+{
+  "services": [
+    {
+      "id": 1,
+      "category": "Home Maintenance & Repairs",
+      "subServices": [
+        {
+          "id": 101,
+          "name": "Plumbing",
+          "services": [
+            {
+              "id": 1011,
+              "name": "Pipe leakage repair",
+              "pricePerHour": 25
+            },
+            {
+              "id": 1012,
+              "name": "Tap & faucet installation",
+              "pricePerHour": 20
+            },
+            {
+              "id": 1013,
+              "name": "Bathroom fitting & fixtures",
+              "pricePerHour": 30
+            },
+            {
+              "id": 1014,
+              "name": "Water tank cleaning",
+              "pricePerHour": 18
+            },
+            {
+              "id": 1015,
+              "name": "Drainage unclogging",
+              "pricePerHour": 22
+            }
+          ]
+        },
+        {
+          "id": 102,
+          "name": "Electrical",
+          "services": [
+            {
+              "id": 1021,
+              "name": "Fan/light installation",
+              "pricePerHour": 20
+            },
+            {
+              "id": 1022,
+              "name": "Switch & wiring repair",
+              "pricePerHour": 25
+            },
+            {
+              "id": 1023,
+              "name": "Inverter installation",
+              "pricePerHour": 35
+            },
+            {
+              "id": 1024,
+              "name": "Circuit breaker repair",
+              "pricePerHour": 30
+            }
+          ]
+        },
+        {
+          "id": 103,
+          "name": "Carpentry",
+          "services": [
+            {
+              "id": 1031,
+              "name": "Furniture assembly",
+              "pricePerHour": 18
+            },
+            {
+              "id": 1032,
+              "name": "Wooden door/window repair",
+              "pricePerHour": 22
+            },
+            {
+              "id": 1033,
+              "name": "Modular kitchen setup",
+              "pricePerHour": 40
+            }
+          ]
+        },
+        {
+          "id": 104,
+          "name": "Appliance Repair",
+          "services": [
+            {
+              "id": 1041,
+              "name": "AC servicing",
+              "pricePerHour": 30
+            },
+            {
+              "id": 1042,
+              "name": "Refrigerator repair",
+              "pricePerHour": 28
+            },
+            {
+              "id": 1043,
+              "name": "Washing machine repair",
+              "pricePerHour": 26
+            },
+            {
+              "id": 1044,
+              "name": "Water purifier servicing",
+              "pricePerHour": 20
+            }
+          ]
+        },
+        {
+          "id": 105,
+          "name": "Painting & Renovation",
+          "services": [
+            {
+              "id": 1051,
+              "name": "Interior painting",
+              "pricePerHour": 22
+            },
+            {
+              "id": 1052,
+              "name": "Exterior painting",
+              "pricePerHour": 25
+            },
+            {
+              "id": 1053,
+              "name": "Wallpaper installation",
+              "pricePerHour": 20
+            }
+          ]
+        },
+        {
+          "id": 106,
+          "name": "Pest Control",
+          "services": [
+            {
+              "id": 1061,
+              "name": "Termite treatment",
+              "pricePerHour": 40
+            },
+            {
+              "id": 1062,
+              "name": "Mosquito control",
+              "pricePerHour": 18
+            },
+            {
+              "id": 1063,
+              "name": "Rodent control",
+              "pricePerHour": 25
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "category": "Personal Care & Wellness",
+      "subServices": [
+        {
+          "id": 201,
+          "name": "Salon Services",
+          "services": [
+            {
+              "id": 2011,
+              "name": "Haircut & styling",
+              "pricePerHour": 20
+            },
+            {
+              "id": 2012,
+              "name": "Manicure/pedicure",
+              "pricePerHour": 18
+            },
+            {
+              "id": 2013,
+              "name": "Makeup services",
+              "pricePerHour": 35
+            }
+          ]
+        },
+        {
+          "id": 202,
+          "name": "Spa & Massage",
+          "services": [
+            {
+              "id": 2021,
+              "name": "Full body massage",
+              "pricePerHour": 40
+            },
+            {
+              "id": 2022,
+              "name": "Aromatherapy",
+              "pricePerHour": 45
+            },
+            {
+              "id": 2023,
+              "name": "Stress-relief therapy",
+              "pricePerHour": 38
+            }
+          ]
+        },
+        {
+          "id": 203,
+          "name": "Fitness & Wellness",
+          "services": [
+            {
+              "id": 2031,
+              "name": "Personal training",
+              "pricePerHour": 35
+            },
+            {
+              "id": 2032,
+              "name": "Yoga classes",
+              "pricePerHour": 25
+            },
+            {
+              "id": 2033,
+              "name": "Diet consultation",
+              "pricePerHour": 30
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

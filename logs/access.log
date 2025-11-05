@@ -1,0 +1,2 @@
+[2025-11-04T20:11:05.442] [INFO] access - Server is running on http://localhost:3000
+[2025-11-04T20:11:25.468] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 200 5251 "" "curl/8.7.1"

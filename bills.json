@@ -1,0 +1,119 @@
+[
+  {
+    "id": 1,
+    "serviceId": 1011,
+    "tenantId": 1,
+    "billAmount": 75,
+    "date": "2025-11-01",
+    "hours": 3,
+    "status": "paid"
+  },
+  {
+    "id": 2,
+    "serviceId": 1021,
+    "tenantId": 1,
+    "billAmount": 40,
+    "date": "2025-11-01",
+    "hours": 2,
+    "status": "pending"
+  },
+  {
+    "id": 3,
+    "serviceId": 1041,
+    "tenantId": 2,
+    "billAmount": 90,
+    "date": "2025-11-01",
+    "hours": 3,
+    "status": "paid"
+  },
+  {
+    "id": 4,
+    "serviceId": 2021,
+    "tenantId": 3,
+    "billAmount": 120,
+    "date": "2025-11-01",
+    "hours": 3,
+    "status": "paid"
+  },
+  {
+    "id": 5,
+    "serviceId": 1051,
+    "tenantId": 4,
+    "billAmount": 176,
+    "date": "2025-11-01",
+    "hours": 8,
+    "status": "pending"
+  },
+  {
+    "id": 6,
+    "serviceId": 1061,
+    "tenantId": 5,
+    "billAmount": 80,
+    "date": "2025-11-01",
+    "hours": 2,
+    "status": "paid"
+  },
+  {
+    "id": 7,
+    "serviceId": 2011,
+    "tenantId": 2,
+    "billAmount": 40,
+    "date": "2025-11-02",
+    "hours": 2,
+    "status": "pending"
+  },
+  {
+    "id": 8,
+    "serviceId": 1032,
+    "tenantId": 3,
+    "billAmount": 44,
+    "date": "2025-11-02",
+    "hours": 2,
+    "status": "pending"
+  },
+  {
+    "id": 9,
+    "serviceId": 1013,
+    "tenantId": 1,
+    "billAmount": 90,
+    "date": "2025-11-02",
+    "hours": 3,
+    "status": "pending"
+  },
+  {
+    "id": 10,
+    "serviceId": 2031,
+    "tenantId": 4,
+    "billAmount": 70,
+    "date": "2025-11-02",
+    "hours": 2,
+    "status": "paid"
+  },
+  {
+    "id": 11,
+    "serviceId": 1011,
+    "tenantId": 1,
+    "billAmount": 50,
+    "hours": 2,
+    "date": "2025-11-02",
+    "status": "pending"
+  },
+  {
+    "id": 12,
+    "serviceId": 1011,
+    "tenantId": 1,
+    "billAmount": 100,
+    "hours": 4,
+    "date": "2025-11-02",
+    "status": "paid"
+  },
+  {
+    "id": 13,
+    "serviceId": 1011,
+    "tenantId": 2,
+    "billAmount": 75,
+    "hours": 3,
+    "date": "2025-11-02",
+    "status": "paid"
+  }
+]
