@@ -30,7 +30,7 @@ Examples of unacceptable behavior include, but are not limited to:
 
 If you experience or witness behavior that violates this Code of Conduct, please report it to the project maintainers. Provide as much context as possible (links, screenshots, timestamps, usernames) so we can fairly evaluate the situation.
 
-Reports can be sent to the project email: `maintainers@project.local` (replace with the project's real contact) or opened as a private GitHub issue marked for maintainers only.
+Reports can be sent to the project email: "gupta.shrishti.0111@gmail.com" or opened as a private GitHub issue marked for maintainers only.
 
 When a report is received, maintainers will:
 
@@ -49,10 +49,3 @@ This Code of Conduct is intended to cover behavior in project spaces and events.
 This Code of Conduct is adapted to be short, clear, and beginner-friendly. You may replace the contact email with a project-specific address and customize wording to match your project's needs.
 
 ---
-
-If you want, I can:
-- Replace the placeholder contact `maintainers@project.local` with a specific email.
-- Add a CONTRIBUTING.md cross-reference.
-- Create an issue template or link in the README that points to this file.
-
-Which next step would you like me to do?
