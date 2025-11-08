@@ -3,12 +3,17 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "export-api-spec": "node scripts/export-api-spec.js",
+    "docs:export": "npm run export-api-spec",
+    "docs:serve": "node index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^5.1.0",
+    "js-yaml": "^4.1.0",
     "log4js": "^6.9.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"

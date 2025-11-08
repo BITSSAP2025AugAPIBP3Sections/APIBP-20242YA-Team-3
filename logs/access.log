@@ -1,2 +1,35 @@
 [2025-11-04T20:11:05.442] [INFO] access - Server is running on http://localhost:3000
 [2025-11-04T20:11:25.468] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 200 5251 "" "curl/8.7.1"
+[2025-11-05T19:23:37.186] [INFO] access - Server is running on http://localhost:3000
+[2025-11-05T19:23:41.383] [INFO] access - ::1 - "GET / HTTP/1.1" 404 139 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:24:12.045] [INFO] access - ::1 - "GET / HTTP/1.1" 404 139 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:24:26.319] [INFO] access - Server is running on http://localhost:3000
+[2025-11-05T19:24:30.993] [INFO] access - ::1 - "GET / HTTP/1.1" 404 139 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:24:33.105] [INFO] access - ::1 - "GET / HTTP/1.1" 404 139 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:24:46.829] [INFO] access - Server is running on http://localhost:3000
+[2025-11-05T19:25:01.207] [INFO] access - ::1 - "GET /api/v1 HTTP/1.1" 404 145 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:25:39.296] [INFO] access - ::1 - "GET //v1/bills HTTP/1.1" 404 148 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:25:46.379] [INFO] access - ::1 - "GET /v1/bills HTTP/1.1" 404 147 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:25:47.652] [INFO] access - ::1 - "GET /v1/bills HTTP/1.1" 404 147 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:25:49.365] [INFO] access - ::1 - "GET /v1/bills HTTP/1.1" 404 147 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:26:50.596] [INFO] access - Server is running on http://localhost:3000
+[2025-11-05T19:26:56.568] [INFO] access - ::1 - "GET / HTTP/1.1" 404 139 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:27:06.252] [INFO] access - ::1 - "GET /api-docs HTTP/1.1" 301 158 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:27:06.257] [INFO] access - ::1 - "GET /api-docs/ HTTP/1.1" 200 3106 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:27:06.273] [INFO] access - ::1 - "GET /api-docs/swagger-ui-init.js HTTP/1.1" 200 30269 "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:27:06.278] [INFO] access - ::1 - "GET /api-docs/swagger-ui.css HTTP/1.1" 200 155212 "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:27:06.284] [INFO] access - ::1 - "GET /api-docs/swagger-ui-standalone-preset.js HTTP/1.1" 200 250335 "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:27:06.292] [INFO] access - ::1 - "GET /api-docs/swagger-ui-bundle.js HTTP/1.1" 200 1510159 "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:27:06.462] [INFO] access - ::1 - "GET /api-docs/favicon-32x32.png HTTP/1.1" 200 628 "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:27:27.701] [INFO] access - ::1 - "GET /auth HTTP/1.1" 404 143 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:27:41.904] [INFO] access - ::1 - "GET / HTTP/1.1" 404 139 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:27:55.346] [INFO] access - ::1 - "GET /auth HTTP/1.1" 404 143 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:32:28.990] [INFO] access - ::1 - "GET /api/v1/login HTTP/1.1" 404 151 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:32:33.026] [INFO] access - ::1 - "GET /api/v1/login HTTP/1.1" 404 151 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:32:43.204] [INFO] access - Server is running on http://localhost:3000
+[2025-11-05T19:35:53.108] [INFO] access - Server is running on http://localhost:3000
+[2025-11-05T19:35:55.947] [INFO] access - ::1 - "GET / HTTP/1.1" 404 139 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:36:05.559] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 200 5251 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:36:05.590] [INFO] access - ::1 - "GET /favicon.ico HTTP/1.1" 404 150 "http://localhost:3000/api/v1/services" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-05T19:53:25.989] [INFO] access - Server is running on http://localhost:3000
+[2025-11-05T19:54:19.227] [INFO] access - Server is running on http://localhost:3000
