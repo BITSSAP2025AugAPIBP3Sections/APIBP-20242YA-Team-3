@@ -96,5 +96,3 @@ Thanks for contributing — we appreciate your help! If you'd like, I can also:
 - Add issue/pr templates
 - Add a checklist to the PR template for reviewers
 - Add CI (GitHub Actions) skeleton to run linters/tests
-
-Which of these would you like next?
