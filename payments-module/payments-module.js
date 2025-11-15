@@ -1,7 +1,17 @@
-const fs = require('fs');
-const path = require('path');
 const express = require('express');
 const router = express.Router();
+const { connectDB } = require('../config/database');
+const { Bill } = require('../models/Bill');
+const { addNotification } = require('../notification-module/notification-module');
+
+// Initialize database connection
+let dbInitialized = false;
+const initializeDB = async () => {
+    if (!dbInitialized) {
+        await connectDB();
+        dbInitialized = true;
+    }
+};
 
 /**
  * @swagger
@@ -51,7 +61,7 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/v1/payment', (req, res) => {
+router.post('/v1/payment', async (req, res) => {
     try {
         const { billId, status } = req.body;
 
@@ -68,21 +78,38 @@ router.post('/v1/payment', (req, res) => {
             });
         }
 
-        // Load bills
-        const billsPath = path.join(__dirname, '..', 'bills.json');
-        const bills = JSON.parse(fs.readFileSync(billsPath, 'utf8'));
+        await initializeDB();
 
         // Find and update the bill
-        const bill = bills.find(b => b.id === parseInt(billId));
+        const bill = await Bill.findOne({ id: parseInt(billId) });
         if (!bill) {
             return res.status(404).json({ error: 'Bill not found' });
         }
 
+        const previousStatus = bill.status;
         // Update status
         bill.status = status;
 
-        // Save back to file
-        fs.writeFileSync(billsPath, JSON.stringify(bills, null, 2));
+        // Save to MongoDB
+        await bill.save();
+
+        // Create notification
+        try {
+            await addNotification({
+                type: 'PAYMENT_STATUS_UPDATED',
+                message: `Bill #${billId} status updated from ${previousStatus} to ${status}`,
+                data: {
+                    billId: bill.id,
+                    tenantId: bill.tenantId,
+                    previousStatus,
+                    newStatus: status,
+                    amount: bill.billAmount
+                }
+            });
+        } catch (notificationError) {
+            console.error('Error creating notification:', notificationError);
+            // Don't fail the request if notification fails
+        }
 
         res.json({
             message: 'Payment status updated successfully',

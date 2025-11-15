@@ -1,15 +1,20 @@
 {
-  "name": "oss-api-project",
+  "name": "oss-api-project", 
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "migrate": "node migrate-data.js"
   },
   "author": "",
-  "license": "ISC",
+  "license": "ISC", 
   "dependencies": {
-    "express": "^5.1.0",
+    "apollo-server-express": "^3.13.0",
+    "express": "^5.1.0", 
+    "graphql": "^16.12.0",
     "log4js": "^6.9.1",
+    "mongoose": "^8.19.4",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },

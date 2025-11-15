@@ -166,6 +166,33 @@ const options = {
                             description: 'Payment status'
                         }
                     }
+                },
+                Notification: {
+                    type: 'object',
+                    properties: {
+                        id: {
+                            type: 'integer',
+                            description: 'Notification ID'
+                        },
+                        type: {
+                            type: 'string',
+                            enum: ['BILL_CREATED', 'PAYMENT_STATUS_UPDATED'],
+                            description: 'Notification type'
+                        },
+                        message: {
+                            type: 'string',
+                            description: 'Notification message'
+                        },
+                        data: {
+                            type: 'object',
+                            description: 'Notification data payload'
+                        },
+                        createdAt: {
+                            type: 'string',
+                            format: 'date-time',
+                            description: 'Creation timestamp'
+                        }
+                    }
                 }
             }
         }
@@ -174,7 +201,8 @@ const options = {
         './service-module/service-module.js',
         './billing-module/billing-module.js',
         './payments-module/payments-module.js',
-        './auth-module/auth-module.js'
+        './auth-module/auth-module.js',
+        './notification-module/notification-module.js'
     ]
 };
 

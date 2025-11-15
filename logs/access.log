@@ -1,2 +1,42 @@
-[2025-11-04T20:11:05.442] [INFO] access - Server is running on http://localhost:3000
-[2025-11-04T20:11:25.468] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 200 5251 "" "curl/8.7.1"
+[2025-11-15T11:34:36.753] [INFO] access - Server is running on http://localhost:3000
+[2025-11-15T11:34:36.753] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-15T11:34:36.753] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-15T11:34:39.728] [INFO] access - MongoDB connection initialized
+[2025-11-15T11:34:39.731] [INFO] access - Notifications system initialized
+[2025-11-15T11:34:39.731] [INFO] access - GraphQL introspection enabled
+[2025-11-15T11:34:50.700] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 200 5251 "" "curl/8.7.1"
+[2025-11-15T11:35:05.984] [INFO] access - ::1 - "POST /api/v1/services HTTP/1.1" 201 163 "" "curl/8.7.1"
+[2025-11-15T11:35:16.700] [INFO] access - ::1 - "GET /api/v1/services/1016 HTTP/1.1" 200 163 "" "curl/8.7.1"
+[2025-11-15T11:35:20.523] [INFO] access - ::1 - "GET /api/v1/services/2014 HTTP/1.1" 200 166 "" "curl/8.7.1"
+[2025-11-15T11:35:25.161] [INFO] access - ::1 - "PUT /api/v1/services/1016 HTTP/1.1" 200 3239 "" "curl/8.7.1"
+[2025-11-15T11:35:54.284] [INFO] access - Server is running on http://localhost:3000
+[2025-11-15T11:35:54.284] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-15T11:35:54.284] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-15T11:35:54.779] [INFO] access - MongoDB connection initialized
+[2025-11-15T11:35:54.781] [INFO] access - Notifications system initialized
+[2025-11-15T11:35:54.781] [INFO] access - GraphQL introspection enabled
+[2025-11-15T11:36:01.311] [INFO] access - ::1 - "PUT /api/v1/services/1016 HTTP/1.1" 200 176 "" "curl/8.7.1"
+[2025-11-15T11:36:05.745] [INFO] access - ::1 - "DELETE /api/v1/services/2014 HTTP/1.1" 200 57 "" "curl/8.7.1"
+[2025-11-15T11:36:10.429] [INFO] access - ::1 - "GET /api/v1/services/2014 HTTP/1.1" 404 29 "" "curl/8.7.1"
+[2025-11-15T11:45:10.709] [INFO] access - Server is running on http://localhost:3000
+[2025-11-15T11:45:10.709] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-15T11:45:10.709] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-15T11:45:11.651] [INFO] access - MongoDB connection initialized
+[2025-11-15T11:45:11.652] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-15T11:45:11.652] [INFO] access - Notifications system initialized
+[2025-11-15T11:45:11.653] [INFO] access - GraphQL introspection enabled
+[2025-11-15T11:45:20.294] [INFO] access - ::1 - "GET /api/v1/tenants HTTP/1.1" 200 1285 "" "curl/8.7.1"
+[2025-11-15T11:45:27.032] [INFO] access - ::1 - "GET /api/v1/bills HTTP/1.1" 200 4241 "" "curl/8.7.1"
+[2025-11-15T11:45:34.210] [INFO] access - Fetching all notifications
+[2025-11-15T11:45:34.211] [INFO] access - ::1 - "GET /api/v1/notifications HTTP/1.1" 200 1516 "" "curl/8.7.1"
+[2025-11-15T11:45:40.529] [INFO] access - ::1 - "POST /api/v1/bills HTTP/1.1" 201 223 "" "curl/8.7.1"
+[2025-11-15T11:46:10.262] [INFO] access - ::1 - "POST /api/v1/payment HTTP/1.1" 200 277 "" "curl/8.7.1"
+[2025-11-15T11:46:15.432] [INFO] access - Fetching all notifications
+[2025-11-15T11:46:15.433] [INFO] access - ::1 - "GET /api/v1/notifications HTTP/1.1" 200 2013 "" "curl/8.7.1"
+[2025-11-15T11:51:11.885] [INFO] access - Server is running on http://localhost:3000
+[2025-11-15T11:51:11.885] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-15T11:51:11.886] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-15T11:51:12.616] [INFO] access - MongoDB connection initialized
+[2025-11-15T11:51:12.616] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-15T11:51:12.617] [INFO] access - Notifications system initialized
+[2025-11-15T11:51:12.617] [INFO] access - GraphQL introspection enabled
