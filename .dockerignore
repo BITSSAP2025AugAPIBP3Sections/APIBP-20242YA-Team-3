@@ -1,0 +1,9 @@
+node_modules
+logs
+*.log
+debug.log*
+error.log*
+access.log*
+.env
+.DS_Store
+

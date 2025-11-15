@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-api-config
+  labels:
+    app: service-api
+  namespace: default
+data:
+  PORT: "3000"
+  KAFKA_BROKERS: "kafka:9092"
+  LOG_LEVEL: "debug"
+
