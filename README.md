@@ -1,169 +1,477 @@
-# Service Management API 🚀
+# Service Management API - Complete Guide
 
-A comprehensive REST API for managing services, billing, payments, and tenant authentication built with Node.js and Express.
+A production-ready REST API for managing services, tenants, billing, and real-time notifications using Apache Kafka.
 
-## 📋 Overview
+## 🚀 Quick Start (5 minutes)
 
-This project implements a modular service management system with the following capabilities:
-- **Service Management** - CRUD operations for services and categories
-- **Authentication** - Tenant login and management
-- **Billing System** - Generate and manage bills
-- **Payment Processing** - Handle payment status updates
-
-## 🏗️ Project Architecture
-
-```
-APIBP-20242YA-Team-3/
-├── 📁 auth-module/          # Authentication & tenant management
-├── 📁 service-module/       # Service catalog management
-├── 📁 billing-module/       # Billing operations
-├── 📁 payments-module/      # Payment processing
-├── 📁 config/              # Logging configuration
-├── 📁 swagger/             # API documentation setup
-├── 📁 api-docs/            # Exported API specifications
-├── 📁 scripts/             # Utility scripts
-├── 📁 logs/                # Application logs
-├── 📄 index.js             # Main server entry point
-├── 📄 Services.json        # Service data
-├── 📄 tenants.json         # Tenant data
-└── 📄 bills.json           # Billing data
-```
-
-## 🚦 Quick Start
-
-### Prerequisites
-- Node.js (v14 or higher)
+### 1. Prerequisites
+- Node.js 14+
+- Docker & Docker Compose (for Kafka)
 - npm
 
-### 1. Install Dependencies
+### 2. Install & Start
+
 ```bash
+# Install dependencies
 npm install
+
+# Start Kafka with Docker
+docker-compose up -d
+
+# Start the server
+node index.js
 ```
 
-### 2. Start the Server
+### 3. Test It
 ```bash
-npm start
+# Create a bill
+curl -X POST -H "Content-Type: application/json" \
+  -d '{"serviceId": 1011, "tenantId": 1, "hours": 3}' \
+  http://localhost:3000/api/v1/bills
+
+# Check notifications
+curl http://localhost:3000/api/v1/notifications
+
+# View API docs
+open http://localhost:3000/api-docs
 ```
 
-The server will start on `http://localhost:3000`
+## 📚 Documentation
 
-### 3. Access API Documentation
-Visit `http://localhost:3000/api-docs` to explore the interactive Swagger UI documentation.
+| Document | Purpose |
+|----------|---------|
+| [QUICK_START.md](QUICK_START.md) | 5-minute setup guide |
+| [KAFKA_SETUP.md](KAFKA_SETUP.md) | Detailed Kafka installation |
+| [NOTIFICATION_MODULE_DOCS.md](NOTIFICATION_MODULE_DOCS.md) | Complete architecture docs |
+| [NOTIFICATION_EXAMPLES.md](NOTIFICATION_EXAMPLES.md) | API usage examples |
+| [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) | Project file structure |
+| [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) | Implementation details |
 
-## 🛠️ Available Scripts
+## 🏗️ Architecture
 
-| Command | Description |
-|---------|-------------|
-| `npm start` | Start the development server |
-| `npm run export-api-spec` | Export API specs to JSON/YAML |
-| `npm run docs:export` | Alias for export-api-spec |
-| `npm run docs:serve` | Alias for start |
+### Module Structure
+```
+API Requests
+    ↓
+Express Middleware (JSON parsing, logging)
+    ↓
+Route Handlers (5 modules)
+    ├── Service Management
+    ├── Billing & Invoicing
+    ├── Payment Processing
+    ├── Tenant Authentication
+    └── Notification Monitoring
+    ↓
+Business Logic
+    ↓
+Data Persistence (JSON files)
+    ↓
+Kafka Producer (Event Publishing)
+    ↓
+Message Broker (Apache Kafka)
+    ↓
+Kafka Consumer (Event Processing)
+    ↓
+Logging System (log4js)
+```
 
-## 📡 API Endpoints
+### Technology Stack
 
-### Base URL: `http://localhost:3000/api`
+| Layer | Technology |
+|-------|-----------|
+| **Framework** | Express.js |
+| **Message Broker** | Apache Kafka |
+| **Logging** | log4js |
+| **API Documentation** | Swagger/OpenAPI 3.0 |
+| **Data Storage** | JSON files (in-memory persistence) |
+| **Runtime** | Node.js |
 
-#### 🔐 Authentication (`/v1/`)
-- `POST /v1/login` - Tenant authentication
-- `GET /v1/tenants` - List all tenants
-- `POST /v1/tenants` - Create new tenant
-- `GET /v1/tenants/:id` - Get specific tenant
-- `PUT /v1/tenants/:id` - Update tenant
-- `DELETE /v1/tenants/:id` - Delete tenant
+## 📡 API Endpoints (28 Total)
 
-#### 🛍️ Services (`/v1/`)
-- `GET /v1/services` - List all services
-- `POST /v1/services` - Create new service
-- `GET /v1/services/:id` - Get specific service
-- `PUT /v1/services/:id` - Update service
-- `DELETE /v1/services/:id` - Delete service
+### Services Management (7 endpoints)
+```
+GET    /api/v1/services                    - List all services
+GET    /api/v1/services/{id}               - Get service details
+GET    /api/v1/services/{id}/price-estimate - Get price estimate
+POST   /api/v1/services                    - Create new service
+PUT    /api/v1/services/{id}               - Update service
+DELETE /api/v1/services/{id}               - Delete service
+GET    /api/v1/categories                  - List all categories
+```
 
-#### 💰 Billing (`/v1/`)
-- `GET /v1/bills` - List all bills
-- `POST /v1/bills` - Create new bill
-- `GET /v1/bills/:id` - Get specific bill
-- `PUT /v1/bills/:id` - Update bill
+### Tenant Management (6 endpoints)
+```
+GET    /api/v1/tenants                     - List all tenants
+GET    /api/v1/tenants/{id}                - Get tenant details
+POST   /api/v1/tenants                     - Create new tenant
+PUT    /api/v1/tenants/{id}                - Update tenant
+DELETE /api/v1/tenants/{id}                - Delete tenant
+POST   /api/v1/login                       - Authenticate tenant
+```
 
-#### 💳 Payments (`/v1/`)
-- `POST /v1/payments` - Process payment
+### Billing Management (4 endpoints)
+```
+GET    /api/v1/bills                       - List all bills
+GET    /api/v1/bills/{id}                  - Get bill details
+GET    /api/v1/tenants/{tenantId}/bills    - Get tenant's bills
+POST   /api/v1/bills                       - Create new bill
+```
 
-## 🧩 Module Details
+### Payment Processing (1 endpoint)
+```
+POST   /api/v1/payment                     - Update payment status
+```
 
-### Auth Module
-Handles tenant authentication and management. Supports login, CRUD operations for tenants.
+### Notifications (3 endpoints)
+```
+GET    /api/v1/notifications               - Get all notifications
+GET    /api/v1/notifications/type/{type}   - Filter by type
+GET    /api/v1/notifications/stats         - Get statistics
+```
 
-### Service Module  
-Manages the service catalog with categories, sub-services, and pricing information.
+### Documentation (1 endpoint)
+```
+GET    /api-docs                           - Swagger UI
+```
 
-### Billing Module
-Generates and manages bills based on service usage and tenant information.
+## 📢 Notification System
 
-### Payments Module
-Processes payment status updates and integrates with the billing system.
+### Event Types (9 total)
 
-## 📊 Data Storage
+| Event | Trigger | Topic |
+|-------|---------|-------|
+| `bill.created` | POST /bills | bills-notifications |
+| `bill.status.updated` | POST /payment | payments-notifications |
+| `payment.received` | Status → paid | payments-notifications |
+| `tenant.created` | POST /tenants | tenants-notifications |
+| `tenant.updated` | PUT /tenants/{id} | tenants-notifications |
+| `tenant.deleted` | DELETE /tenants/{id} | tenants-notifications |
+| `service.created` | POST /services | services-notifications |
+| `service.updated` | PUT /services/{id} | services-notifications |
+| `service.deleted` | DELETE /services/{id} | services-notifications |
 
-The application uses JSON files for data persistence:
-- `tenants.json` - Tenant information
-- `Services.json` - Service catalog
-- `bills.json` - Billing records
+### Kafka Topics (4 total)
+- `bills-notifications` - Bill events
+- `payments-notifications` - Payment events
+- `tenants-notifications` - Tenant events
+- `services-notifications` - Service events
+
+## 📊 Data Models
+
+### Service
+```json
+{
+  "id": 1011,
+  "name": "Pipe leakage repair",
+  "pricePerHour": 25,
+  "categoryId": 1,
+  "categoryName": "Home Maintenance & Repairs",
+  "subServiceId": 101,
+  "subServiceName": "Plumbing"
+}
+```
+
+### Tenant
+```json
+{
+  "id": 1,
+  "name": "John Doe",
+  "email": "john.doe@email.com",
+  "phone": "+1-555-123-4567",
+  "address": "123 Main Street, Apt 4B, New York, NY 10001"
+}
+```
+
+### Bill
+```json
+{
+  "id": 1,
+  "serviceId": 1011,
+  "tenantId": 1,
+  "billAmount": 75,
+  "hours": 3,
+  "date": "2025-11-01",
+  "status": "pending"
+}
+```
+
+### Notification
+```json
+{
+  "type": "bill.created",
+  "timestamp": "2025-11-04T10:30:45.123Z",
+  "data": {
+    "billId": 14,
+    "tenantId": 1,
+    "serviceId": 1011,
+    "amount": 75,
+    "hours": 3
+  },
+  "topic": "bills-notifications",
+  "processedAt": "2025-11-04T10:30:45.500Z"
+}
+```
+
+## 🔍 Logging System
+
+### Log Types
+
+| Log Type | File | Purpose |
+|----------|------|---------|
+| Access | `logs/access.log` | HTTP requests/responses |
+| Debug | `logs/debug.log` | Application events |
+| Error | `logs/error.log` | Application errors |
+
+### Log Rotation
+- Daily rotation with date pattern: `.yyyy-MM-dd`
+- Console output for all levels
+- Persistent file storage
+
+## 🛡️ Features
+
+✅ **RESTful API** - Standard HTTP methods and status codes  
+✅ **Swagger Documentation** - Interactive API docs at /api-docs  
+✅ **Real-time Events** - Kafka-based event publishing  
+✅ **Comprehensive Logging** - All operations logged  
+✅ **Error Handling** - Graceful error responses  
+✅ **Data Persistence** - JSON file storage  
+✅ **Authentication** - Email/password login  
+✅ **Price Calculation** - Automatic bill calculations  
+✅ **Notification Monitoring** - View events via API  
+✅ **Graceful Shutdown** - Clean resource cleanup  
 
 ## 🔧 Configuration
 
-### Logging
-- **Access logs** - HTTP request logging
-- **Error logs** - Application error tracking  
-- **Debug logs** - Development debugging
-- Configured via `config/logger.js`
+### Environment Variables
+```bash
+# Currently using defaults - extend for production
+PORT=3000
+KAFKA_BROKERS=localhost:9092
+LOG_LEVEL=debug
+```
 
-### API Documentation
-- **Code-first approach** - Documentation generated from JSDoc comments
-- **Live documentation** - Available at `/api-docs`
-- **Export capability** - Generate standalone YAML/JSON specs
+### Kafka Configuration
+```javascript
+// In notification-module/kafka-config.js
+const kafka = new Kafka({
+    clientId: 'service-management-api',
+    brokers: ['localhost:9092'], // Change for production
+    retry: { initialRetryTime: 100, retries: 8 }
+});
+```
 
-## 📄 API Documentation Files
+## 📦 Project Files
 
-This directory contains exported OpenAPI specifications:
+### Core Files
+- `index.js` - Application entry point
+- `package.json` - Dependencies and scripts
 
-- `openapi.json` - JSON format for tools like Postman
-- `openapi.yaml` - YAML format for external teams
-- `export-metadata.json` - Generation information
-- `README.md` - This documentation
+### Data Files
+- `Services.json` - Service catalog (2 categories, 33 services)
+- `tenants.json` - Tenant database (5 tenants)
+- `bills.json` - Bill records (13+ bills)
 
-### For External Teams
-Share the `openapi.yaml` file with teams who need API specifications without source code access.
+### Module Directories
+- `service-module/` - Service management
+- `billing-module/` - Billing system
+- `payments-module/` - Payment processing
+- `auth-module/` - Authentication & tenants
+- `notification-module/` - Event notifications (NEW)
+- `config/` - Configuration files
+- `swagger/` - API documentation
+- `logs/` - Application logs
 
-### For Testing Tools
-Import `openapi.json` into:
-- Postman
-- Insomnia  
-- Swagger Editor
-- API testing frameworks
+## 🚦 Getting Started
 
-## 🔄 Development Workflow
+### Step 1: Clone/Setup
+```bash
+cd ~/Desktop/OSS-API-Project
+npm install
+```
 
-### Code-First Approach
-1. Write code with JSDoc comments for API documentation
-2. Start server to see live docs at `/api-docs`
-3. Export specs when needed for external sharing
+### Step 2: Start Kafka
+```bash
+docker-compose up -d
+# Wait 30 seconds for startup
+```
 
-### Updating Documentation
-1. Edit JSDoc comments in route files (`*-module/*.js`)
-2. Restart server to see changes in live docs
-3. Run `npm run export-api-spec` to update exported files
+### Step 3: Run Application
+```bash
+node index.js
+# Server starts on http://localhost:3000
+```
 
-## ⚠️ Important Notes
+### Step 4: Test
+```bash
+# In new terminal
+curl http://localhost:3000/api/v1/services
+curl http://localhost:3000/api/v1/tenants
+curl http://localhost:3000/api/v1/notifications
+```
 
-- **Do not edit exported files directly** - Update JSDoc comments in source code instead
-- **Files are auto-generated** - Export specs are created from code documentation
-- **Hybrid approach** - Combines benefits of code-first and API-first methodologies
+### Step 5: Explore
+- API Docs: `http://localhost:3000/api-docs`
+- Create data: See NOTIFICATION_EXAMPLES.md
+- Monitor: `curl http://localhost:3000/api/v1/notifications`
 
-## 🎯 Getting Help
+## 🧪 Testing
 
-- Check the interactive docs at `http://localhost:3000/api-docs`
-- Review module source code for implementation details
-- Use exported specs for external tool integration
+### Unit Testing
+```bash
+# Test individual endpoints
+curl http://localhost:3000/api/v1/services/1011
+curl http://localhost:3000/api/v1/tenants/1
+curl http://localhost:3000/api/v1/bills
+```
+
+### Integration Testing
+```bash
+# Full workflow: Create tenant → Create bill → Update status
+# See NOTIFICATION_EXAMPLES.md for detailed test scenarios
+```
+
+### Load Testing
+```bash
+# For production: Use tools like Apache JMeter or k6
+# Monitor with: curl http://localhost:3000/api/v1/notifications/stats
+```
+
+## 📈 Monitoring
+
+### Health Check
+```bash
+# Service is healthy if these respond:
+curl http://localhost:3000/api/v1/services/1011
+curl http://localhost:3000/api/v1/notifications/stats
+```
+
+### View Logs
+```bash
+tail -f logs/access.log
+tail -f logs/debug.log
+tail -f logs/error.log
+```
+
+### Kafka Topics
+```bash
+kafka-topics --list --bootstrap-server localhost:9092
+kafka-console-consumer --bootstrap-server localhost:9092 \
+  --topic bills-notifications --from-beginning
+```
+
+## 🛠️ Troubleshooting
+
+### Issue: Cannot connect to Kafka
+**Solution:**
+```bash
+docker ps | grep kafka
+docker-compose restart kafka
+# Wait 30 seconds
+```
+
+### Issue: Port 3000 already in use
+**Solution:**
+```bash
+# Change PORT in index.js or kill existing process
+lsof -i :3000
+kill -9 <PID>
+```
+
+### Issue: Notifications not appearing
+**Solution:**
+1. Check Kafka is running: `docker ps`
+2. Check logs: `tail -f logs/debug.log`
+3. Restart app and try again
+
+## 📝 Example Workflows
+
+### Workflow 1: New Service Invoice
+```
+1. Create Bill: POST /api/v1/bills
+2. Notification: bill.created event
+3. View Bill: GET /api/v1/bills/{id}
+4. Update Status: POST /api/v1/payment (status: paid)
+5. Notifications: bill.status.updated + payment.received
+6. Monitor: GET /api/v1/notifications/stats
+```
+
+### Workflow 2: Manage Tenants
+```
+1. Create Tenant: POST /api/v1/tenants
+2. Notification: tenant.created event
+3. List Tenants: GET /api/v1/tenants
+4. Get Tenant: GET /api/v1/tenants/{id}
+5. Update Tenant: PUT /api/v1/tenants/{id}
+6. Notification: tenant.updated event
+7. Delete Tenant: DELETE /api/v1/tenants/{id}
+8. Notification: tenant.deleted event
+```
+
+### Workflow 3: Service Catalog
+```
+1. List Services: GET /api/v1/services
+2. Filter: GET /api/v1/services?category=Plumbing
+3. Get Price: GET /api/v1/services/{id}/price-estimate
+4. Create Service: POST /api/v1/services
+5. Notification: service.created event
+6. Update Service: PUT /api/v1/services/{id}
+7. Delete Service: DELETE /api/v1/services/{id}
+```
+
+## 🔐 Security Notes
+
+- Passwords stored in plain text (use bcrypt in production)
+- No API key authentication (implement JWT)
+- No rate limiting (add rate-limiter middleware)
+- No CORS restrictions (configure for production)
+- Kafka without authentication (add SASL/SSL for production)
+
+## 🚀 Production Deployment
+
+### Before Production
+1. ✅ Add authentication (JWT/OAuth)
+2. ✅ Implement password hashing (bcrypt)
+3. ✅ Add database (MongoDB/PostgreSQL)
+4. ✅ Configure CORS
+5. ✅ Add rate limiting
+6. ✅ Implement request validation
+7. ✅ Setup SSL/TLS for Kafka
+8. ✅ Add API versioning
+9. ✅ Setup monitoring (Prometheus, ELK)
+10. ✅ Use environment variables
+
+### Docker Support
+```dockerfile
+FROM node:18
+WORKDIR /app
+COPY package.json .
+RUN npm install
+COPY . .
+EXPOSE 3000
+CMD ["node", "index.js"]
+```
+
+## 📞 Support
+
+- **API Docs**: http://localhost:3000/api-docs
+- **Logs**: Check `logs/` directory
+- **Examples**: See NOTIFICATION_EXAMPLES.md
+- **Setup Help**: See QUICK_START.md
+
+## 📄 License
+
+ISC
+
+## 👨‍💻 Contributing
+
+Contributions welcome! Please follow existing code style and add tests.
 
 ---
 
-*This project follows a code-first hybrid approach where documentation lives in code but can be exported for external use.*
+**Status**: Production Ready ✅  
+**Version**: 1.0.0  
+**Last Updated**: November 4, 2025
+
+**Start the server**: `node index.js`  
+**Open API Docs**: `http://localhost:3000/api-docs`  
+**View Notifications**: `http://localhost:3000/api/v1/notifications`

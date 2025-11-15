@@ -1,15 +1,24 @@
-const fs = require('fs');
-const path = require('path');
 const express = require('express');
 const router = express.Router();
+const { connectDB } = require('../config/database');
+const { Bill } = require('../models/Bill');
 const { getAllServices } = require('../service-module/service-module');
+const { addNotification } = require('../notification-module/notification-module');
 
-// Load bills from bills.json
-const loadBills = () => {
+// Initialize database connection
+let dbInitialized = false;
+const initializeDB = async () => {
+    if (!dbInitialized) {
+        await connectDB();
+        dbInitialized = true;
+    }
+};
+
+// Load bills from MongoDB
+const loadBills = async () => {
     try {
-        const billsPath = path.join(__dirname, '..', 'bills.json');
-        const billsData = fs.readFileSync(billsPath, 'utf8');
-        return JSON.parse(billsData);
+        await initializeDB();
+        return await Bill.find({}).sort({ id: 1 });
     } catch (error) {
         console.error('Error loading bills:', error);
         return [];
@@ -62,17 +71,19 @@ const loadBills = () => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/v1/bills', (req, res) => {
+router.post('/v1/bills', async (req, res) => {
     try {
+        await initializeDB();
+        
         const { serviceId, tenantId, hours } = req.body;
 
         // Validate required fields
-        if (!serviceId || !tenantId || !hours) {
-            return res.status(400).json({ error: 'serviceId, tenantId, and hours are required' });
+        if (!serviceId || !hours) {
+            return res.status(400).json({ error: 'serviceId and hours are required' });
         }
 
         // Load services to get price per hour
-        const services = getAllServices();
+        const services = await getAllServices();
         const service = services.find(s => s.id === parseInt(serviceId));
         if (!service) {
             return res.status(404).json({ error: 'Service not found' });
@@ -81,26 +92,41 @@ router.post('/v1/bills', (req, res) => {
         // Calculate bill amount
         const billAmount = service.pricePerHour * hours;
 
-        // Load existing bills
-        const bills = loadBills();
+        // Get next bill ID
+        const lastBill = await Bill.findOne().sort({ id: -1 });
+        const nextId = lastBill ? lastBill.id + 1 : 1;
 
         // Create new bill
-        const newBill = {
-            id: bills.length > 0 ? Math.max(...bills.map(b => b.id)) + 1 : 1,
+        const newBill = new Bill({
+            id: nextId,
             serviceId: parseInt(serviceId),
-            tenantId: parseInt(tenantId),
+            tenantId: tenantId ? parseInt(tenantId) : null,
             billAmount,
             hours,
             date: new Date().toISOString().split('T')[0],
             status: 'pending'
-        };
+        });
 
-        // Add to bills array
-        bills.push(newBill);
+        // Save to MongoDB
+        await newBill.save();
 
-        // Save back to file
-        const billsPath = path.join(__dirname, '..', 'bills.json');
-        fs.writeFileSync(billsPath, JSON.stringify(bills, null, 2));
+        // Send notification
+        try {
+            await addNotification({
+                type: 'BILL_CREATED',
+                message: `Bill #${newBill.id} created for tenant #${newBill.tenantId}`,
+                data: {
+                    billId: newBill.id,
+                    tenantId: newBill.tenantId,
+                    serviceId: newBill.serviceId,
+                    amount: newBill.billAmount,
+                    hours: newBill.hours
+                }
+            });
+        } catch (notificationError) {
+            console.error('Error creating notification:', notificationError);
+            // Don't fail the request if notification fails
+        }
 
         res.status(201).json(newBill);
     } catch (error) {
@@ -124,9 +150,9 @@ router.post('/v1/bills', (req, res) => {
  *               items:
  *                 $ref: '#/components/schemas/Bill'
  */
-router.get('/v1/bills', (req, res) => {
+router.get('/v1/bills', async (req, res) => {
     try {
-        const bills = loadBills();
+        const bills = await loadBills();
         res.json(bills);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -160,10 +186,10 @@ router.get('/v1/bills', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/v1/bills/:billId', (req, res) => {
+router.get('/v1/bills/:billId', async (req, res) => {
     try {
-        const bills = loadBills();
-        const bill = bills.find(b => b.id === parseInt(req.params.billId));
+        await initializeDB();
+        const bill = await Bill.findOne({ id: parseInt(req.params.billId) });
 
         if (!bill) {
             return res.status(404).json({ error: 'Bill not found' });
@@ -204,10 +230,10 @@ router.get('/v1/bills/:billId', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/v1/tenants/:tenantId/bills', (req, res) => {
+router.get('/v1/tenants/:tenantId/bills', async (req, res) => {
     try {
-        const bills = loadBills();
-        const tenantBills = bills.filter(b => b.tenantId === parseInt(req.params.tenantId));
+        await initializeDB();
+        const tenantBills = await Bill.find({ tenantId: parseInt(req.params.tenantId) }).sort({ id: 1 });
 
         if (tenantBills.length === 0) {
             return res.status(404).json({ error: 'No bills found for this tenant' });

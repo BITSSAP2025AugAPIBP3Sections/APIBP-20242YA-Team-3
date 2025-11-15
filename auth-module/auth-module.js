@@ -1,29 +1,47 @@
-const fs = require('fs');
-const path = require('path');
 const express = require('express');
 const router = express.Router();
+const { connectDB } = require('../config/database');
+const { Tenant } = require('../models/Tenant');
 
-// Load tenants from tenants.json
-const loadTenants = () => {
+// Initialize database connection
+let dbInitialized = false;
+const initializeDB = async () => {
+    if (!dbInitialized) {
+        await connectDB();
+        dbInitialized = true;
+    }
+};
+
+// Load tenants from MongoDB
+const loadTenants = async () => {
     try {
-        const tenantsPath = path.join(__dirname, '..', 'tenants.json');
-        const tenantsData = fs.readFileSync(tenantsPath, 'utf8');
-        return JSON.parse(tenantsData);
+        await initializeDB();
+        return await Tenant.find({}).sort({ id: 1 });
     } catch (error) {
         console.error('Error loading tenants:', error);
         return [];
     }
 };
 
-// Save tenants to tenants.json
-const saveTenants = (tenants) => {
+// Save tenant to MongoDB
+const saveTenant = async (tenantData) => {
     try {
-        const tenantsPath = path.join(__dirname, '..', 'tenants.json');
-        fs.writeFileSync(tenantsPath, JSON.stringify(tenants, null, 2));
-        return true;
+        await initializeDB();
+        
+        // Get next tenant ID
+        const lastTenant = await Tenant.findOne().sort({ id: -1 });
+        const nextId = lastTenant ? lastTenant.id + 1 : 1;
+        
+        const tenant = new Tenant({
+            ...tenantData,
+            id: nextId
+        });
+        
+        await tenant.save();
+        return tenant;
     } catch (error) {
-        console.error('Error saving tenants:', error);
-        return false;
+        console.error('Error saving tenant:', error);
+        return null;
     }
 };
 
@@ -53,7 +71,7 @@ const saveTenants = (tenants) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/v1/login', (req, res) => {
+router.post('/v1/login', async (req, res) => {
     try {
         const { email, password } = req.body;
 
@@ -62,15 +80,15 @@ router.post('/v1/login', (req, res) => {
             return res.status(400).json({ error: 'Email and password are required' });
         }
 
-        const tenants = loadTenants();
-        const tenant = tenants.find(t => t.email === email && t.password === password);
+        await initializeDB();
+        const tenant = await Tenant.findOne({ email: email, password: password });
 
         if (!tenant) {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
         // Don't send password in response
-        const { password: _, ...tenantWithoutPassword } = tenant;
+        const { password: _, ...tenantWithoutPassword } = tenant.toObject();
         res.json(tenantWithoutPassword);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -93,11 +111,14 @@ router.post('/v1/login', (req, res) => {
  *               items:
  *                 $ref: '#/components/schemas/Tenant'
  */
-router.get('/v1/tenants', (req, res) => {
+router.get('/v1/tenants', async (req, res) => {
     try {
-        const tenants = loadTenants();
+        const tenants = await loadTenants();
         // Remove passwords from response
-        const tenantsWithoutPasswords = tenants.map(({ password, ...rest }) => rest);
+        const tenantsWithoutPasswords = tenants.map(tenant => {
+            const { password, ...rest } = tenant.toObject();
+            return rest;
+        });
         res.json(tenantsWithoutPasswords);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -131,17 +152,17 @@ router.get('/v1/tenants', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/v1/tenants/:id', (req, res) => {
+router.get('/v1/tenants/:id', async (req, res) => {
     try {
-        const tenants = loadTenants();
-        const tenant = tenants.find(t => t.id === parseInt(req.params.id));
+        await initializeDB();
+        const tenant = await Tenant.findOne({ id: parseInt(req.params.id) });
 
         if (!tenant) {
             return res.status(404).json({ error: 'Tenant not found' });
         }
 
         // Remove password from response
-        const { password, ...tenantWithoutPassword } = tenant;
+        const { password, ...tenantWithoutPassword } = tenant.toObject();
         res.json(tenantWithoutPassword);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -174,7 +195,7 @@ router.get('/v1/tenants/:id', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/v1/tenants', (req, res) => {
+router.post('/v1/tenants', async (req, res) => {
     try {
         const { name, address, email, phone, password } = req.body;
 
@@ -185,31 +206,29 @@ router.post('/v1/tenants', (req, res) => {
             });
         }
 
-        const tenants = loadTenants();
+        await initializeDB();
 
         // Check if email already exists
-        if (tenants.some(t => t.email === email)) {
+        const existingTenant = await Tenant.findOne({ email: email });
+        if (existingTenant) {
             return res.status(400).json({ error: 'Email already exists' });
         }
 
         // Create new tenant
-        const newTenant = {
-            id: tenants.length > 0 ? Math.max(...tenants.map(t => t.id)) + 1 : 1,
+        const newTenant = await saveTenant({
             name,
             address,
             email,
             phone,
             password
-        };
+        });
 
-        tenants.push(newTenant);
-
-        if (!saveTenants(tenants)) {
+        if (!newTenant) {
             return res.status(500).json({ error: 'Error saving tenant' });
         }
 
         // Remove password from response
-        const { password: _, ...tenantWithoutPassword } = newTenant;
+        const { password: _, ...tenantWithoutPassword } = newTenant.toObject();
         res.status(201).json(tenantWithoutPassword);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -255,7 +274,7 @@ router.post('/v1/tenants', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/v1/tenants/:id', (req, res) => {
+router.put('/v1/tenants/:id', async (req, res) => {
     try {
         const { name, address, email, phone, password } = req.body;
         const tenantId = parseInt(req.params.id);
@@ -267,35 +286,33 @@ router.put('/v1/tenants/:id', (req, res) => {
             });
         }
 
-        const tenants = loadTenants();
-        const tenantIndex = tenants.findIndex(t => t.id === tenantId);
-
-        if (tenantIndex === -1) {
+        await initializeDB();
+        
+        // Find the tenant to update
+        const tenant = await Tenant.findOne({ id: tenantId });
+        if (!tenant) {
             return res.status(404).json({ error: 'Tenant not found' });
         }
 
         // Check if email exists for other tenants
-        if (tenants.some(t => t.email === email && t.id !== tenantId)) {
+        const existingTenant = await Tenant.findOne({ email: email, id: { $ne: tenantId } });
+        if (existingTenant) {
             return res.status(400).json({ error: 'Email already exists' });
         }
 
         // Update tenant
-        tenants[tenantIndex] = {
-            ...tenants[tenantIndex],
-            name,
-            address,
-            email,
-            phone,
-            // Only update password if provided
-            ...(password && { password })
-        };
-
-        if (!saveTenants(tenants)) {
-            return res.status(500).json({ error: 'Error saving tenant' });
+        tenant.name = name;
+        tenant.address = address;
+        tenant.email = email;
+        tenant.phone = phone;
+        if (password) {
+            tenant.password = password;
         }
 
+        await tenant.save();
+
         // Remove password from response
-        const { password: _, ...tenantWithoutPassword } = tenants[tenantIndex];
+        const { password: _, ...tenantWithoutPassword } = tenant.toObject();
         res.json(tenantWithoutPassword);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -332,21 +349,16 @@ router.put('/v1/tenants/:id', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/v1/tenants/:id', (req, res) => {
+router.delete('/v1/tenants/:id', async (req, res) => {
     try {
         const tenantId = parseInt(req.params.id);
-        const tenants = loadTenants();
-        const tenantIndex = tenants.findIndex(t => t.id === tenantId);
+        
+        await initializeDB();
+        
+        const result = await Tenant.deleteOne({ id: tenantId });
 
-        if (tenantIndex === -1) {
+        if (result.deletedCount === 0) {
             return res.status(404).json({ error: 'Tenant not found' });
-        }
-
-        // Remove tenant
-        tenants.splice(tenantIndex, 1);
-
-        if (!saveTenants(tenants)) {
-            return res.status(500).json({ error: 'Error deleting tenant' });
         }
 
         res.json({ message: 'Tenant deleted successfully' });

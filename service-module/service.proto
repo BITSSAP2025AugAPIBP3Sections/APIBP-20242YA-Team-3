@@ -1,0 +1,251 @@
+syntax = "proto3";
+
+package servicemodule;
+
+option go_package = "github.com/example/service-module/gen/go/servicemodule";
+option java_multiple_files = true;
+option java_package = "com.example.servicemodule";
+option java_outer_classname = "ServiceProto";
+
+/**
+ * Service represents a service offering in the system.
+ * This message includes pricing, categorization, and hierarchical information.
+ */
+message Service {
+    // Unique identifier for the service
+    int32 id = 1;
+    
+    // Human-readable name of the service
+    string name = 2;
+    
+    // Hourly rate for the service in USD
+    float price_per_hour = 3;
+    
+    // Unique identifier of the parent category
+    int32 category_id = 4;
+    
+    // Name of the parent category
+    string category_name = 5;
+    
+    // Unique identifier of the parent sub-service
+    int32 sub_service_id = 6;
+    
+    // Name of the parent sub-service
+    string sub_service_name = 7;
+}
+
+/**
+ * Category represents a service category containing sub-services.
+ */
+message Category {
+    // Unique identifier for the category
+    int32 id = 1;
+    
+    // Category name
+    string name = 2;
+    
+    // List of sub-services in this category
+    repeated SubService sub_services = 3;
+}
+
+/**
+ * SubService represents a sub-category containing services.
+ */
+message SubService {
+    // Unique identifier for the sub-service
+    int32 id = 1;
+    
+    // Sub-service name
+    string name = 2;
+}
+
+/**
+ * PriceEstimate provides pricing information for a service.
+ */
+message PriceEstimate {
+    // Base price per hour
+    float base_price = 1;
+    
+    // Estimated total price
+    float estimated_price = 2;
+    
+    // Currency code (ISO 4217)
+    string currency = 3;
+    
+    // Associated service ID
+    int32 service_id = 4;
+    
+    // Associated service name
+    string service_name = 5;
+}
+
+/**
+ * DeleteResponse is the response for deletion operations.
+ */
+message DeleteResponse {
+    // Whether the operation was successful
+    bool success = 1;
+    
+    // Response message
+    string message = 2;
+}
+
+/**
+ * ServiceInput is used for creating a new service.
+ */
+message ServiceInput {
+    // Category ID for the service
+    int32 category_id = 1;
+    
+    // Sub-service ID for the service
+    int32 sub_service_id = 2;
+    
+    // Service name
+    string name = 3;
+    
+    // Price per hour in USD
+    float price_per_hour = 4;
+}
+
+/**
+ * UpdateServiceInput is used for updating an existing service.
+ */
+message UpdateServiceInput {
+    // Updated service name
+    string name = 1;
+    
+    // Updated price per hour
+    float price_per_hour = 2;
+}
+
+/**
+ * GetServicesRequest is the request for getting all services with filtering.
+ */
+message GetServicesRequest {
+    // Filter by category name (case-insensitive)
+    string category = 1;
+    
+    // Filter by service name (case-insensitive, partial match)
+    string name = 2;
+}
+
+/**
+ * GetServicesResponse contains the list of services.
+ */
+message GetServicesResponse {
+    // List of services matching the filter criteria
+    repeated Service services = 1;
+}
+
+/**
+ * GetServiceRequest is the request for getting a specific service.
+ */
+message GetServiceRequest {
+    // The service ID to retrieve
+    int32 id = 1;
+}
+
+/**
+ * GetCategoriesResponse contains the list of categories.
+ */
+message GetCategoriesResponse {
+    // List of all available categories
+    repeated Category categories = 1;
+}
+
+/**
+ * GetPriceEstimateRequest is the request for getting a price estimate.
+ */
+message GetPriceEstimateRequest {
+    // The ID of the service to estimate
+    int32 service_id = 1;
+}
+
+/**
+ * CreateServiceRequest is the request for creating a new service.
+ */
+message CreateServiceRequest {
+    // Service creation details
+    ServiceInput input = 1;
+}
+
+/**
+ * UpdateServiceRequest is the request for updating an existing service.
+ */
+message UpdateServiceRequest {
+    // The service ID to update
+    int32 id = 1;
+    
+    // Fields to update
+    UpdateServiceInput input = 2;
+}
+
+/**
+ * DeleteServiceRequest is the request for deleting a service.
+ */
+message DeleteServiceRequest {
+    // The service ID to delete
+    int32 id = 1;
+}
+
+/**
+ * ServiceService defines the RPC methods for service management.
+ * This service provides both query and mutation operations for the Service API.
+ */
+service ServiceService {
+    /**
+     * GetServices returns all services with optional filtering by category or name.
+     * 
+     * Request: GetServicesRequest with optional category and name filters
+     * Response: GetServicesResponse containing the list of services
+     */
+    rpc GetServices(GetServicesRequest) returns (GetServicesResponse) {}
+    
+    /**
+     * GetService returns a specific service by its ID.
+     * 
+     * Request: GetServiceRequest with the service ID
+     * Response: Service message or error if not found
+     */
+    rpc GetService(GetServiceRequest) returns (Service) {}
+    
+    /**
+     * GetCategories returns all service categories with their sub-services.
+     * 
+     * Request: Empty message (no parameters)
+     * Response: GetCategoriesResponse containing all categories
+     */
+    rpc GetCategories(google.protobuf.Empty) returns (GetCategoriesResponse) {}
+    
+    /**
+     * GetPriceEstimate returns a price estimate for a specific service.
+     * 
+     * Request: GetPriceEstimateRequest with the service ID
+     * Response: PriceEstimate message or error if service not found
+     */
+    rpc GetPriceEstimate(GetPriceEstimateRequest) returns (PriceEstimate) {}
+    
+    /**
+     * CreateService creates a new service in a specified category and sub-service.
+     * 
+     * Request: CreateServiceRequest with service creation details
+     * Response: Service message containing the newly created service
+     */
+    rpc CreateService(CreateServiceRequest) returns (Service) {}
+    
+    /**
+     * UpdateService updates an existing service's details.
+     * 
+     * Request: UpdateServiceRequest with ID and fields to update
+     * Response: Service message containing the updated service
+     */
+    rpc UpdateService(UpdateServiceRequest) returns (Service) {}
+    
+    /**
+     * DeleteService deletes an existing service by ID.
+     * 
+     * Request: DeleteServiceRequest with the service ID
+     * Response: DeleteResponse with success status and message
+     */
+    rpc DeleteService(DeleteServiceRequest) returns (DeleteResponse) {}
+}

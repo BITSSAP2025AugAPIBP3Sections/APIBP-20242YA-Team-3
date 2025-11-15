@@ -1,19 +1,35 @@
-const fs = require('fs');
-const path = require('path');
+const { gql } = require('apollo-server-express');
 const express = require('express');
-const router = express.Router();
+const { connectDB } = require('../config/database');
+const { Category } = require('../models/Service');
 
-// Read and parse the Services.json file
-const loadServices = () => {
+// ============================================================================
+// DATA LOADING
+// ============================================================================
+
+// ============================================================================
+// DATA LOADING
+// ============================================================================
+
+// Initialize database connection
+let dbInitialized = false;
+const initializeDB = async () => {
+    if (!dbInitialized) {
+        await connectDB();
+        dbInitialized = true;
+    }
+};
+
+const loadServices = async () => {
     try {
-        const servicesPath = path.join(__dirname, '..', 'Services.json');
-        const servicesData = fs.readFileSync(servicesPath, 'utf8');
-        const servicesJson = JSON.parse(servicesData);
+        await initializeDB();
+        
+        const categories = await Category.find({});
         
         // Transform the data into a flat list of services
         const allServices = [];
         
-        servicesJson.services.forEach(category => {
+        categories.forEach(category => {
             category.subServices.forEach(subService => {
                 subService.services.forEach(service => {
                     allServices.push({
@@ -36,7 +52,470 @@ const loadServices = () => {
     }
 };
 
-// API Routes
+const loadServicesJson = async () => {
+    try {
+        await initializeDB();
+        const categories = await Category.find({});
+        return { services: categories };
+    } catch (error) {
+        console.error('Error loading services.json:', error);
+        return { services: [] };
+    }
+};
+
+// ============================================================================
+// GRAPHQL SCHEMA WITH INTROSPECTION
+// ============================================================================
+
+const typeDefs = gql`
+    """
+    Service type representing a service offering in the system.
+    This type includes pricing, categorization, and hierarchical information.
+    """
+    type Service {
+        """
+        Unique identifier for the service
+        """
+        id: Int!
+        
+        """
+        Human-readable name of the service
+        """
+        name: String!
+        
+        """
+        Hourly rate for the service in USD
+        """
+        pricePerHour: Float!
+        
+        """
+        Unique identifier of the parent category
+        """
+        categoryId: Int!
+        
+        """
+        Name of the parent category
+        """
+        categoryName: String!
+        
+        """
+        Unique identifier of the parent sub-service
+        """
+        subServiceId: Int!
+        
+        """
+        Name of the parent sub-service
+        """
+        subServiceName: String!
+    }
+
+    """
+    Category type representing a service category containing sub-services.
+    """
+    type Category {
+        """
+        Unique identifier for the category
+        """
+        id: Int!
+        
+        """
+        Category name
+        """
+        name: String!
+        
+        """
+        List of sub-services in this category
+        """
+        subServices: [SubService!]!
+    }
+
+    """
+    SubService type representing a sub-category containing services.
+    """
+    type SubService {
+        """
+        Unique identifier for the sub-service
+        """
+        id: Int!
+        
+        """
+        Sub-service name
+        """
+        name: String!
+    }
+
+    """
+    PriceEstimate type providing pricing information for a service.
+    """
+    type PriceEstimate {
+        """
+        Base price per hour
+        """
+        basePrice: Float!
+        
+        """
+        Estimated total price
+        """
+        estimatedPrice: Float!
+        
+        """
+        Currency code (ISO 4217)
+        """
+        currency: String!
+        
+        """
+        Associated service ID
+        """
+        serviceId: Int!
+        
+        """
+        Associated service name
+        """
+        serviceName: String!
+    }
+
+    """
+    Response type for deletion operations.
+    """
+    type DeleteResponse {
+        """
+        Whether the operation was successful
+        """
+        success: Boolean!
+        
+        """
+        Response message
+        """
+        message: String!
+    }
+
+    """
+    Input type for creating a new service.
+    """
+    input ServiceInput {
+        """
+        Category ID for the service
+        """
+        categoryId: Int!
+        
+        """
+        Sub-service ID for the service
+        """
+        subServiceId: Int!
+        
+        """
+        Service name
+        """
+        name: String!
+        
+        """
+        Price per hour in USD
+        """
+        pricePerHour: Float!
+    }
+
+    """
+    Input type for updating an existing service.
+    """
+    input UpdateServiceInput {
+        """
+        Updated service name
+        """
+        name: String
+        
+        """
+        Updated price per hour
+        """
+        pricePerHour: Float
+    }
+
+    """
+    Root query type for the Service GraphQL API.
+    Provides read-only access to service data with various filtering options.
+    """
+    type Query {
+        """
+        Get all services with optional filtering by category or name.
+        
+        Args:
+            category: Filter by category name (case-insensitive)
+            name: Filter by service name (case-insensitive, partial match)
+        
+        Returns: List of matching services
+        """
+        services(category: String, name: String): [Service!]!
+
+        """
+        Get a specific service by its ID.
+        
+        Args:
+            id: The service ID to retrieve
+        
+        Returns: The requested service or null if not found
+        """
+        service(id: Int!): Service
+
+        """
+        Get all service categories with their sub-services.
+        
+        Returns: List of all available categories
+        """
+        categories: [Category!]!
+
+        """
+        Get a price estimate for a specific service.
+        
+        Args:
+            serviceId: The ID of the service to estimate
+        
+        Returns: Price estimate details or error if service not found
+        """
+        priceEstimate(serviceId: Int!): PriceEstimate
+    }
+
+    """
+    Root mutation type for the Service GraphQL API.
+    Provides write operations for service management.
+    """
+    type Mutation {
+        """
+        Create a new service in a specified category and sub-service.
+        
+        Args:
+            input: Service creation details
+        
+        Returns: The newly created service
+        """
+        createService(input: ServiceInput!): Service
+
+        """
+        Update an existing service's details.
+        
+        Args:
+            id: The service ID to update
+            input: Fields to update
+        
+        Returns: The updated service
+        """
+        updateService(id: Int!, input: UpdateServiceInput!): Service
+
+        """
+        Delete an existing service by ID.
+        
+        Args:
+            id: The service ID to delete
+        
+        Returns: Success confirmation and message
+        """
+        deleteService(id: Int!): DeleteResponse!
+    }
+`;
+
+// ============================================================================
+// GRAPHQL RESOLVERS
+// ============================================================================
+
+const resolvers = {
+    Query: {
+        /**
+         * Resolver for services query with optional filtering
+         */
+        services: async (_, { category, name }) => {
+            let services = await loadServices();
+            
+            if (category) {
+                services = services.filter(service => 
+                    service.categoryName.toLowerCase() === category.toLowerCase()
+                );
+            }
+            
+            if (name) {
+                services = services.filter(service => 
+                    service.name.toLowerCase().includes(name.toLowerCase())
+                );
+            }
+            
+            return services;
+        },
+
+        /**
+         * Resolver for single service by ID
+         */
+        service: async (_, { id }) => {
+            const services = await loadServices();
+            return services.find(s => s.id === id) || null;
+        },
+
+        /**
+         * Resolver for all categories
+         */
+        categories: async () => {
+            const servicesJson = await loadServicesJson();
+            return servicesJson.services.map(category => ({
+                id: category.id,
+                name: category.category,
+                subServices: category.subServices.map(sub => ({
+                    id: sub.id,
+                    name: sub.name
+                }))
+            }));
+        },
+
+        /**
+         * Resolver for price estimate
+         */
+        priceEstimate: async (_, { serviceId }) => {
+            const services = await loadServices();
+            const service = services.find(s => s.id === serviceId);
+            
+            if (!service) {
+                throw new Error(`Service with ID ${serviceId} not found`);
+            }
+            
+            return {
+                basePrice: service.pricePerHour,
+                estimatedPrice: service.pricePerHour,
+                currency: 'USD',
+                serviceId: service.id,
+                serviceName: service.name
+            };
+        }
+    },
+
+    Mutation: {
+        /**
+         * Resolver for creating a new service
+         */
+        createService: async (_, { input }) => {
+            await initializeDB();
+            
+            const { categoryId, subServiceId, name, pricePerHour } = input;
+            
+            // Find the category
+            const category = await Category.findOne({ id: categoryId });
+            if (!category) {
+                throw new Error(`Category with ID ${categoryId} not found`);
+            }
+            
+            // Find the subservice
+            const subService = category.subServices.find(s => s.id === subServiceId);
+            if (!subService) {
+                throw new Error(`SubService with ID ${subServiceId} not found`);
+            }
+            
+            // Create new service ID
+            const newServiceId = Math.max(...subService.services.map(s => s.id), 0) + 1;
+            
+            // Create new service
+            const newService = {
+                id: newServiceId,
+                name,
+                pricePerHour
+            };
+            
+            // Add to services array
+            subService.services.push(newService);
+            
+            // Save to MongoDB
+            await category.save();
+            
+            return {
+                ...newService,
+                categoryId: category.id,
+                categoryName: category.category,
+                subServiceId: subService.id,
+                subServiceName: subService.name
+            };
+        },
+
+        /**
+         * Resolver for updating a service
+         */
+        updateService: async (_, { id, input }) => {
+            await initializeDB();
+            
+            let updatedService = null;
+            
+            // Find and update the service
+            const categories = await Category.find({});
+            
+            for (let category of categories) {
+                for (let subService of category.subServices) {
+                    const serviceIndex = subService.services.findIndex(s => s.id === id);
+                    if (serviceIndex !== -1) {
+                        if (input.name) {
+                            subService.services[serviceIndex].name = input.name;
+                        }
+                        if (input.pricePerHour !== undefined) {
+                            subService.services[serviceIndex].pricePerHour = input.pricePerHour;
+                        }
+                        
+                        await category.save();
+                        
+                        updatedService = {
+                            id: subService.services[serviceIndex].id,
+                            name: subService.services[serviceIndex].name,
+                            pricePerHour: subService.services[serviceIndex].pricePerHour,
+                            categoryId: category.id,
+                            categoryName: category.category,
+                            subServiceId: subService.id,
+                            subServiceName: subService.name
+                        };
+                        break;
+                    }
+                }
+                if (updatedService) break;
+            }
+            
+            if (!updatedService) {
+                throw new Error(`Service with ID ${id} not found`);
+            }
+            
+            return updatedService;
+        },
+
+        /**
+         * Resolver for deleting a service
+         */
+        deleteService: async (_, { id }) => {
+            await initializeDB();
+            
+            let serviceDeleted = false;
+            
+            // Find and delete the service
+            const categories = await Category.find({});
+            
+            for (let category of categories) {
+                for (let subService of category.subServices) {
+                    const serviceIndex = subService.services.findIndex(s => s.id === id);
+                    if (serviceIndex !== -1) {
+                        subService.services.splice(serviceIndex, 1);
+                        await category.save();
+                        serviceDeleted = true;
+                        break;
+                    }
+                }
+                if (serviceDeleted) break;
+            }
+            
+            if (!serviceDeleted) {
+                throw new Error(`Service with ID ${id} not found`);
+            }
+            
+            return {
+                success: true,
+                message: `Service with ID ${id} deleted successfully`
+            };
+        }
+    }
+};
+
+// ============================================================================
+// EXPRESS ROUTER FOR BACKWARD COMPATIBILITY
+// ============================================================================
+
+const router = express.Router();
+
 /**
  * @swagger
  * /v1/services:
@@ -64,9 +543,9 @@ const loadServices = () => {
  *               items:
  *                 $ref: '#/components/schemas/Service'
  */
-router.get('/v1/services', (req, res) => {
+router.get('/v1/services', async (req, res) => {
     try {
-        const services = loadServices();
+        const services = await loadServices();
         
         // Apply filters if provided
         let filteredServices = services;
@@ -114,9 +593,9 @@ router.get('/v1/services', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/v1/services/:serviceId', (req, res) => {
+router.get('/v1/services/:serviceId', async (req, res) => {
     try {
-        const services = loadServices();
+        const services = await loadServices();
         const service = services.find(s => s.id === parseInt(req.params.serviceId));
         
         if (!service) {
@@ -173,15 +652,14 @@ router.get('/v1/services/:serviceId', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/v1/services', (req, res) => {
+router.post('/v1/services', async (req, res) => {
     try {
-        const servicesPath = path.join(__dirname, '..', 'Services.json');
-        const servicesJson = JSON.parse(fs.readFileSync(servicesPath, 'utf8'));
+        await initializeDB();
         
         const { categoryId, subServiceId, name, pricePerHour } = req.body;
         
         // Find the category and subService
-        const category = servicesJson.services.find(c => c.id === categoryId);
+        const category = await Category.findOne({ id: categoryId });
         if (!category) {
             return res.status(400).json({ error: 'Category not found' });
         }
@@ -193,7 +671,7 @@ router.post('/v1/services', (req, res) => {
         
         // Create new service
         const newService = {
-            id: Math.max(...subService.services.map(s => s.id)) + 1,
+            id: Math.max(...subService.services.map(s => s.id), 0) + 1,
             name,
             pricePerHour
         };
@@ -201,8 +679,8 @@ router.post('/v1/services', (req, res) => {
         // Add to services array
         subService.services.push(newService);
         
-        // Save back to file
-        fs.writeFileSync(servicesPath, JSON.stringify(servicesJson, null, 2));
+        // Save to MongoDB
+        await category.save();
         
         res.status(201).json({
             ...newService,
@@ -256,40 +734,44 @@ router.post('/v1/services', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/v1/services/:serviceId', (req, res) => {
+router.put('/v1/services/:serviceId', async (req, res) => {
     try {
-        const servicesPath = path.join(__dirname, '..', 'Services.json');
-        const servicesJson = JSON.parse(fs.readFileSync(servicesPath, 'utf8'));
+        await initializeDB();
         
         let updatedService = null;
         const serviceId = parseInt(req.params.serviceId);
         
         // Find and update the service
-        servicesJson.services.forEach(category => {
-            category.subServices.forEach(subService => {
+        const categories = await Category.find({});
+        
+        for (let category of categories) {
+            for (let subService of category.subServices) {
                 const serviceIndex = subService.services.findIndex(s => s.id === serviceId);
                 if (serviceIndex !== -1) {
                     // Update the service
                     subService.services[serviceIndex].name = req.body.name || subService.services[serviceIndex].name;
                     subService.services[serviceIndex].pricePerHour = req.body.pricePerHour || subService.services[serviceIndex].pricePerHour;
                     
+                    await category.save();
+                    
                     updatedService = {
-                        ...subService.services[serviceIndex],
+                        id: subService.services[serviceIndex].id,
+                        name: subService.services[serviceIndex].name,
+                        pricePerHour: subService.services[serviceIndex].pricePerHour,
                         categoryId: category.id,
                         categoryName: category.category,
                         subServiceId: subService.id,
                         subServiceName: subService.name
                     };
+                    break;
                 }
-            });
-        });
+            }
+            if (updatedService) break;
+        }
         
         if (!updatedService) {
             return res.status(404).json({ error: 'Service not found' });
         }
-        
-        // Save back to file
-        fs.writeFileSync(servicesPath, JSON.stringify(servicesJson, null, 2));
         
         res.json(updatedService);
     } catch (error) {
@@ -329,31 +811,32 @@ router.put('/v1/services/:serviceId', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/v1/services/:serviceId', (req, res) => {
+router.delete('/v1/services/:serviceId', async (req, res) => {
     try {
-        const servicesPath = path.join(__dirname, '..', 'Services.json');
-        const servicesJson = JSON.parse(fs.readFileSync(servicesPath, 'utf8'));
+        await initializeDB();
         
         const serviceId = parseInt(req.params.serviceId);
         let serviceDeleted = false;
         
         // Find and delete the service
-        servicesJson.services.forEach(category => {
-            category.subServices.forEach(subService => {
+        const categories = await Category.find({});
+        
+        for (let category of categories) {
+            for (let subService of category.subServices) {
                 const serviceIndex = subService.services.findIndex(s => s.id === serviceId);
                 if (serviceIndex !== -1) {
                     subService.services.splice(serviceIndex, 1);
+                    await category.save();
                     serviceDeleted = true;
+                    break;
                 }
-            });
-        });
+            }
+            if (serviceDeleted) break;
+        }
         
         if (!serviceDeleted) {
             return res.status(404).json({ error: 'Service not found' });
         }
-        
-        // Save back to file
-        fs.writeFileSync(servicesPath, JSON.stringify(servicesJson, null, 2));
         
         res.json({ success: true, message: 'Service deleted successfully' });
     } catch (error) {
@@ -404,9 +887,9 @@ router.delete('/v1/services/:serviceId', (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/v1/services/:serviceId/price-estimate', (req, res) => {
+router.get('/v1/services/:serviceId/price-estimate', async (req, res) => {
     try {
-        const services = loadServices();
+        const services = await loadServices();
         const service = services.find(s => s.id === parseInt(req.params.serviceId));
         
         if (!service) {
@@ -460,10 +943,9 @@ router.get('/v1/services/:serviceId/price-estimate', (req, res) => {
  *                           type: string
  *                           description: Sub-service name
  */
-router.get('/v1/categories', (req, res) => {
+router.get('/v1/categories', async (req, res) => {
     try {
-        const servicesPath = path.join(__dirname, '..', 'Services.json');
-        const servicesJson = JSON.parse(fs.readFileSync(servicesPath, 'utf8'));
+        const servicesJson = await loadServicesJson();
         
         const categories = servicesJson.services.map(category => ({
             id: category.id,
@@ -480,15 +962,14 @@ router.get('/v1/categories', (req, res) => {
     }
 });
 
-// Export the router and loadServices function
+// ============================================================================
+// EXPORTS
+// ============================================================================
+
 module.exports = {
     getAllServices: loadServices,
-    router
+    router,
+    typeDefs,
+    resolvers,
+    initializeDB
 };
-
-const app = express();
-app.use(router);
-
-app.listen(5000,()=>{
-    console.log('Service module running on port 5000');
-});
