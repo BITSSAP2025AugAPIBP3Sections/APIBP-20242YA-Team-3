@@ -1,40 +1,278 @@
-# Service Management API - Complete Guide
+# Service Management API - Complete Deployment Guide
 
 A production-ready REST API for managing services, tenants, billing, and real-time notifications using Apache Kafka.
 
-## 🚀 Quick Start (5 minutes)
+## 🚀 Quick Start for New Developers
 
-### 1. Prerequisites
-- Node.js 14+
-- Docker & Docker Compose (for Kafka)
-- npm
+Choose the deployment method that works best for you:
 
-### 2. Install & Start
+### Method 1: Docker Compose (🔥 Recommended - Easiest)
+
+**Perfect for:** First-time setup, development, testing  
+**Time to run:** 2 minutes
 
 ```bash
-# Install dependencies
-npm install
+# 1. Navigate to the project directory
+cd APIBP-20242YA-Team-3
 
-# Start Kafka with Docker
+# 2. Start everything (Kafka + Zookeeper + API)
 docker-compose up -d
 
-# Start the server
-node index.js
+# 3. Wait 30 seconds, then test
+curl http://localhost:3000/api/v1/services
+curl http://localhost:3000/api/v1/tenants
+
+# 4. View API documentation
+open http://localhost:3000/api-docs
 ```
 
-### 3. Test It
+**✅ What you get automatically:**
+- Kafka + Zookeeper (message broker for notifications)
+- Your API server (all endpoints working)
+- Real-time event notifications
+- No manual setup required
+
+---
+
+### Method 2: Kubernetes with Minikube (Production-like)
+
+**Perfect for:** Learning Kubernetes, production simulation  
+**Time to run:** 5 minutes
+
 ```bash
-# Create a bill
+# 1. Navigate to the project directory
+cd APIBP-20242YA-Team-3
+
+# 2. Start Minikube
+minikube start
+
+# 3. Build and deploy to Kubernetes
+eval $(minikube docker-env)
+docker build -t service-api:latest .
+kubectl apply -f k8s-configmap.yaml
+kubectl apply -f k8s-deployment.yaml
+
+# 4. Get the service URL
+minikube service service-api --url
+# Use the returned URL (e.g., http://127.0.0.1:58583) to test:
+curl <RETURNED_URL>/api/v1/services
+```
+
+---
+
+### Method 3: Manual Setup (Development Mode)
+
+**Perfect for:** Code development, debugging, learning the codebase  
+**Time to run:** 3 minutes
+
+```bash
+# 1. Navigate to the project directory
+cd APIBP-20242YA-Team-3
+
+# 2. Install dependencies
+npm install
+# If you get dependency conflicts, use:
+# npm install --legacy-peer-deps
+
+# 3. Start Kafka services only
+docker-compose up -d kafka zookeeper
+
+# 4. Start the API server manually
+npm start
+# or: node index.js
+
+# 5. Test
+curl http://localhost:3000/api/v1/services
+```
+
+---
+
+## 📋 Prerequisites by Method
+
+### Docker Compose:
+- **Docker Desktop** (Windows/Mac) or **Docker + Compose** (Linux)
+- That's it! 🎉
+
+### Kubernetes:
+- **Docker Desktop** (Windows/Mac) or **Docker** (Linux)
+- **Minikube** ([Install Guide](https://minikube.sigs.k8s.io/docs/start/))
+- **kubectl** (usually comes with Docker Desktop)
+
+### Manual Setup:
+- **Node.js 14+** ([Download](https://nodejs.org/))
+- **npm** (comes with Node.js)
+- **Docker** (for Kafka services)
+
+---
+
+## ⚡ Quick API Test Suite
+
+Once running, test your deployment with these commands:
+
+```bash
+# Replace localhost:3000 with your service URL (for Kubernetes)
+
+# 1. List all services (should return JSON array)
+curl http://localhost:3000/api/v1/services
+
+# 2. Get specific service details
+curl http://localhost:3000/api/v1/services/1011
+
+# 3. List all tenants
+curl http://localhost:3000/api/v1/tenants
+
+# 4. Create a new bill (triggers Kafka notification)
 curl -X POST -H "Content-Type: application/json" \
   -d '{"serviceId": 1011, "tenantId": 1, "hours": 3}' \
   http://localhost:3000/api/v1/bills
 
-# Check notifications
+# 5. Check real-time notifications (Kafka events)
 curl http://localhost:3000/api/v1/notifications
 
-# View API docs
+# 6. View interactive API documentation
 open http://localhost:3000/api-docs
 ```
+
+**Expected results:**
+- Services: Returns list of 33+ services across 2 categories
+- Tenants: Returns list of 5 pre-loaded tenants
+- Bills: Creates bill and triggers `bill.created` notification
+- Notifications: Shows real-time Kafka events
+- API Docs: Interactive Swagger UI
+
+---
+
+## 🛑 Stopping the Application
+
+**Docker Compose:**
+```bash
+docker-compose down
+```
+
+**Kubernetes:**
+```bash
+kubectl delete -f k8s-deployment.yaml
+minikube stop  # optional: stops Minikube
+```
+
+**Manual Setup:**
+```bash
+# Ctrl+C to stop the Node.js server
+docker-compose down  # stops Kafka services
+```
+
+---
+
+## 🔧 Included Deployment Files
+
+Your repository includes everything needed for deployment:
+
+| File | Description |
+|------|-------------|
+| `docker-compose.yml` | Complete stack: Kafka + Zookeeper + API |
+| `Dockerfile` | API server container definition |
+| `k8s-configmap.yaml` | Kubernetes environment variables |
+| `k8s-deployment.yaml` | Kubernetes deployment & service |
+| `k8s-kafka.yaml` | Kubernetes Kafka & Zookeeper |
+| `.dockerignore` | Docker build optimization |
+
+---
+
+## 🐛 Common Issues & Solutions
+
+### Issue: npm dependency conflicts (ERESOLVE error)
+```bash
+npm error ERESOLVE could not resolve
+npm error peer express@"^4.17.1" from apollo-server-express@3.13.0
+```
+
+**Solutions (try in order):**
+```bash
+# Option 1: Use legacy peer deps (recommended)
+npm install --legacy-peer-deps
+
+# Option 2: Force the installation
+npm install --force
+
+# Option 3: Clear cache and retry
+npm cache clean --force
+rm -rf node_modules package-lock.json
+npm install --legacy-peer-deps
+```
+
+**Why this happens:** The project uses Express v4.x for compatibility with apollo-server-express, but npm sometimes tries to install Express v5.x.
+
+### Issue: "Cannot connect" errors
+```bash
+# Check what's running
+docker ps                    # Docker Compose
+kubectl get pods            # Kubernetes
+
+# Restart services
+docker-compose restart      # Docker Compose
+kubectl delete pod <name>   # Kubernetes
+```
+
+### Issue: Port 3000 already in use
+```bash
+# Find and kill the process
+lsof -i :3000
+kill -9 <PID>
+```
+
+### Issue: Docker not running (macOS)
+```bash
+# Start Docker
+colima start              # if using Colima
+# OR open Docker Desktop app
+```
+
+### Issue: Kafka not responding
+**Wait 30-60 seconds** after starting - Kafka takes time to initialize.
+
+```bash
+# Check Kafka logs
+docker-compose logs kafka    # Docker Compose
+kubectl logs <kafka-pod>     # Kubernetes
+```
+
+---
+
+## 🧪 Available API Endpoints (28 total)
+
+### Core Services (7 endpoints)
+- `GET /api/v1/services` - List all services
+- `GET /api/v1/services/{id}` - Service details
+- `POST /api/v1/services` - Create service
+- `PUT /api/v1/services/{id}` - Update service
+- `DELETE /api/v1/services/{id}` - Delete service
+- `GET /api/v1/services/{id}/price-estimate` - Price calculator
+- `GET /api/v1/categories` - Service categories
+
+### Tenant Management (6 endpoints)
+- `GET /api/v1/tenants` - List tenants
+- `GET /api/v1/tenants/{id}` - Tenant details
+- `POST /api/v1/tenants` - Create tenant
+- `PUT /api/v1/tenants/{id}` - Update tenant
+- `DELETE /api/v1/tenants/{id}` - Delete tenant
+- `POST /api/v1/login` - Authenticate
+
+### Billing & Payments (5 endpoints)
+- `GET /api/v1/bills` - List bills
+- `GET /api/v1/bills/{id}` - Bill details
+- `GET /api/v1/tenants/{id}/bills` - Tenant's bills
+- `POST /api/v1/bills` - Create bill
+- `POST /api/v1/payment` - Update payment status
+
+### Real-time Notifications (3 endpoints)
+- `GET /api/v1/notifications` - All notifications
+- `GET /api/v1/notifications/type/{type}` - Filter by type
+- `GET /api/v1/notifications/stats` - Statistics
+
+### Documentation (1 endpoint)
+- `GET /api-docs` - Interactive Swagger UI
+
+---
 
 ## 📚 Documentation
 
@@ -85,54 +323,6 @@ Logging System (log4js)
 | **API Documentation** | Swagger/OpenAPI 3.0 |
 | **Data Storage** | JSON files (in-memory persistence) |
 | **Runtime** | Node.js |
-
-## 📡 API Endpoints (28 Total)
-
-### Services Management (7 endpoints)
-```
-GET    /api/v1/services                    - List all services
-GET    /api/v1/services/{id}               - Get service details
-GET    /api/v1/services/{id}/price-estimate - Get price estimate
-POST   /api/v1/services                    - Create new service
-PUT    /api/v1/services/{id}               - Update service
-DELETE /api/v1/services/{id}               - Delete service
-GET    /api/v1/categories                  - List all categories
-```
-
-### Tenant Management (6 endpoints)
-```
-GET    /api/v1/tenants                     - List all tenants
-GET    /api/v1/tenants/{id}                - Get tenant details
-POST   /api/v1/tenants                     - Create new tenant
-PUT    /api/v1/tenants/{id}                - Update tenant
-DELETE /api/v1/tenants/{id}                - Delete tenant
-POST   /api/v1/login                       - Authenticate tenant
-```
-
-### Billing Management (4 endpoints)
-```
-GET    /api/v1/bills                       - List all bills
-GET    /api/v1/bills/{id}                  - Get bill details
-GET    /api/v1/tenants/{tenantId}/bills    - Get tenant's bills
-POST   /api/v1/bills                       - Create new bill
-```
-
-### Payment Processing (1 endpoint)
-```
-POST   /api/v1/payment                     - Update payment status
-```
-
-### Notifications (3 endpoints)
-```
-GET    /api/v1/notifications               - Get all notifications
-GET    /api/v1/notifications/type/{type}   - Filter by type
-GET    /api/v1/notifications/stats         - Get statistics
-```
-
-### Documentation (1 endpoint)
-```
-GET    /api-docs                           - Swagger UI
-```
 
 ## 📢 Notification System
 
