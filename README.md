@@ -2,6 +2,8 @@
 
 A production-ready REST API for managing services, tenants, billing, and real-time notifications using Apache Kafka.
 
+**App deployed on**: `[evio-tech](http://52.66.102.217:3000/api-docs/)` 
+
 ## 🚀 Quick Start for New Developers
 
 Choose the deployment method that works best for you:
