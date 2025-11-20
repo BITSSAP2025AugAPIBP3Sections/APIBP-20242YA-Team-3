@@ -186,10 +186,10 @@ This diagram shows the high-level interactions between the system and external e
 
 ![System Context Diagram](System_Context_Diagram.drawio.png)                          
 
-- External Client: Represents users or systems accessing the application.
-- API Gateway: The entry point for all requests, implemented in index.js.
-- Application: Hosted on a single EC2 instance, handling business logic and interacting with MongoDB.
-- MongoDB Atlas: A cloud-hosted database storing collections like Bill, Service, Tenant, and Notification.
+- **External Client**: Represents users or systems accessing the application.
+- **API Gateway**: The entry point for all requests, implemented in index.js.
+- **Application**: Hosted on a single EC2 instance, handling business logic and interacting with MongoDB.
+- **MongoDB Atlas**: A cloud-hosted database storing collections like Bill, Service, Tenant, and Notification.
 
 ### 2. Container Diagram
 
@@ -197,9 +197,9 @@ This diagram focuses on the logical components within the system.
 
 ![Container Diagram](Container.drawio.png)
 
-- API Gateway: Routes requests to the application.
-- Application: Implements business logic, REST/GraphQL APIs, and interacts with MongoDB.
-- MongoDB Atlas: Stores the application's data.
+- **API Gateway**: Routes requests to the application.
+- **Application**: Implements business logic, REST/GraphQL APIs, and interacts with MongoDB.
+- **MongoDB Atlas**: Stores the application's data.
 
 ### 3. Deployment Diagram
 
