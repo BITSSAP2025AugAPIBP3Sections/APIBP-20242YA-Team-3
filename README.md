@@ -178,6 +178,39 @@ Your repository includes everything needed for deployment:
 
 ---
 
+## 🐛 Project Structure and Diagrams
+
+### 1. System Context Diagram
+
+This diagram shows the high-level interactions between the system and external entities.
+
+![System Context Diagram](System_Context_Diagram.drawio.png)                          
+
+External Client: Represents users or systems accessing the application.
+API Gateway: The entry point for all requests, implemented in index.js.
+Application: Hosted on a single EC2 instance, handling business logic and interacting with MongoDB.
+MongoDB Atlas: A cloud-hosted database storing collections like Bill, Service, Tenant, and Notification.
+
+### 2. Container Diagram
+
+This diagram focuses on the logical components within the system.
+
+![Container Diagram](Container.drawio.png)
+
+API Gateway: Routes requests to the application.
+Application: Implements business logic, REST/GraphQL APIs, and interacts with MongoDB.
+MongoDB Atlas: Stores the application's data.
+
+### 3. Deployment Diagram
+
+This diagram shows the physical deployment of components.
+
+![Deployment Diagram](Deployment.drawio.png)
+
+EC2 Instance: Hosts the application, including the API Gateway, REST/GraphQL APIs, and logger.
+MongoDB Atlas: A managed database service hosted on AWS.
+
+
 ## 🐛 Common Issues & Solutions
 
 ### Issue: npm dependency conflicts (ERESOLVE error)
