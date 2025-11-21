@@ -521,6 +521,18 @@ const router = express.Router();
  * /v1/services:
  *   get:
  *     summary: Get all services
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - Registered Tenants with verified accounts browsing service catalog
+ *       - System Administrators with admin role credentials
+ *       - Service Managers with service-read permissions
+ *       - Internal Microservices (service-module, billing-module) for service lookups
+ *       - API Partners with valid API keys for service discovery
+ *       - Public API endpoints for unauthenticated catalog browsing (if configured)
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Blacklisted IP Addresses flagged for malicious activities
+ *       - Rate Limit Exceeding Clients (over 1000 requests/hour)
  *     tags: [Services]
  *     parameters:
  *       - in: query
@@ -571,6 +583,18 @@ router.get('/v1/services', async (req, res) => {
  * /v1/services/{serviceId}:
  *   get:
  *     summary: Get service by ID
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - Registered Tenants with verified accounts viewing service details
+ *       - System Administrators with admin role credentials
+ *       - Service Managers with service-read permissions
+ *       - Internal Microservices (service-module, billing-module) for service lookups
+ *       - API Partners with valid API keys
+ *       - Public API endpoints for unauthenticated service detail viewing (if configured)
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Blacklisted IP Addresses flagged for malicious activities
+ *       - Rate Limit Exceeding Clients (over 1000 requests/hour)
  *     tags: [Services]
  *     parameters:
  *       - in: path
@@ -613,6 +637,20 @@ router.get('/v1/services/:serviceId', async (req, res) => {
  * /v1/services:
  *   post:
  *     summary: Create a new service
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Service Managers with service-create permissions
+ *       - Authorized Service Providers adding their service offerings
+ *       - Internal Microservices (service-module) for automated service catalog updates
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Anonymous Requests without valid JWT tokens
+ *       - Authenticated Tenants without service-create permissions
+ *       - Billing Managers lacking service management privileges
+ *       - Suspended Tenants with 'suspended' or 'terminated' status
+ *       - Insufficient Role Permissions (viewer role attempting service creation)
+ *       - Requests with invalid or non-existent categoryId/subServiceId
  *     tags: [Services]
  *     requestBody:
  *       required: true
@@ -699,6 +737,20 @@ router.post('/v1/services', async (req, res) => {
  * /v1/services/{serviceId}:
  *   put:
  *     summary: Update a service
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Service Managers with service-update permissions
+ *       - Authorized Service Providers updating their own service offerings
+ *       - Internal Microservices (service-module) for automated service updates
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Anonymous Requests without valid JWT tokens
+ *       - Authenticated Tenants without service-update permissions
+ *       - Billing Managers lacking service management privileges
+ *       - Suspended Tenants with 'suspended' or 'terminated' status
+ *       - Insufficient Role Permissions (viewer role attempting modifications)
+ *       - Service Providers attempting to update services owned by other providers
  *     tags: [Services]
  *     parameters:
  *       - in: path
@@ -784,6 +836,20 @@ router.put('/v1/services/:serviceId', async (req, res) => {
  * /v1/services/{serviceId}:
  *   delete:
  *     summary: Delete a service
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials and delete permissions
+ *       - Service Managers with service-delete permissions
+ *       - Internal Microservices (service-module) executing service removal workflows
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Anonymous Requests without valid JWT tokens
+ *       - Authenticated Tenants without service-delete permissions
+ *       - Billing Managers lacking service management privileges
+ *       - Service Managers without delete permissions
+ *       - Authorized Service Providers attempting to delete services owned by others
+ *       - Insufficient Role Permissions (non-admin, non-service-manager roles)
+ *       - Requests attempting to delete services with active bills
  *     tags: [Services]
  *     parameters:
  *       - in: path
@@ -849,6 +915,19 @@ router.delete('/v1/services/:serviceId', async (req, res) => {
  * /v1/services/{serviceId}/price-estimate:
  *   get:
  *     summary: Get price estimate for a service
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - Registered Tenants with verified accounts requesting price estimates
+ *       - System Administrators with admin role credentials
+ *       - Billing Managers with pricing-read permissions
+ *       - Internal Microservices (service-module, billing-module) for price calculations
+ *       - API Partners with valid API keys for pricing information
+ *       - Public API endpoints for unauthenticated price estimates (if configured)
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Blacklisted IP Addresses flagged for malicious activities
+ *       - Rate Limit Exceeding Clients (over 1000 requests/hour)
+ *       - Requests for non-existent serviceId
  *     tags: [Services]
  *     parameters:
  *       - in: path
@@ -914,6 +993,18 @@ router.get('/v1/services/:serviceId/price-estimate', async (req, res) => {
  * /v1/categories:
  *   get:
  *     summary: Get all service categories
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - Registered Tenants with verified accounts browsing service categories
+ *       - System Administrators with admin role credentials
+ *       - Service Managers with service-read permissions
+ *       - Internal Microservices (service-module, billing-module) for category lookups
+ *       - API Partners with valid API keys
+ *       - Public API endpoints for unauthenticated category browsing (if configured)
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Blacklisted IP Addresses flagged for malicious activities
+ *       - Rate Limit Exceeding Clients (over 1000 requests/hour)
  *     tags: [Services]
  *     responses:
  *       200:

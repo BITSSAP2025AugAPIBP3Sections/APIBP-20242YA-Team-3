@@ -50,6 +50,15 @@ const saveTenant = async (tenantData) => {
  * /v1/login:
  *   post:
  *     summary: Authenticate a tenant
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - Registered Tenants with valid email and password credentials
+ *       - Organizations with active tenant accounts
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Unregistered accounts without completed registration
+ *       - Suspended Tenants with 'suspended' or 'terminated' status
+ *       - Accounts with incorrect email/password combinations
  *     tags: [Auth]
  *     requestBody:
  *       required: true
@@ -100,6 +109,17 @@ router.post('/v1/login', async (req, res) => {
  * /v1/tenants:
  *   get:
  *     summary: Get all tenants
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Internal Microservices (auth-module, billing-module, notification-module, payments-module, service-module)
+ *       - API Partners with valid API keys and read permissions
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Unauthenticated Requests without valid JWT tokens or API key authentication
+ *       - Regular Tenants without admin privileges
+ *       - Billing Managers without tenant-read permissions
+ *       - Revoked or Expired API Keys
  *     tags: [Tenants]
  *     responses:
  *       200:
@@ -130,6 +150,18 @@ router.get('/v1/tenants', async (req, res) => {
  * /v1/tenants/{id}:
  *   get:
  *     summary: Get tenant by ID
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Authenticated Tenants accessing their own account information
+ *       - Billing Managers with tenant-read permissions
+ *       - Internal Microservices requiring tenant details for processing
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Unauthenticated Requests without valid JWT tokens
+ *       - Authenticated Tenants attempting to access other tenants' information
+ *       - Suspended Tenants with 'suspended' or 'terminated' account status
+ *       - Expired Session Tokens
  *     tags: [Tenants]
  *     parameters:
  *       - in: path
@@ -174,6 +206,16 @@ router.get('/v1/tenants/:id', async (req, res) => {
  * /v1/tenants:
  *   post:
  *     summary: Create a new tenant
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - Public Registration Endpoints for new organizations/individuals
+ *       - System Administrators creating tenant accounts
+ *       - API Partners with tenant-creation permissions
+ *       - Internal Microservices during automated onboarding processes
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Requests attempting to register with existing email addresses
+ *       - Invalid or incomplete registration data
  *     tags: [Tenants]
  *     requestBody:
  *       required: true
@@ -240,6 +282,18 @@ router.post('/v1/tenants', async (req, res) => {
  * /v1/tenants/{id}:
  *   put:
  *     summary: Update a tenant
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Authenticated Tenants updating their own account information
+ *       - Internal Microservices performing tenant data synchronization
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Unauthenticated Requests without valid JWT tokens
+ *       - Authenticated Tenants attempting to modify other tenants' accounts
+ *       - Suspended Tenants with 'suspended' or 'terminated' status
+ *       - Requests attempting to change email to an already registered address
+ *       - Insufficient Role Permissions
  *     tags: [Tenants]
  *     parameters:
  *       - in: path
@@ -324,6 +378,17 @@ router.put('/v1/tenants/:id', async (req, res) => {
  * /v1/tenants/{id}:
  *   delete:
  *     summary: Delete a tenant
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials and delete permissions
+ *       - Internal Microservices executing account closure workflows
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Unauthenticated Requests without valid JWT tokens
+ *       - Regular Tenants attempting to delete accounts
+ *       - Billing Managers without administrative delete privileges
+ *       - Service Managers lacking tenant management permissions
+ *       - API Partners without explicit tenant-deletion permissions
  *     tags: [Tenants]
  *     parameters:
  *       - in: path
