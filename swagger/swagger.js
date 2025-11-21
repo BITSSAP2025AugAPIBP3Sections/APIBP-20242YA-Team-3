@@ -6,7 +6,23 @@ const options = {
         info: {
             title: 'Service Management API',
             version: '1.0.0',
-            description: 'API documentation for the Service Management System',
+            description: `API documentation for the Service Management System
+
+## API Access Criteria
+
+### Who Can Use This API (Inclusion):
+- **Registered Tenants**: Authenticated tenants with valid accounts
+- **System Administrators**: Admin personnel with appropriate credentials
+- **Billing Managers**: Staff with billing management permissions
+- **Service Managers**: Staff managing service catalog operations
+- **Internal Microservices**: Backend services (auth, billing, notification, payments, service modules)
+- **API Partners**: Third-party integrators with valid API keys
+
+### Who Cannot Use This API (Exclusion):
+- **Unauthenticated Requests**: API calls without valid authentication tokens
+- **Suspended Accounts**: Tenants with suspended or terminated status
+- **Insufficient Permissions**: Entities attempting operations beyond their role scope
+- **Expired Credentials**: Requests with expired authentication tokens or API keys`,
             contact: {
                 name: 'API Support',
                 email: 'support@example.com'

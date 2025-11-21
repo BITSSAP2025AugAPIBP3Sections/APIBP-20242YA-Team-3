@@ -30,6 +30,20 @@ const loadBills = async () => {
  * /v1/bills:
  *   post:
  *     summary: Create a new bill
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Billing Managers with billing-create permissions
+ *       - Internal Microservices (billing-module, service-module) for automated billing
+ *       - Authorized Service Providers generating bills for consumed services
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Unauthenticated Requests without valid JWT tokens
+ *       - Regular Tenants attempting to create bills
+ *       - Service Managers without billing-create permissions
+ *       - Suspended Tenants with 'suspended' or 'terminated' status
+ *       - Requests with invalid or non-existent serviceId
+ *       - Insufficient Role Permissions
  *     tags: [Bills]
  *     requestBody:
  *       required: true
@@ -139,6 +153,19 @@ router.post('/v1/bills', async (req, res) => {
  * /v1/bills:
  *   get:
  *     summary: Get all bills
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Billing Managers with billing-read permissions
+ *       - Internal Microservices (billing-module, payments-module) for bill processing
+ *       - API Partners with valid API keys and billing-read permissions
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Unauthenticated Requests without valid JWT tokens
+ *       - Regular Tenants attempting to access all bills (should use tenant-specific endpoint)
+ *       - Service Managers without billing-read permissions
+ *       - Revoked API Keys or expired authentication tokens
+ *       - Insufficient Role Permissions
  *     tags: [Bills]
  *     responses:
  *       200:
@@ -164,6 +191,20 @@ router.get('/v1/bills', async (req, res) => {
  * /v1/bills/{billId}:
  *   get:
  *     summary: Get bill by ID
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Billing Managers with billing-read permissions
+ *       - Authenticated Tenants accessing their own bills
+ *       - Internal Microservices (billing-module, payments-module, notification-module)
+ *       - Payment Gateway Integrations for payment processing
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Unauthenticated Requests without valid JWT tokens
+ *       - Authenticated Tenants attempting to access other tenants' bills
+ *       - Service Managers without billing-read permissions
+ *       - Expired Session Tokens
+ *       - Insufficient Role Permissions for cross-tenant bill access
  *     tags: [Bills]
  *     parameters:
  *       - in: path
@@ -206,6 +247,20 @@ router.get('/v1/bills/:billId', async (req, res) => {
  * /v1/tenants/{tenantId}/bills:
  *   get:
  *     summary: Get all bills for a specific tenant
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Billing Managers with billing-read permissions
+ *       - Authenticated Tenants accessing their own bills (tenantId matches authenticated tenant)
+ *       - Internal Microservices (billing-module, payments-module) for tenant billing operations
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Unauthenticated Requests without valid JWT tokens
+ *       - Authenticated Tenants attempting to access other tenants' bills
+ *       - Service Managers without billing-read permissions
+ *       - Suspended Tenants with 'suspended' or 'terminated' status
+ *       - Expired Session Tokens
+ *       - Insufficient Role Permissions for cross-tenant bill access
  *     tags: [Bills]
  *     parameters:
  *       - in: path

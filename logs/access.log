@@ -125,3 +125,89 @@
 [2025-11-15T14:56:00.503] [INFO] access - ::1 - "GET /api-docs/swagger-ui-standalone-preset.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0.1 Safari/605.1.15"
 [2025-11-15T14:56:25.890] [INFO] access - ::1 - "GET /api/v1/services/1011 HTTP/1.1" 404 29 "" "curl/8.7.1"
 [2025-11-15T14:56:47.181] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 200 2 "" "curl/8.7.1"
+[2025-11-21T20:37:39.759] [INFO] access - Server is running on http://localhost:3000
+[2025-11-21T20:37:39.759] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-21T20:37:39.759] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-21T20:37:42.731] [INFO] access - MongoDB connection initialized
+[2025-11-21T20:37:42.731] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-21T20:37:42.731] [INFO] access - Notifications system initialized
+[2025-11-21T20:37:42.731] [INFO] access - GraphQL introspection enabled
+[2025-11-21T20:37:55.924] [INFO] access - ::1 - "GET /api-docs HTTP/1.1" 301 158 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:37:55.927] [INFO] access - ::1 - "GET /api-docs/ HTTP/1.1" 200 3106 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:37:55.948] [INFO] access - ::1 - "GET /api-docs/swagger-ui-init.js HTTP/1.1" 200 52303 "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:37:55.971] [INFO] access - ::1 - "GET /api-docs/swagger-ui.css HTTP/1.1" 200 155212 "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:37:56.029] [INFO] access - ::1 - "GET /api-docs/swagger-ui-standalone-preset.js HTTP/1.1" 200 250335 "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:37:56.032] [INFO] access - ::1 - "GET /api-docs/swagger-ui-bundle.js HTTP/1.1" 200 1510159 "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:37:56.236] [INFO] access - ::1 - "GET /api-docs/favicon-32x32.png HTTP/1.1" 200 628 "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:41:57.551] [INFO] access - Server is running on http://localhost:3000
+[2025-11-21T20:41:57.552] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-21T20:41:57.552] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-21T20:41:58.621] [INFO] access - MongoDB connection initialized
+[2025-11-21T20:41:58.622] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-21T20:41:58.622] [INFO] access - Notifications system initialized
+[2025-11-21T20:41:58.622] [INFO] access - GraphQL introspection enabled
+[2025-11-21T20:42:06.613] [INFO] access - ::1 - "GET /api-docs/ HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:42:06.634] [INFO] access - ::1 - "GET /api-docs/swagger-ui-bundle.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:42:06.634] [INFO] access - ::1 - "GET /api-docs/swagger-ui.css HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:42:06.636] [INFO] access - ::1 - "GET /api-docs/swagger-ui-standalone-preset.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:42:06.637] [INFO] access - ::1 - "GET /api-docs/swagger-ui-init.js HTTP/1.1" 200 51944 "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:42:06.771] [INFO] access - ::1 - "GET /api-docs/favicon-32x32.png HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:42:08.011] [INFO] access - ::1 - "GET /api-docs/ HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:42:08.031] [INFO] access - ::1 - "GET /api-docs/swagger-ui.css HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:42:08.032] [INFO] access - ::1 - "GET /api-docs/swagger-ui-bundle.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:42:08.035] [INFO] access - ::1 - "GET /api-docs/swagger-ui-init.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:42:08.035] [INFO] access - ::1 - "GET /api-docs/swagger-ui-standalone-preset.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:42:08.089] [INFO] access - ::1 - "GET /api-docs/favicon-32x32.png HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:46:38.563] [INFO] access - ::1 - "GET /api-docs/ HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:46:38.583] [INFO] access - ::1 - "GET /api-docs/swagger-ui.css HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:46:38.584] [INFO] access - ::1 - "GET /api-docs/swagger-ui-bundle.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:46:38.585] [INFO] access - ::1 - "GET /api-docs/swagger-ui-standalone-preset.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:46:38.586] [INFO] access - ::1 - "GET /api-docs/swagger-ui-init.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:46:38.678] [INFO] access - ::1 - "GET /api-docs/favicon-32x32.png HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:46:51.453] [INFO] access - Server is running on http://localhost:3000
+[2025-11-21T20:46:51.453] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-21T20:46:51.453] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-21T20:46:52.753] [INFO] access - MongoDB connection initialized
+[2025-11-21T20:46:52.753] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-21T20:46:52.753] [INFO] access - Notifications system initialized
+[2025-11-21T20:46:52.754] [INFO] access - GraphQL introspection enabled
+[2025-11-21T20:47:12.596] [INFO] access - ::1 - "GET /api-docs/ HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:47:12.614] [INFO] access - ::1 - "GET /api-docs/swagger-ui.css HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:47:12.616] [INFO] access - ::1 - "GET /api-docs/swagger-ui-bundle.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:47:12.618] [INFO] access - ::1 - "GET /api-docs/swagger-ui-init.js HTTP/1.1" 200 51871 "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:47:12.619] [INFO] access - ::1 - "GET /api-docs/swagger-ui-standalone-preset.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T20:47:12.685] [INFO] access - ::1 - "GET /api-docs/favicon-32x32.png HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T21:09:07.287] [INFO] access - Server is running on http://localhost:3000
+[2025-11-21T21:09:07.287] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-21T21:09:07.287] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-21T21:09:08.550] [INFO] access - MongoDB connection initialized
+[2025-11-21T21:09:08.551] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-21T21:09:08.551] [INFO] access - Notifications system initialized
+[2025-11-21T21:09:08.551] [INFO] access - GraphQL introspection enabled
+[2025-11-21T21:09:15.664] [INFO] access - ::1 - "GET /api-docs/ HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T21:09:35.521] [INFO] access - Server is running on http://localhost:3000
+[2025-11-21T21:09:35.522] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-21T21:09:35.522] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-21T21:09:36.422] [INFO] access - MongoDB connection initialized
+[2025-11-21T21:09:36.422] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-21T21:09:36.422] [INFO] access - Notifications system initialized
+[2025-11-21T21:09:36.423] [INFO] access - GraphQL introspection enabled
+[2025-11-21T21:09:40.776] [INFO] access - ::1 - "GET /api-docs/ HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T21:09:40.793] [INFO] access - ::1 - "GET /api-docs/swagger-ui.css HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T21:09:40.795] [INFO] access - ::1 - "GET /api-docs/swagger-ui-standalone-preset.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T21:09:40.796] [INFO] access - ::1 - "GET /api-docs/swagger-ui-bundle.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T21:09:40.798] [INFO] access - ::1 - "GET /api-docs/swagger-ui-init.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T21:09:40.971] [INFO] access - ::1 - "GET /api-docs/favicon-32x32.png HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T21:12:55.625] [INFO] access - Server is running on http://localhost:3000
+[2025-11-21T21:12:55.625] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-21T21:12:55.625] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-21T21:12:57.248] [INFO] access - MongoDB connection initialized
+[2025-11-21T21:12:57.248] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-21T21:12:57.249] [INFO] access - Notifications system initialized
+[2025-11-21T21:12:57.249] [INFO] access - GraphQL introspection enabled
+[2025-11-21T21:13:02.040] [INFO] access - ::1 - "GET /api-docs/ HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T21:13:02.067] [INFO] access - ::1 - "GET /api-docs/swagger-ui.css HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T21:13:02.068] [INFO] access - ::1 - "GET /api-docs/swagger-ui-bundle.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T21:13:02.070] [INFO] access - ::1 - "GET /api-docs/swagger-ui-init.js HTTP/1.1" 200 49519 "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T21:13:02.070] [INFO] access - ::1 - "GET /api-docs/swagger-ui-standalone-preset.js HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-21T21:13:02.206] [INFO] access - ::1 - "GET /api-docs/favicon-32x32.png HTTP/1.1" 304 - "http://localhost:3000/api-docs/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"

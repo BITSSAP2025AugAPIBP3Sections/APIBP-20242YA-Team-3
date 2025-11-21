@@ -18,6 +18,22 @@ const initializeDB = async () => {
  * /v1/payment:
  *   post:
  *     summary: Update bill payment status
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Billing Managers with payment-update permissions
+ *       - Authenticated Tenants updating payment status for their own bills
+ *       - Payment Gateway Integrations with valid API credentials for automated payment processing
+ *       - Internal Microservices (payments-module, billing-module) executing payment workflows
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Anonymous Requests without valid JWT tokens or API key authentication headers
+ *       - Authenticated Tenants attempting to update payment status for other tenants' bills
+ *       - Service Managers without payment-update permissions
+ *       - Suspended Tenants with 'suspended' or 'terminated' status
+ *       - Revoked API Keys from unauthorized payment gateways
+ *       - Insufficient Role Permissions (viewer role attempting payment modifications)
+ *       - Requests with invalid status values (not 'pending', 'paid', or 'cancelled')
  *     tags: [Payments]
  *     requestBody:
  *       required: true

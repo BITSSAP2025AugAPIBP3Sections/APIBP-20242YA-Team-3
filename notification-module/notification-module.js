@@ -63,7 +63,21 @@ const addNotification = async (notification) => {
  * /v1/notifications:
  *   get:
  *     summary: Get all notifications
- *     description: Retrieve all notifications from the system
+ *     description: |
+ *       Retrieve all notifications from the system
+ *       
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Billing Managers with notification-read permissions
+ *       - Internal Microservices (notification-module, billing-module, payments-module)
+ *       - API Partners with valid API keys and notification-read permissions
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Anonymous Requests without valid JWT tokens
+ *       - Authenticated Tenants attempting to access all notifications (should use tenant-specific filters)
+ *       - Service Managers without notification-read permissions
+ *       - Insufficient Role Permissions (viewer role without notification access)
+ *       - Rate Limit Exceeding Clients (over 1000 requests/hour)
  *     tags:
  *       - Notifications
  *     responses:
@@ -103,7 +117,22 @@ router.get('/v1/notifications', async (req, res) => {
  * /v1/notifications/type/{type}:
  *   get:
  *     summary: Get notifications by type
- *     description: Retrieve notifications filtered by type
+ *     description: |
+ *       Retrieve notifications filtered by type
+ *       
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Billing Managers accessing billing-related notification types
+ *       - Authenticated Tenants accessing notification types relevant to their account
+ *       - Internal Microservices (notification-module, billing-module, payments-module) filtering by type
+ *       - API Partners with valid API keys and notification-read permissions
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Anonymous Requests without valid JWT tokens
+ *       - Authenticated Tenants attempting to access notification types beyond their scope
+ *       - Service Managers without notification-read permissions
+ *       - Insufficient Role Permissions for specific notification types
+ *       - Expired Session Tokens beyond 24-hour validity period
  *     tags:
  *       - Notifications
  *     parameters:
@@ -149,7 +178,22 @@ router.get('/v1/notifications/type/:type', async (req, res) => {
  * /v1/notifications:
  *   post:
  *     summary: Create a notification (Internal Use)
- *     description: Create a new notification in the system
+ *     description: |
+ *       Create a new notification in the system
+ *       
+ *       **WHO CAN USE:**
+ *       - Internal Microservices (notification-module, billing-module, payments-module, auth-module, service-module)
+ *       - System Administrators with admin role credentials
+ *       - Authorized notification systems with valid API credentials
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Anonymous Requests without valid JWT tokens or API key authentication headers
+ *       - Authenticated Tenants attempting to create notifications
+ *       - Billing Managers without notification-create permissions
+ *       - Service Managers without notification-create permissions
+ *       - API Partners without explicit notification-creation permissions
+ *       - Insufficient Role Permissions (non-admin roles without notification-create)
+ *       - Requests missing required fields (type, message)
  *     tags:
  *       - Notifications
  *     requestBody:
@@ -197,7 +241,21 @@ router.post('/v1/notifications', async (req, res) => {
  * /v1/notifications/{id}:
  *   get:
  *     summary: Get a notification by ID
- *     description: Retrieve a specific notification
+ *     description: |
+ *       Retrieve a specific notification
+ *       
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Billing Managers with notification-read permissions
+ *       - Authenticated Tenants accessing their own notification
+ *       - Internal Microservices (notification-module, billing-module, payments-module)
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Anonymous Requests without valid JWT tokens
+ *       - Authenticated Tenants attempting to access other tenants' notifications
+ *       - Service Managers without notification-read permissions
+ *       - Insufficient Role Permissions for cross-tenant notification access
+ *       - Expired Session Tokens beyond 24-hour validity period
  *     tags:
  *       - Notifications
  *     parameters:
