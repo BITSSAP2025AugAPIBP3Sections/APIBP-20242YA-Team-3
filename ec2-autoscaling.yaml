@@ -1,0 +1,111 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: EC2 Instance with Load Balancer and Auto Scaling Group
+
+Parameters:
+  InstanceType:
+    Type: String
+    Default: t2.micro
+    Description: EC2 instance type
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: EvioTechKeyPair
+    Description: Name of an existing EC2 KeyPair to enable SSH access
+  VPC:
+    Type: AWS::EC2::VPC::Id
+    Default: vpc-04e19b57e28a9f631
+    Description: VPC ID for the resources
+  Subnets:
+    Type: List<AWS::EC2::Subnet::Id>
+    Default: subnet-034418c07356e6ecd,subnet-012b1a9c8f62931a8
+    Description: Subnet IDs for the load balancer and instances
+
+Resources:
+  # Security Group for EC2 and Load Balancer
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP and SSH traffic
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  # Launch Template for EC2 Instances
+  LaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        InstanceType: !Ref InstanceType
+        KeyName: !Ref KeyName
+        SecurityGroupIds:
+          - !Ref InstanceSecurityGroup
+        ImageId: ami-0c02fb55956c7d316 # Amazon Linux 2 AMI (update as needed)
+        UserData:
+          Fn::Base64: |
+            #!/bin/bash
+            yum update -y
+            yum install -y git
+            curl -sL https://rpm.nodesource.com/setup_16.x | bash -
+            yum install -y nodejs
+            git clone https://github.com/BITSSAP2025AugAPIBP3Sections/APIBP-20242YA-Team-3.git /home/ec2-user/app
+            cd /home/ec2-user/app
+            npm install
+            npm start
+  # Auto Scaling Group
+  AutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      VPCZoneIdentifier: !Ref Subnets
+      LaunchTemplate:
+        LaunchTemplateId: !Ref LaunchTemplate
+        Version: !GetAtt LaunchTemplate.LatestVersionNumber
+      MinSize: "1"
+      MaxSize: "3"
+      DesiredCapacity: "2"
+      TargetGroupARNs:
+        - !Ref TargetGroup
+
+  # Application Load Balancer
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Subnets: !Ref Subnets
+      SecurityGroups:
+        - !Ref InstanceSecurityGroup
+      Scheme: internet-facing
+      LoadBalancerAttributes:
+        - Key: idle_timeout.timeout_seconds
+          Value: "60"
+
+  # Target Group for Load Balancer
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      VpcId: !Ref VPC
+      Port: 80
+      Protocol: HTTP
+      TargetType: instance
+      HealthCheckPath: /
+      HealthCheckIntervalSeconds: 30
+
+  # Listener for Load Balancer
+  LoadBalancerListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref LoadBalancer
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+
+Outputs:
+  LoadBalancerDNSName:
+    Description: DNS Name of the Load Balancer
+    Value: !GetAtt LoadBalancer.DNSName
