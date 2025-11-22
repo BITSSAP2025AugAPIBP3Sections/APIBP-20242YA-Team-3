@@ -1,6 +1,6 @@
 # Service Management API - Complete Deployment Guide
 
-A production-ready REST API for managing services, tenants, billing, and real-time notifications using Apache Kafka.
+A production-ready REST API for managing services, tenants, billing, and real-time notifications using MongoDB Atlas.
 
 **App deployed on**: [evio-tech](http://52.66.102.217:3000/api-docs/)
 
@@ -17,7 +17,7 @@ Choose the deployment method that works best for you:
 # 1. Navigate to the project directory
 cd APIBP-20242YA-Team-3
 
-# 2. Start everything (Kafka + Zookeeper + API)
+# 2. Start everything (MongoDB + API)
 docker-compose up -d
 
 # 3. Wait 30 seconds, then test
@@ -29,7 +29,7 @@ open http://localhost:3000/api-docs
 ```
 
 **✅ What you get automatically:**
-- Kafka + Zookeeper (message broker for notifications)
+- MongoDB Atlas connection
 - Your API server (all endpoints working)
 - Real-time event notifications
 - No manual setup required
@@ -76,8 +76,8 @@ npm install
 # If you get dependency conflicts, use:
 # npm install --legacy-peer-deps
 
-# 3. Start Kafka services only
-docker-compose up -d kafka zookeeper
+# 3. Start MongoDB services only
+docker-compose up -d
 
 # 4. Start the API server manually
 npm start
@@ -103,7 +103,7 @@ curl http://localhost:3000/api/v1/services
 ### Manual Setup:
 - **Node.js 14+** ([Download](https://nodejs.org/))
 - **npm** (comes with Node.js)
-- **Docker** (for Kafka services)
+- **MongoDB Atlas Account** (or local MongoDB)
 
 ---
 
@@ -123,12 +123,12 @@ curl http://localhost:3000/api/v1/services/1011
 # 3. List all tenants
 curl http://localhost:3000/api/v1/tenants
 
-# 4. Create a new bill (triggers Kafka notification)
+# 4. Create a new bill (triggers notification)
 curl -X POST -H "Content-Type: application/json" \
   -d '{"serviceId": 1011, "tenantId": 1, "hours": 3}' \
   http://localhost:3000/api/v1/bills
 
-# 5. Check real-time notifications (Kafka events)
+# 5. Check real-time notifications
 curl http://localhost:3000/api/v1/notifications
 
 # 6. View interactive API documentation
@@ -139,7 +139,7 @@ open http://localhost:3000/api-docs
 - Services: Returns list of 33+ services across 2 categories
 - Tenants: Returns list of 5 pre-loaded tenants
 - Bills: Creates bill and triggers `bill.created` notification
-- Notifications: Shows real-time Kafka events
+- Notifications: Shows stored notification events
 - API Docs: Interactive Swagger UI
 
 ---
@@ -160,7 +160,7 @@ minikube stop  # optional: stops Minikube
 **Manual Setup:**
 ```bash
 # Ctrl+C to stop the Node.js server
-docker-compose down  # stops Kafka services
+docker-compose down  # stops services
 ```
 
 ---
@@ -171,11 +171,10 @@ Your repository includes everything needed for deployment:
 
 | File | Description |
 |------|-------------|
-| `docker-compose.yml` | Complete stack: Kafka + Zookeeper + API |
+| `docker-compose.yml` | Complete stack configuration |
 | `Dockerfile` | API server container definition |
 | `k8s-configmap.yaml` | Kubernetes environment variables |
 | `k8s-deployment.yaml` | Kubernetes deployment & service |
-| `k8s-kafka.yaml` | Kubernetes Kafka & Zookeeper |
 | `.dockerignore` | Docker build optimization |
 
 ---
@@ -262,15 +261,6 @@ colima start              # if using Colima
 # OR open Docker Desktop app
 ```
 
-### Issue: Kafka not responding
-**Wait 30-60 seconds** after starting - Kafka takes time to initialize.
-
-```bash
-# Check Kafka logs
-docker-compose logs kafka    # Docker Compose
-kubectl logs <kafka-pod>     # Kubernetes
-```
-
 ---
 
 ## 🧪 Available API Endpoints (28 total)
@@ -309,24 +299,13 @@ kubectl logs <kafka-pod>     # Kubernetes
 
 ---
 
-## 📚 Documentation
-
-| Document | Purpose |
-|----------|---------|
-| [QUICK_START.md](QUICK_START.md) | 5-minute setup guide |
-| [KAFKA_SETUP.md](KAFKA_SETUP.md) | Detailed Kafka installation |
-| [NOTIFICATION_MODULE_DOCS.md](NOTIFICATION_MODULE_DOCS.md) | Complete architecture docs |
-| [NOTIFICATION_EXAMPLES.md](NOTIFICATION_EXAMPLES.md) | API usage examples |
-| [PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md) | Project file structure |
-| [IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md) | Implementation details |
-
 ## 🏗️ Architecture
 
 ### Module Structure
 ```
 API Requests
     ↓
-Express Middleware (JSON parsing, logging)
+Express Middleware (JSON parsing, log4js logging)
     ↓
 Route Handlers (5 modules)
     ├── Service Management
@@ -335,17 +314,11 @@ Route Handlers (5 modules)
     ├── Tenant Authentication
     └── Notification Monitoring
     ↓
-Business Logic
+Business Logic (with log4js logging)
     ↓
-Data Persistence (JSON files)
+Data Persistence (MongoDB Atlas)
     ↓
-Kafka Producer (Event Publishing)
-    ↓
-Message Broker (Apache Kafka)
-    ↓
-Kafka Consumer (Event Processing)
-    ↓
-Logging System (log4js)
+Notification Events Stored in MongoDB
 ```
 
 ### Technology Stack
@@ -353,33 +326,29 @@ Logging System (log4js)
 | Layer | Technology |
 |-------|-----------|
 | **Framework** | Express.js |
-| **Message Broker** | Apache Kafka |
+| **GraphQL** | Apollo Server Express |
 | **Logging** | log4js |
 | **API Documentation** | Swagger/OpenAPI 3.0 |
-| **Data Storage** | JSON files (in-memory persistence) |
+| **Data Storage** | MongoDB Atlas |
 | **Runtime** | Node.js |
 
 ## 📢 Notification System
 
 ### Event Types (9 total)
 
-| Event | Trigger | Topic |
-|-------|---------|-------|
-| `bill.created` | POST /bills | bills-notifications |
-| `bill.status.updated` | POST /payment | payments-notifications |
-| `payment.received` | Status → paid | payments-notifications |
-| `tenant.created` | POST /tenants | tenants-notifications |
-| `tenant.updated` | PUT /tenants/{id} | tenants-notifications |
-| `tenant.deleted` | DELETE /tenants/{id} | tenants-notifications |
-| `service.created` | POST /services | services-notifications |
-| `service.updated` | PUT /services/{id} | services-notifications |
-| `service.deleted` | DELETE /services/{id} | services-notifications |
+| Event | Trigger | Storage |
+|-------|---------|---------|
+| `bill.created` | POST /bills | MongoDB Notifications |
+| `bill.status.updated` | POST /payment | MongoDB Notifications |
+| `payment.received` | Status → paid | MongoDB Notifications |
+| `tenant.created` | POST /tenants | MongoDB Notifications |
+| `tenant.updated` | PUT /tenants/{id} | MongoDB Notifications |
+| `tenant.deleted` | DELETE /tenants/{id} | MongoDB Notifications |
+| `service.created` | POST /services | MongoDB Notifications |
+| `service.updated` | PUT /services/{id} | MongoDB Notifications |
+| `service.deleted` | DELETE /services/{id} | MongoDB Notifications |
 
-### Kafka Topics (4 total)
-- `bills-notifications` - Bill events
-- `payments-notifications` - Payment events
-- `tenants-notifications` - Tenant events
-- `services-notifications` - Service events
+All notifications are stored directly in MongoDB Atlas and can be retrieved via the Notifications API endpoints.
 
 ## 📊 Data Models
 
@@ -423,8 +392,9 @@ Logging System (log4js)
 ### Notification
 ```json
 {
+  "id": 1,
   "type": "bill.created",
-  "timestamp": "2025-11-04T10:30:45.123Z",
+  "message": "New bill created",
   "data": {
     "billId": 14,
     "tenantId": 1,
@@ -432,8 +402,7 @@ Logging System (log4js)
     "amount": 75,
     "hours": 3
   },
-  "topic": "bills-notifications",
-  "processedAt": "2025-11-04T10:30:45.500Z"
+  "createdAt": "2025-11-04T10:30:45.123Z"
 }
 ```
 
@@ -455,11 +424,12 @@ Logging System (log4js)
 ## 🛡️ Features
 
 ✅ **RESTful API** - Standard HTTP methods and status codes  
+✅ **GraphQL API** - Apollo Server with introspection  
 ✅ **Swagger Documentation** - Interactive API docs at /api-docs  
-✅ **Real-time Events** - Kafka-based event publishing  
-✅ **Comprehensive Logging** - All operations logged  
+✅ **Real-time Events** - Notification storage in MongoDB  
+✅ **Comprehensive Logging** - All operations logged with log4js  
 ✅ **Error Handling** - Graceful error responses  
-✅ **Data Persistence** - JSON file storage  
+✅ **Data Persistence** - MongoDB Atlas storage  
 ✅ **Authentication** - Email/password login  
 ✅ **Price Calculation** - Automatic bill calculations  
 ✅ **Notification Monitoring** - View events via API  
@@ -471,18 +441,8 @@ Logging System (log4js)
 ```bash
 # Currently using defaults - extend for production
 PORT=3000
-KAFKA_BROKERS=localhost:9092
+MONGODB_URI=<your-mongodb-atlas-uri>
 LOG_LEVEL=debug
-```
-
-### Kafka Configuration
-```javascript
-// In notification-module/kafka-config.js
-const kafka = new Kafka({
-    clientId: 'service-management-api',
-    brokers: ['localhost:9092'], // Change for production
-    retry: { initialRetryTime: 100, retries: 8 }
-});
 ```
 
 ## 📦 Project Files
@@ -492,9 +452,9 @@ const kafka = new Kafka({
 - `package.json` - Dependencies and scripts
 
 ### Data Files
-- `Services.json` - Service catalog (2 categories, 33 services)
-- `tenants.json` - Tenant database (5 tenants)
-- `bills.json` - Bill records (13+ bills)
+- `Services.json` - Service catalog (backup/seed data)
+- `tenants.json` - Tenant database (backup/seed data)
+- `bills.json` - Bill records (backup/seed data)
 
 ### Module Directories
 - `service-module/` - Service management
@@ -514,7 +474,7 @@ cd ~/Desktop/OSS-API-Project
 npm install
 ```
 
-### Step 2: Start Kafka
+### Step 2: Start Services
 ```bash
 docker-compose up -d
 # Wait 30 seconds for startup
@@ -577,21 +537,14 @@ tail -f logs/debug.log
 tail -f logs/error.log
 ```
 
-### Kafka Topics
-```bash
-kafka-topics --list --bootstrap-server localhost:9092
-kafka-console-consumer --bootstrap-server localhost:9092 \
-  --topic bills-notifications --from-beginning
-```
-
 ## 🛠️ Troubleshooting
 
-### Issue: Cannot connect to Kafka
+### Issue: Cannot connect to MongoDB
 **Solution:**
 ```bash
-docker ps | grep kafka
-docker-compose restart kafka
-# Wait 30 seconds
+# Check MongoDB connection string in config/database.js
+# Verify MongoDB Atlas is accessible
+# Check network/firewall settings
 ```
 
 ### Issue: Port 3000 already in use
@@ -604,9 +557,10 @@ kill -9 <PID>
 
 ### Issue: Notifications not appearing
 **Solution:**
-1. Check Kafka is running: `docker ps`
+1. Check MongoDB connection is active
 2. Check logs: `tail -f logs/debug.log`
-3. Restart app and try again
+3. Verify notification events are being created
+4. Restart app and try again
 
 ## 📝 Example Workflows
 
@@ -649,18 +603,18 @@ kill -9 <PID>
 - No API key authentication (implement JWT)
 - No rate limiting (add rate-limiter middleware)
 - No CORS restrictions (configure for production)
-- Kafka without authentication (add SASL/SSL for production)
+- MongoDB connection should use encrypted connection string
 
 ## 🚀 Production Deployment
 
 ### Before Production
 1. ✅ Add authentication (JWT/OAuth)
 2. ✅ Implement password hashing (bcrypt)
-3. ✅ Add database (MongoDB/PostgreSQL)
+3. ✅ Verify MongoDB Atlas security settings
 4. ✅ Configure CORS
 5. ✅ Add rate limiting
 6. ✅ Implement request validation
-7. ✅ Setup SSL/TLS for Kafka
+7. ✅ Setup SSL/TLS for MongoDB connection
 8. ✅ Add API versioning
 9. ✅ Setup monitoring (Prometheus, ELK)
 10. ✅ Use environment variables
