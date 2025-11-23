@@ -1,7 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 const { connectDB } = require('../config/database');
 const { Tenant } = require('../models/Tenant');
+const { generateToken, authenticateToken, requireOwnerOrAdmin, requireAdmin } = require('../middleware/auth.middleware');
+
+const SALT_ROUNDS = 10; // For bcrypt password hashing
 
 // Initialize database connection
 let dbInitialized = false;
@@ -90,15 +94,36 @@ router.post('/v1/login', async (req, res) => {
         }
 
         await initializeDB();
-        const tenant = await Tenant.findOne({ email: email, password: password });
+        
+        // Find tenant by email only (don't include password in query)
+        const tenant = await Tenant.findOne({ email: email });
 
         if (!tenant) {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
+        // Compare password with hashed password
+        const isPasswordValid = await bcrypt.compare(password, tenant.password);
+        
+        if (!isPasswordValid) {
+            return res.status(401).json({ error: 'Invalid email or password' });
+        }
+
+        // Generate JWT token
+        const token = generateToken({
+            tenantId: tenant.id,
+            email: tenant.email,
+            name: tenant.name,
+            role: tenant.role || 'user' // Default role is 'user', admins have 'admin'
+        });
+
         // Don't send password in response
         const { password: _, ...tenantWithoutPassword } = tenant.toObject();
-        res.json(tenantWithoutPassword);
+        
+        res.json({
+            ...tenantWithoutPassword,
+            token // Send JWT token to client
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -121,6 +146,8 @@ router.post('/v1/login', async (req, res) => {
  *       - Billing Managers without tenant-read permissions
  *       - Revoked or Expired API Keys
  *     tags: [Tenants]
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of all tenants
@@ -130,8 +157,12 @@ router.post('/v1/login', async (req, res) => {
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/Tenant'
+ *       401:
+ *         description: Unauthorized - Missing or invalid token
+ *       403:
+ *         description: Forbidden - Admin access required
  */
-router.get('/v1/tenants', async (req, res) => {
+router.get('/v1/tenants', authenticateToken, requireAdmin, async (req, res) => {
     try {
         await initializeDB();
         console.log('Fetching all tenants from database...');
@@ -175,6 +206,8 @@ router.get('/v1/tenants', async (req, res) => {
  *       - Suspended Tenants with 'suspended' or 'terminated' account status
  *       - Expired Session Tokens
  *     tags: [Tenants]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -189,6 +222,10 @@ router.get('/v1/tenants', async (req, res) => {
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Tenant'
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Forbidden - Can only access own data
  *       404:
  *         description: Tenant not found
  *         content:
@@ -196,7 +233,7 @@ router.get('/v1/tenants', async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/v1/tenants/:id', async (req, res) => {
+router.get('/v1/tenants/:id', authenticateToken, requireOwnerOrAdmin, async (req, res) => {
     try {
         await initializeDB();
         const tenant = await Tenant.findOne({ id: parseInt(req.params.id) });
@@ -260,6 +297,13 @@ router.post('/v1/tenants', async (req, res) => {
             });
         }
 
+        // Validate password strength
+        if (password.length < 8) {
+            return res.status(400).json({ 
+                error: 'Password must be at least 8 characters long' 
+            });
+        }
+
         await initializeDB();
 
         // Check if email already exists
@@ -268,15 +312,19 @@ router.post('/v1/tenants', async (req, res) => {
             return res.status(400).json({ error: 'Email already exists' });
         }
 
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
         // Create new tenant with all provided fields
         const tenantData = {
             name,
             email,
             phone,
-            password,
+            password: hashedPassword, // Store hashed password
             address: billingAddress || '', // Use billingAddress as address
             companyName: companyName || '',
-            status: status || 'active'
+            status: status || 'active',
+            role: 'user' // Default role for new signups
         };
 
         const newTenant = await saveTenant(tenantData);
@@ -285,9 +333,184 @@ router.post('/v1/tenants', async (req, res) => {
             return res.status(500).json({ error: 'Error saving tenant' });
         }
 
+        // Generate JWT token for auto-login after signup
+        const token = generateToken({
+            tenantId: newTenant.id,
+            email: newTenant.email,
+            name: newTenant.name,
+            role: newTenant.role || 'user'
+        });
+
         // Remove password from response
         const { password: _, ...tenantWithoutPassword } = newTenant.toObject();
-        res.status(201).json(tenantWithoutPassword);
+        
+        res.status(201).json({
+            ...tenantWithoutPassword,
+            token // Send JWT token to client
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /v1/tenants/admin:
+ *   post:
+ *     summary: Create an admin user
+ *     description: |
+ *       Creates a new tenant with admin privileges. This endpoint requires either:
+ *       1. An existing admin's JWT token (for creating additional admins), OR
+ *       2. A special setup key (only for creating the first admin)
+ *       
+ *       **WHO CAN USE:**
+ *       - Existing System Administrators (requires valid admin JWT token)
+ *       - Setup Process (requires ADMIN_SETUP_KEY environment variable on first use only)
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Regular users without admin privileges
+ *       - Unauthenticated requests (unless using valid setup key for first admin)
+ *     tags: [Tenants]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - phone
+ *               - password
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               companyName:
+ *                 type: string
+ *               billingAddress:
+ *                 type: string
+ *               setupKey:
+ *                 type: string
+ *                 description: Required only for creating the first admin (must match ADMIN_SETUP_KEY env variable)
+ *     responses:
+ *       201:
+ *         description: Admin user created successfully
+ *       400:
+ *         description: Invalid input or email already exists
+ *       401:
+ *         description: Unauthorized - Invalid setup key or missing admin token
+ *       403:
+ *         description: Forbidden - Admin privileges required
+ */
+router.post('/v1/tenants/admin', async (req, res) => {
+    try {
+        const { name, email, phone, password, companyName, billingAddress, setupKey } = req.body;
+
+        // Validate required fields
+        if (!name || !email || !phone || !password) {
+            return res.status(400).json({ 
+                error: 'Name, email, phone, and password are required' 
+            });
+        }
+
+        // Validate password strength
+        if (password.length < 8) {
+            return res.status(400).json({ 
+                error: 'Password must be at least 8 characters long' 
+            });
+        }
+
+        await initializeDB();
+
+        // Check if any admin exists
+        const existingAdmin = await Tenant.findOne({ role: 'admin' });
+        
+        if (existingAdmin) {
+            // If admins exist, require authentication from an existing admin
+            const authHeader = req.headers['authorization'];
+            const token = authHeader && authHeader.split(' ')[1];
+
+            if (!token) {
+                return res.status(401).json({ 
+                    error: 'Admin authentication required to create additional admins' 
+                });
+            }
+
+            try {
+                const jwt = require('jsonwebtoken');
+                const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key-change-in-production');
+                
+                if (decoded.role !== 'admin') {
+                    return res.status(403).json({ 
+                        error: 'Admin privileges required to create admin users' 
+                    });
+                }
+            } catch (err) {
+                return res.status(401).json({ 
+                    error: 'Invalid or expired token' 
+                });
+            }
+        } else {
+            // First admin - require setup key
+            const requiredSetupKey = process.env.ADMIN_SETUP_KEY || 'default-setup-key-change-me';
+            
+            if (setupKey !== requiredSetupKey) {
+                return res.status(401).json({ 
+                    error: 'Invalid setup key for first admin creation' 
+                });
+            }
+        }
+
+        // Check if email already exists
+        const existingTenant = await Tenant.findOne({ email: email });
+        if (existingTenant) {
+            return res.status(400).json({ error: 'Email already exists' });
+        }
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
+        // Create new admin tenant
+        const tenantData = {
+            name,
+            email,
+            phone,
+            password: hashedPassword,
+            address: billingAddress || '',
+            companyName: companyName || '',
+            status: 'active',
+            role: 'admin' // Set role to admin
+        };
+
+        const newTenant = await saveTenant(tenantData);
+
+        if (!newTenant) {
+            return res.status(500).json({ error: 'Error saving admin tenant' });
+        }
+
+        // Generate JWT token for auto-login after signup
+        const token = generateToken({
+            tenantId: newTenant.id,
+            email: newTenant.email,
+            name: newTenant.name,
+            role: 'admin'
+        });
+
+        // Remove password from response
+        const { password: _, ...tenantWithoutPassword } = newTenant.toObject();
+        
+        res.status(201).json({
+            ...tenantWithoutPassword,
+            token // Send JWT token to client
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

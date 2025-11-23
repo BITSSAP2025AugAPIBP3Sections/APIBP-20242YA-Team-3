@@ -2,6 +2,7 @@ const { gql } = require('apollo-server-express');
 const express = require('express');
 const { connectDB } = require('../config/database');
 const { Category } = require('../models/Service');
+const { authenticateToken, requireAdmin } = require('../middleware/auth.middleware');
 
 // ============================================================================
 // DATA LOADING
@@ -690,7 +691,7 @@ router.get('/v1/services/:serviceId', async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/v1/services', async (req, res) => {
+router.post('/v1/services', authenticateToken, requireAdmin, async (req, res) => {
     try {
         await initializeDB();
         
@@ -786,7 +787,7 @@ router.post('/v1/services', async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/v1/services/:serviceId', async (req, res) => {
+router.put('/v1/services/:serviceId', authenticateToken, requireAdmin, async (req, res) => {
     try {
         await initializeDB();
         

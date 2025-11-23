@@ -1,12 +1,67 @@
-# Service Management API - Complete Deployment Guide
+# Documentation
 
-A production-ready REST API for managing services, tenants, billing, and real-time notifications using MongoDB Atlas.
 
-**App deployed on**: [evio-tech](http://52.66.102.217:3000/api-docs/)
+Complete documentation for the Service Management Platform.
 
-## 🚀 Quick Start for New Developers
+## Quick Links## Quick Links
 
-Choose the deployment method that works best for you:
+
+
+- [Installation Guide](INSTALLATION.md) - Setup and deployment instructions- [Installation Guide](INSTALLATION.md) - Setup and deployment instructions
+
+- [API Reference](API.md) - Complete API documentation- [API Reference](API.md) - Complete API documentation
+
+- [Architecture](ARCHITECTURE.md) - System design and components- [Architecture](ARCHITECTURE.md) - System design and components
+
+- [Security Policy](SECURITY.md) - Security practices and reporting- [Security Policy](SECURITY.md) - Security practices and reporting
+
+- [Contributing](CONTRIBUTING.md) - How to contribute- [Contributing](CONTRIBUTING.md) - How to contribute
+
+- [Quick Start](QUICKSTART.md) - Get started in 5 minutes- [Quick Start](QUICKSTART.md) - Get started in 5 minutes
+
+
+
+## Documentation Index#
+
+
+
+| Document | Description |
+
+|----------|-------------|
+
+| [API Reference](API.md) | REST and GraphQL API endpoints, authentication, examples || [API Reference](API.md) | REST and GraphQL API endpoints, authentication, examples |
+
+| [Architecture](ARCHITECTURE.md) | System architecture, data flow, technology stack || [Architecture](ARCHITECTURE.md) | System architecture, data flow, technology stack |
+
+| [Installation](INSTALLATION.md) | Docker, Kubernetes, local, and AWS deployment || [Installation](INSTALLATION.md) | Docker, Kubernetes, local, and AWS deployment |
+
+| [Quick Start](QUICKSTART.md) | Fast setup guide for new users || [Quick Start](QUICKSTART.md) | Fast setup guide for new users |
+
+| [Security](SECURITY.md) | Security features, reporting vulnerabilities || [Security](SECURITY.md) | Security features, reporting vulnerabilities |
+
+| [User Journey](USER_JOURNEY.md) | Complete user workflows and scenarios || [User Journey](USER_JOURNEY.md) | Complete user workflows and scenarios |
+
+| [Dashboard Guide](DASHBOARD_GUIDE.md) | Using the admin dashboard || [Dashboard Guide](DASHBOARD_GUIDE.md) | Using the admin dashboard |
+
+| [Navigation Guide](NAVIGATION_GUIDE.md) | UI navigation reference || [Navigation Guide](NAVIGATION_GUIDE.md) | UI navigation reference |
+
+| [Contributing](CONTRIBUTING.md) | Contribution guidelines and workflow || [Contributing](CONTRIBUTING.md) | Contribution guidelines and workflow |
+
+| [Code of Conduct](CODE_OF_CONDUCT.md) | Community standards || [Code of Conduct](CODE_OF_CONDUCT.md) | Community standards |
+
+
+
+## Getting Help
+
+
+
+- **Live Demo:** [http://52.66.102.217:3000/api-docs](http://52.66.102.217:3000/api-docs/)- **Live Demo:** [http://52.66.102.217:3000/api-docs](http://52.66.102.217:3000/api-docs/)
+
+- **GitHub Issues:** [Report bugs or request features](https://github.com/BITSSAP2025AugAPIBP3Sections/APIBP-20242YA-Team-3/issues)- **GitHub Issues:** [Report bugs or request features](https://github.com/BITSSAP2025AugAPIBP3Sections/APIBP-20242YA-Team-3/issues)
+
+- **Main README:** [Back to project home](../README.md)
+
+
 
 ### Method 1: Docker Compose (🔥 Recommended - Easiest)
 
@@ -34,7 +89,6 @@ open http://localhost:3000/api-docs
 - Real-time event notifications
 - No manual setup required
 
----
 
 ### Method 2: Kubernetes with Minikube (Production-like)
 
@@ -60,7 +114,6 @@ minikube service service-api --url
 curl <RETURNED_URL>/api/v1/services
 ```
 
----
 
 ### Method 3: Manual Setup (Development Mode)
 
@@ -87,7 +140,6 @@ npm start
 curl http://localhost:3000/api/v1/services
 ```
 
----
 
 ## 📋 Prerequisites by Method
 
@@ -105,7 +157,6 @@ curl http://localhost:3000/api/v1/services
 - **npm** (comes with Node.js)
 - **MongoDB Atlas Account** (or local MongoDB)
 
----
 
 ## ⚡ Quick API Test Suite
 
@@ -142,7 +193,6 @@ open http://localhost:3000/api-docs
 - Notifications: Shows stored notification events
 - API Docs: Interactive Swagger UI
 
----
 
 ## 🛑 Stopping the Application
 
@@ -163,7 +213,6 @@ minikube stop  # optional: stops Minikube
 docker-compose down  # stops services
 ```
 
----
 
 ## 🔧 Included Deployment Files
 
@@ -177,7 +226,6 @@ Your repository includes everything needed for deployment:
 | `k8s-deployment.yaml` | Kubernetes deployment & service |
 | `.dockerignore` | Docker build optimization |
 
----
 
 ## 🐛 Project Structure and Diagrams
 
@@ -261,7 +309,6 @@ colima start              # if using Colima
 # OR open Docker Desktop app
 ```
 
----
 
 ## 🧪 Available API Endpoints (28 total)
 
@@ -297,7 +344,6 @@ colima start              # if using Colima
 ### Documentation (1 endpoint)
 - `GET /api-docs` - Interactive Swagger UI
 
----
 
 ## 🏗️ Architecture
 
@@ -350,7 +396,7 @@ Notification Events Stored in MongoDB
 
 All notifications are stored directly in MongoDB Atlas and can be retrieved via the Notifications API endpoints.
 
-## 📊 Data Models
+## Data Models
 
 ### Service
 ```json
@@ -406,7 +452,7 @@ All notifications are stored directly in MongoDB Atlas and can be retrieved via 
 }
 ```
 
-## 🔍 Logging System
+## Logging System
 
 ### Log Types
 
@@ -605,7 +651,7 @@ kill -9 <PID>
 - No CORS restrictions (configure for production)
 - MongoDB connection should use encrypted connection string
 
-## 🚀 Production Deployment
+## Production Deployment
 
 ### Before Production
 1. ✅ Add authentication (JWT/OAuth)
@@ -639,13 +685,12 @@ CMD ["node", "index.js"]
 
 ## 📄 License
 
-ISC
+MIT
 
 ## 👨‍💻 Contributing
 
 Contributions welcome! Please follow existing code style and add tests.
 
----
 
 **Status**: Production Ready ✅  
 **Version**: 1.0.0  

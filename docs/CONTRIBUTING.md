@@ -90,7 +90,6 @@ Common types:
 ## Security and reporting vulnerabilities
 If you find a security vulnerability, please email the maintainers directly (see `CODE_OF_CONDUCT.md`) or open a private issue flagged for maintainers.
 
----
 
 Thanks for contributing — we appreciate your help! If you'd like, I can also:
 - Add issue/pr templates

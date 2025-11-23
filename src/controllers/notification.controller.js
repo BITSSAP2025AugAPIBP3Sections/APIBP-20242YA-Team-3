@@ -2,6 +2,7 @@ const express = require('express');
 const { connectDB } = require('../config/database');
 const { Notification } = require('../models/Notification');
 const { access: accessLogger, error: errorLogger, debug: debugLogger } = require('../utils/logger');
+const { authenticateToken } = require('../middleware/auth.middleware');
 
 const router = express.Router();
 
@@ -101,7 +102,7 @@ const addNotification = async (notification) => {
  *                   createdAt:
  *                     type: string
  */
-router.get('/v1/notifications', async (req, res) => {
+router.get('/v1/notifications', authenticateToken, async (req, res) => {
     try {
         const notifications = await readNotifications();
         accessLogger.info('Fetching all notifications');
@@ -154,7 +155,7 @@ router.get('/v1/notifications', async (req, res) => {
  *       404:
  *         description: No notifications found for the type
  */
-router.get('/v1/notifications/type/:type', async (req, res) => {
+router.get('/v1/notifications/type/:type', authenticateToken, async (req, res) => {
     try {
         const { type } = req.params;
         const notifications = await readNotifications();
@@ -218,7 +219,7 @@ router.get('/v1/notifications/type/:type', async (req, res) => {
  *       400:
  *         description: Missing required fields
  */
-router.post('/v1/notifications', async (req, res) => {
+router.post('/v1/notifications', authenticateToken, async (req, res) => {
     try {
         const { type, message, data } = req.body;
         
@@ -270,7 +271,7 @@ router.post('/v1/notifications', async (req, res) => {
  *       404:
  *         description: Notification not found
  */
-router.get('/v1/notifications/:id', async (req, res) => {
+router.get('/v1/notifications/:id', authenticateToken, async (req, res) => {
     try {
         const { id } = req.params;
         const notifications = await readNotifications();

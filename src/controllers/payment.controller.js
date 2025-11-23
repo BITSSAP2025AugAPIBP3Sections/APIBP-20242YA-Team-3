@@ -3,6 +3,7 @@ const router = express.Router();
 const { connectDB } = require('../config/database');
 const { Bill } = require('../models/Bill');
 const { addNotification } = require('./notification.controller');
+const { authenticateToken, requireOwnerOrAdmin } = require('../middleware/auth.middleware');
 
 // Initialize database connection
 let dbInitialized = false;
@@ -77,7 +78,7 @@ const initializeDB = async () => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/v1/payment', async (req, res) => {
+router.post('/v1/payment', authenticateToken, async (req, res) => {
     try {
         const { billId, status } = req.body;
 

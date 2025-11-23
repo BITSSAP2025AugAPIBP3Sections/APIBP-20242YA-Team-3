@@ -245,3 +245,184 @@
 [2025-11-23T12:52:11.753] [INFO] access - ::1 - "GET /api/v1/bills HTTP/1.1" 304 - "http://localhost:3000/pages/admin/dashboard.html" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
 [2025-11-23T12:52:11.796] [INFO] access - ::1 - "GET /api/v1/tenants HTTP/1.1" 304 - "http://localhost:3000/pages/admin/dashboard.html" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
 [2025-11-23T12:52:18.100] [INFO] access - ::1 - "GET /api/v1/tenants/9/bills HTTP/1.1" 404 42 "http://localhost:3000/pages/dashboard/my-services.html" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T18:50:47.102] [INFO] access - Server is running on http://localhost:3000
+[2025-11-23T18:50:47.103] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-23T18:50:47.103] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-23T18:50:48.705] [INFO] access - MongoDB connection initialized
+[2025-11-23T18:50:48.706] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-23T18:50:48.706] [INFO] access - Notifications system initialized
+[2025-11-23T18:50:48.706] [INFO] access - GraphQL introspection enabled
+[2025-11-23T18:50:56.919] [INFO] access - ::1 - "GET /favicon.ico HTTP/1.1" 404 150 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T18:52:18.804] [INFO] access - Server is running on http://localhost:3000
+[2025-11-23T18:52:18.804] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-23T18:52:18.804] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-23T18:52:19.675] [INFO] access - MongoDB connection initialized
+[2025-11-23T18:52:19.675] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-23T18:52:19.675] [INFO] access - Notifications system initialized
+[2025-11-23T18:52:19.675] [INFO] access - GraphQL introspection enabled
+[2025-11-23T18:55:32.465] [INFO] access - ::1 - "POST /api/v1/tenants HTTP/1.1" 201 519 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T18:55:34.096] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 200 6103 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T18:55:34.161] [INFO] access - ::1 - "GET /api/v1/categories HTTP/1.1" 200 431 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T18:59:17.348] [INFO] access - ::ffff:127.0.0.1 - "POST /api/v1/tenants HTTP/1.1" 201 516 "" "Thunder Client (https://www.thunderclient.com)"
+[2025-11-23T19:01:24.220] [INFO] access - Server is running on http://localhost:3000
+[2025-11-23T19:01:24.221] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-23T19:01:24.221] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-23T19:01:25.529] [INFO] access - MongoDB connection initialized
+[2025-11-23T19:01:25.530] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-23T19:01:25.530] [INFO] access - Notifications system initialized
+[2025-11-23T19:01:25.530] [INFO] access - GraphQL introspection enabled
+[2025-11-23T19:01:55.126] [INFO] access - ::1 - "POST /api/v1/login HTTP/1.1" 200 519 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:01:56.754] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:01:56.797] [INFO] access - ::1 - "GET /api/v1/categories HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:11:15.004] [INFO] access - Server is running on http://localhost:3000
+[2025-11-23T19:11:15.004] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-23T19:11:15.004] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-23T19:11:15.987] [INFO] access - MongoDB connection initialized
+[2025-11-23T19:11:15.988] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-23T19:11:15.988] [INFO] access - Notifications system initialized
+[2025-11-23T19:11:15.988] [INFO] access - GraphQL introspection enabled
+[2025-11-23T19:13:00.405] [INFO] access - Server is running on http://localhost:3000
+[2025-11-23T19:13:00.405] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-23T19:13:00.405] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-23T19:13:01.466] [INFO] access - MongoDB connection initialized
+[2025-11-23T19:13:01.466] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-23T19:13:01.467] [INFO] access - Notifications system initialized
+[2025-11-23T19:13:01.467] [INFO] access - GraphQL introspection enabled
+[2025-11-23T19:13:06.294] [INFO] access - ::1 - "GET /favicon.ico HTTP/1.1" 404 150 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:13:06.334] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 200 6103 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:13:06.368] [INFO] access - ::1 - "GET /api/v1/categories HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:13:07.683] [INFO] access - ::1 - "GET /favicon.ico HTTP/1.1" 404 150 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:13:07.712] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 200 6103 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:13:07.744] [INFO] access - ::1 - "GET /api/v1/categories HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:13:12.664] [INFO] access - ::1 - "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 187 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:14:19.162] [INFO] access - Server is running on http://localhost:3000
+[2025-11-23T19:14:19.162] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-23T19:14:19.162] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-23T19:14:20.114] [INFO] access - MongoDB connection initialized
+[2025-11-23T19:14:20.114] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-23T19:14:20.114] [INFO] access - Notifications system initialized
+[2025-11-23T19:14:20.114] [INFO] access - GraphQL introspection enabled
+[2025-11-23T19:14:24.377] [INFO] access - ::1 - "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 187 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:14:24.418] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:14:24.452] [INFO] access - ::1 - "GET /api/v1/categories HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:14:26.076] [INFO] access - ::1 - "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 187 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:14:26.121] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:14:26.151] [INFO] access - ::1 - "GET /api/v1/categories HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:14:27.386] [INFO] access - ::1 - "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 187 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:14:27.397] [INFO] access - ::1 - "GET /favicon.ico HTTP/1.1" 404 150 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:14:27.431] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 200 6103 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:14:27.465] [INFO] access - ::1 - "GET /api/v1/categories HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:14:28.925] [INFO] access - ::1 - "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 187 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:14:28.936] [INFO] access - ::1 - "GET /favicon.ico HTTP/1.1" 404 150 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:14:28.966] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 200 6103 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:14:29.000] [INFO] access - ::1 - "GET /api/v1/categories HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:14:30.920] [INFO] access - ::1 - "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 187 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:18:23.599] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:18:54.229] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:19:24.224] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:19:54.240] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:20:24.231] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:20:47.665] [INFO] access - Server is running on http://localhost:3000
+[2025-11-23T19:20:47.665] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-23T19:20:47.665] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-23T19:20:48.478] [INFO] access - MongoDB connection initialized
+[2025-11-23T19:20:48.479] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-23T19:20:48.479] [INFO] access - Notifications system initialized
+[2025-11-23T19:20:48.479] [INFO] access - GraphQL introspection enabled
+[2025-11-23T19:20:54.241] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:21:18.674] [INFO] access - ::1 - "GET /api/v1/bills HTTP/1.1" 200 5129 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:21:18.702] [INFO] access - ::1 - "GET /api/v1/tenants HTTP/1.1" 401 33 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:21:24.243] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:21:35.698] [INFO] access - ::1 - "PUT /api/v1/bills/TXN-1763905510118 HTTP/1.1" 500 116 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:21:35.757] [INFO] access - ::1 - "GET /api/v1/bills HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:21:35.769] [INFO] access - ::1 - "GET /api/v1/tenants HTTP/1.1" 401 33 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:21:54.233] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:22:29.226] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:23:29.226] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:24:29.230] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:41:25.183] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:56:30.915] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 500 58 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T19:57:50.119] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T20:15:41.072] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T20:44:27.101] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T20:45:26.642] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T20:46:27.149] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T20:47:26.648] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T20:48:26.640] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T20:49:26.627] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T20:50:16.686] [INFO] access - Server is running on http://localhost:3000
+[2025-11-23T20:50:16.686] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-23T20:50:16.686] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-23T20:50:17.596] [INFO] access - MongoDB connection initialized
+[2025-11-23T20:50:17.596] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-23T20:50:17.596] [INFO] access - Notifications system initialized
+[2025-11-23T20:50:17.596] [INFO] access - GraphQL introspection enabled
+[2025-11-23T20:50:26.647] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T20:51:01.082] [INFO] access - Server is running on http://localhost:3000
+[2025-11-23T20:51:01.082] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-23T20:51:01.082] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-23T20:51:01.692] [INFO] access - MongoDB connection initialized
+[2025-11-23T20:51:01.693] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-23T20:51:01.693] [INFO] access - Notifications system initialized
+[2025-11-23T20:51:01.693] [INFO] access - GraphQL introspection enabled
+[2025-11-23T20:52:12.050] [INFO] access - Server is running on http://localhost:3000
+[2025-11-23T20:52:12.051] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-23T20:52:12.051] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-23T20:52:13.936] [INFO] access - MongoDB connection initialized
+[2025-11-23T20:52:13.937] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-23T20:52:13.937] [INFO] access - Notifications system initialized
+[2025-11-23T20:52:13.937] [INFO] access - GraphQL introspection enabled
+[2025-11-23T20:52:26.635] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T20:54:22.541] [INFO] access - Server is running on http://localhost:3000
+[2025-11-23T20:54:22.541] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-23T20:54:22.541] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-23T20:54:23.409] [INFO] access - MongoDB connection initialized
+[2025-11-23T20:54:23.409] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-23T20:54:23.409] [INFO] access - Notifications system initialized
+[2025-11-23T20:54:23.409] [INFO] access - GraphQL introspection enabled
+[2025-11-23T20:54:26.643] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T20:56:58.844] [INFO] access - Server is running on http://localhost:3000
+[2025-11-23T20:56:58.844] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-23T20:56:58.844] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-23T20:56:59.876] [INFO] access - MongoDB connection initialized
+[2025-11-23T20:56:59.877] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-23T20:56:59.877] [INFO] access - Notifications system initialized
+[2025-11-23T20:56:59.877] [INFO] access - GraphQL introspection enabled
+[2025-11-23T20:57:42.349] [INFO] access - Server is running on http://localhost:3000
+[2025-11-23T20:57:42.349] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-23T20:57:42.349] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-23T20:57:43.013] [INFO] access - MongoDB connection initialized
+[2025-11-23T20:57:43.014] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-23T20:57:43.014] [INFO] access - Notifications system initialized
+[2025-11-23T20:57:43.014] [INFO] access - GraphQL introspection enabled
+[2025-11-23T20:58:26.629] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T20:58:46.718] [INFO] access - ::ffff:127.0.0.1 - "POST /api/v1/tenants/admin HTTP/1.1" 201 528 "" "Thunder Client (https://www.thunderclient.com)"
+[2025-11-23T20:59:26.622] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T21:00:26.622] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T21:01:26.624] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T21:02:26.620] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T21:03:26.622] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 404 42 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T21:04:15.073] [INFO] access - Server is running on http://localhost:3000
+[2025-11-23T21:04:15.073] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-23T21:04:15.073] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-23T21:04:16.105] [INFO] access - MongoDB connection initialized
+[2025-11-23T21:04:16.106] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-23T21:04:16.106] [INFO] access - Notifications system initialized
+[2025-11-23T21:04:16.106] [INFO] access - GraphQL introspection enabled
+[2025-11-23T21:04:26.602] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 401 33 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T21:05:13.097] [INFO] access - ::1 - "GET /api/v1/tenants/10/bills HTTP/1.1" 401 33 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T21:05:27.956] [INFO] access - ::1 - "POST /api/v1/login HTTP/1.1" 401 37 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T21:06:11.754] [INFO] access - ::1 - "POST /api/v1/tenants HTTP/1.1" 201 508 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T21:06:13.522] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T21:06:13.581] [INFO] access - ::1 - "GET /api/v1/categories HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T23:49:46.118] [INFO] access - Server is running on http://localhost:3000
+[2025-11-23T23:49:46.119] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-23T23:49:46.119] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-23T23:49:47.241] [INFO] access - MongoDB connection initialized
+[2025-11-23T23:49:47.242] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-23T23:49:47.242] [INFO] access - Notifications system initialized
+[2025-11-23T23:49:47.242] [INFO] access - GraphQL introspection enabled
+[2025-11-23T23:49:51.238] [INFO] access - ::1 - "GET /favicon.ico HTTP/1.1" 404 150 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T23:50:42.569] [INFO] access - ::1 - "POST /api/v1/tenants HTTP/1.1" 201 567 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T23:50:44.214] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-23T23:50:44.257] [INFO] access - ::1 - "GET /api/v1/categories HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"

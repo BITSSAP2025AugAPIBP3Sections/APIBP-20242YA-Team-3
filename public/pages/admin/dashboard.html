@@ -669,36 +669,31 @@
         let filteredUsers = [];
         let selectedOrder = null;
 
-        // Admin credentials (in production, this should be in backend)
-        const ADMIN_CREDENTIALS = {
-            email: 'admin@evio-techservices.com',
-            password: 'admin123'
-        };
-
         // Initialize
         window.addEventListener('DOMContentLoaded', () => {
-            // Check admin access
-            const adminAuth = localStorage.getItem('adminAuth');
-            if (!adminAuth) {
-                promptAdminLogin();
+            // Check JWT authentication and admin role
+            if (!isAuthenticated()) {
+                alert('Please login first');
+                window.location.href = '/pages/auth/login.html';
                 return;
+            }
+
+            // Verify admin role
+            const tenant = getTenantData();
+            if (!tenant || tenant.role !== 'admin') {
+                alert('Access Denied: Admin privileges required');
+                window.location.href = '/pages/dashboard/index.html';
+                return;
+            }
+
+            // Set admin badge
+            const adminBadge = document.querySelector('.admin-badge');
+            if (adminBadge && tenant.name) {
+                adminBadge.textContent = `${tenant.name} (ADMIN)`;
             }
 
             loadData();
         });
-
-        function promptAdminLogin() {
-            const email = prompt('Admin Email:');
-            const password = prompt('Admin Password:');
-
-            if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
-                localStorage.setItem('adminAuth', 'true');
-                loadData();
-            } else {
-                alert('Invalid admin credentials!');
-                window.location.href = '/pages/auth/login.html';
-            }
-        }
 
         async function loadData() {
             await loadOrders();
@@ -707,10 +702,10 @@
         }
 
         async function loadOrders() {
-            // Load orders from API
+            // Load orders from API with authentication
             try {
                 console.log('🔄 Fetching orders from API...');
-                const response = await fetch('/api/v1/bills');
+                const response = await authenticatedFetch('/api/v1/bills');
                 console.log('📊 Orders API response status:', response.status);
                 
                 if (response.ok) {
@@ -742,10 +737,10 @@
         }
 
         async function loadUsers() {
-            // Load users from API
+            // Load users from API with authentication
             try {
                 console.log('🔄 Fetching users from API...');
-                const response = await fetch('/api/v1/tenants');
+                const response = await authenticatedFetch('/api/v1/tenants');
                 console.log('📊 Users API response status:', response.status);
                 
                 if (response.ok) {
@@ -1104,8 +1099,11 @@
 
         function logout() {
             localStorage.removeItem('adminAuth');
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('tenant');
             window.location.href = '/pages/auth/login.html';
         }
     </script>
+    <script src="/js/auth-helper.js"></script>
 </body>
 </html>

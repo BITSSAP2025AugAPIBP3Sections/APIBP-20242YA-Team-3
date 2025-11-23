@@ -4,6 +4,7 @@ const { connectDB } = require('../config/database');
 const { Bill } = require('../models/Bill');
 const { getAllServices } = require('./service.controller');
 const { addNotification } = require('./notification.controller');
+const { authenticateToken, requireOwnerOrAdmin } = require('../middleware/auth.middleware');
 
 // Initialize database connection
 let dbInitialized = false;
@@ -85,7 +86,7 @@ const loadBills = async () => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.post('/v1/bills', async (req, res) => {
+router.post('/v1/bills', authenticateToken, async (req, res) => {
     try {
         await initializeDB();
         
@@ -227,7 +228,7 @@ router.get('/v1/bills', async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/v1/bills/:billId', async (req, res) => {
+router.get('/v1/bills/:billId', authenticateToken, async (req, res) => {
     try {
         await initializeDB();
         const bill = await Bill.findOne({ id: parseInt(req.params.billId) });
@@ -285,7 +286,7 @@ router.get('/v1/bills/:billId', async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.get('/v1/tenants/:tenantId/bills', async (req, res) => {
+router.get('/v1/tenants/:tenantId/bills', authenticateToken, requireOwnerOrAdmin, async (req, res) => {
     try {
         await initializeDB();
         const tenantBills = await Bill.find({ tenantId: parseInt(req.params.tenantId) }).sort({ id: 1 });
@@ -354,7 +355,7 @@ router.get('/v1/tenants/:tenantId/bills', async (req, res) => {
  *       500:
  *         description: Server error
  */
-router.put('/v1/bills/:id', async (req, res) => {
+router.put('/v1/bills/:id', authenticateToken, requireOwnerOrAdmin, async (req, res) => {
     try {
         await initializeDB();
         const { status, notes, updatedAt } = req.body;

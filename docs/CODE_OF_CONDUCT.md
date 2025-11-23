@@ -47,5 +47,3 @@ This Code of Conduct is intended to cover behavior in project spaces and events.
 ## License & Attribution
 
 This Code of Conduct is adapted to be short, clear, and beginner-friendly. You may replace the contact email with a project-specific address and customize wording to match your project's needs.
-
----
