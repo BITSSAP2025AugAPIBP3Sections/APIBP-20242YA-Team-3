@@ -4,7 +4,7 @@ const path = require('path');
 const axios = require('axios');
 const { connectDB } = require('../config/database');
 const { Category } = require('../models/Service');
-const { access: accessLogger, error: errorLogger, debug: debugLogger } = require('../config/logger');
+const { access: accessLogger, error: errorLogger, debug: debugLogger } = require('../utils/logger');
 
 const router = express.Router();
 

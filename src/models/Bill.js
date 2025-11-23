@@ -33,8 +33,25 @@ const billSchema = new mongoose.Schema({
     status: {
         type: String,
         required: true,
-        enum: ['pending', 'paid', 'cancelled'],
+        enum: ['pending', 'paid', 'active', 'completed', 'cancelled'],
         default: 'pending'
+    },
+    transactionId: {
+        type: String,
+        required: false
+    },
+    paymentMethod: {
+        type: String,
+        required: false
+    },
+    metadata: {
+        type: mongoose.Schema.Types.Mixed,
+        required: false,
+        default: {}
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
     }
 }, {
     timestamps: true

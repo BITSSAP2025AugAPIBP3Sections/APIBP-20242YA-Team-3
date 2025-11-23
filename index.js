@@ -1,16 +1,17 @@
 const express = require('express');
+const path = require('path');
 const swaggerUi = require('swagger-ui-express');
-const swaggerSpecs = require('./swagger/swagger.js');
+const swaggerSpecs = require('./src/config/swagger.js');
 const { ApolloServer } = require('apollo-server-express');
-const { router: serviceRouter, typeDefs, resolvers, initializeDB } = require('./service-module/service-module');
-const { router: billingRouter } = require('./billing-module/billing-module');
-const { router: paymentRouter } = require('./payments-module/payments-module');
-const { router: authRouter } = require('./auth-module/auth-module');
-const { router: notificationRouter, initializeNotificationsFile } = require('./notification-module/notification-module');
-const { access: accessLogger, error: errorLogger, debug: debugLogger, log4js } = require('./config/logger');
+const { router: serviceRouter, typeDefs, resolvers, initializeDB } = require('./src/controllers/service.controller');
+const { router: billingRouter } = require('./src/controllers/billing.controller');
+const { router: paymentRouter } = require('./src/controllers/payment.controller');
+const { router: authRouter } = require('./src/controllers/auth.controller');
+const { router: notificationRouter, initializeNotificationsFile } = require('./src/controllers/notification.controller');
+const { access: accessLogger, error: errorLogger, debug: debugLogger, log4js } = require('./src/utils/logger');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Log uncaught exceptions and unhandled rejections
 process.on('uncaughtException', (err) => {
@@ -47,6 +48,10 @@ async function startServer() {
         // THEN apply other middleware and routes
         // Middleware to parse JSON bodies
         app.use(express.json());
+        app.use(express.urlencoded({ extended: true }));
+
+        // Serve static files from public directory
+        app.use(express.static(path.join(__dirname, 'public')));
 
         // Add logging middleware
         app.use(log4js.connectLogger(accessLogger, {
@@ -56,6 +61,30 @@ async function startServer() {
 
         // Swagger UI route
         app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+
+        // Root route - check login and redirect
+        app.get('/', (req, res) => {
+            res.send(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Evio-Tech</title>
+                    <meta http-equiv="refresh" content="0; url=/index.html">
+                </head>
+                <body>
+                    <script>
+                        // Check if user is logged in
+                        const tenant = localStorage.getItem('tenant');
+                        if (tenant) {
+                            window.location.href = '/pages/dashboard/index.html';
+                        } else {
+                            window.location.href = '/index.html';
+                        }
+                    </script>
+                </body>
+                </html>
+            `);
+        });
 
         // Use the service, billing, payment, auth, and notification routes
         app.use('/api', serviceRouter);

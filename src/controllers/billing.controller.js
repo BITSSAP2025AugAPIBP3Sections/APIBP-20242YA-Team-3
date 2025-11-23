@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { connectDB } = require('../config/database');
 const { Bill } = require('../models/Bill');
-const { getAllServices } = require('../service-module/service-module');
-const { addNotification } = require('../notification-module/notification-module');
+const { getAllServices } = require('./service.controller');
+const { addNotification } = require('./notification.controller');
 
 // Initialize database connection
 let dbInitialized = false;
@@ -296,6 +296,97 @@ router.get('/v1/tenants/:tenantId/bills', async (req, res) => {
 
         res.json(tenantBills);
     } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /v1/bills/{id}:
+ *   put:
+ *     summary: Update bill status (Admin only)
+ *     description: |
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Billing Managers with billing-update permissions
+ *       - Internal Microservices (billing-module, payments-module) for status updates
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Unauthenticated Requests without valid JWT tokens
+ *       - Regular Tenants attempting to modify bills
+ *       - Service Managers without billing-update permissions
+ *       - Insufficient Role Permissions
+ *     tags: [Bills]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: Bill ID (MongoDB ObjectId or transaction ID)
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [pending, paid, active, completed, cancelled]
+ *                 description: New bill status
+ *               notes:
+ *                 type: string
+ *                 description: Optional notes about the status change
+ *               updatedAt:
+ *                 type: string
+ *                 format: date-time
+ *                 description: Timestamp of the update
+ *     responses:
+ *       200:
+ *         description: Bill status updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Bill'
+ *       404:
+ *         description: Bill not found
+ *       500:
+ *         description: Server error
+ */
+router.put('/v1/bills/:id', async (req, res) => {
+    try {
+        await initializeDB();
+        const { status, notes, updatedAt } = req.body;
+        const billId = req.params.id;
+
+        // Try to find by MongoDB ObjectId first, then by transaction ID
+        let bill = await Bill.findById(billId);
+        if (!bill) {
+            bill = await Bill.findOne({ transactionId: billId });
+        }
+
+        if (!bill) {
+            return res.status(404).json({ error: 'Bill not found' });
+        }
+
+        // Update bill
+        if (status) bill.status = status;
+        if (notes) bill.metadata = { ...bill.metadata, notes };
+        if (updatedAt) bill.updatedAt = updatedAt;
+
+        await bill.save();
+
+        // Send notification to tenant
+        if (status === 'completed') {
+            await addNotification(bill.tenantId, `Your service order ${bill.transactionId || bill.id} has been completed!`);
+        } else if (status === 'cancelled') {
+            await addNotification(bill.tenantId, `Your service order ${bill.transactionId || bill.id} has been cancelled.`);
+        }
+
+        res.json(bill);
+    } catch (error) {
+        console.error('Error updating bill:', error);
         res.status(500).json({ error: error.message });
     }
 });

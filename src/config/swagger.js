@@ -108,8 +108,25 @@ const options = {
                         },
                         status: {
                             type: 'string',
-                            enum: ['pending', 'paid', 'cancelled'],
+                            enum: ['pending', 'paid', 'active', 'completed', 'cancelled'],
                             description: 'Bill status'
+                        },
+                        transactionId: {
+                            type: 'string',
+                            description: 'Transaction/Order ID'
+                        },
+                        paymentMethod: {
+                            type: 'string',
+                            description: 'Payment method used'
+                        },
+                        metadata: {
+                            type: 'object',
+                            description: 'Additional metadata including notes, service details, etc.'
+                        },
+                        updatedAt: {
+                            type: 'string',
+                            format: 'date-time',
+                            description: 'Last update timestamp'
                         }
                     }
                 },
@@ -124,9 +141,13 @@ const options = {
                             type: 'string',
                             description: 'Tenant name'
                         },
+                        companyName: {
+                            type: 'string',
+                            description: 'Company name'
+                        },
                         address: {
                             type: 'string',
-                            description: 'Tenant address'
+                            description: 'Tenant address/billing address'
                         },
                         email: {
                             type: 'string',
@@ -136,6 +157,11 @@ const options = {
                         phone: {
                             type: 'string',
                             description: 'Tenant phone number'
+                        },
+                        status: {
+                            type: 'string',
+                            enum: ['active', 'trial', 'premium', 'suspended', 'terminated'],
+                            description: 'Tenant account status'
                         }
                     }
                 },
@@ -144,6 +170,7 @@ const options = {
                         { $ref: '#/components/schemas/Tenant' },
                         {
                             type: 'object',
+                            required: ['password'],
                             properties: {
                                 password: {
                                     type: 'string',
@@ -214,11 +241,11 @@ const options = {
         }
     },
     apis: [
-        './service-module/service-module.js',
-        './billing-module/billing-module.js',
-        './payments-module/payments-module.js',
-        './auth-module/auth-module.js',
-        './notification-module/notification-module.js'
+        './src/controllers/service.controller.js',
+        './src/controllers/billing.controller.js',
+        './src/controllers/payment.controller.js',
+        './src/controllers/auth.controller.js',
+        './src/controllers/notification.controller.js'
     ]
 };
 

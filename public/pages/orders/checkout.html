@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Evio-Tech</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .btn-nav {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-nav:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            left: 100%;
+            top: 20px;
+            width: 40px;
+            height: 2px;
+            background: #e0e0e0;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .step.active::after,
+        .step.completed::after {
+            background: #667eea;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .step.active .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: #00C851;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .step.active .step-label {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+        }
+
+        /* Payment Form */
+        .payment-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .payment-method {
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .payment-method:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .payment-method.active {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .payment-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .payment-info h4 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .payment-info p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        /* Card Form */
+        .card-form {
+            display: none;
+        }
+
+        .card-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 15px;
+        }
+
+        .security-badges {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 200, 81, 0.1);
+            border-radius: 10px;
+        }
+
+        .security-badges span {
+            font-size: 12px;
+            color: #00C851;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .summary-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+
+        .summary-item h4 {
+            color: #666;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .summary-item p {
+            color: #333;
+            font-size: 15px;
+        }
+
+        .price-breakdown {
+            margin-top: 20px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 14px;
+        }
+
+        .price-row.total {
+            border-top: 2px solid #e0e0e0;
+            margin-top: 15px;
+            padding-top: 15px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 12px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">💳</div>
+                <div>
+                    <h1 style="font-size: 20px; font-weight: 600;">Secure Checkout</h1>
+                    <p style="font-size: 12px; opacity: 0.9;">Review and complete your payment</p>
+                </div>
+            </div>
+            <div class="nav-links">
+                <a href="/pages/dashboard/my-services.html" class="btn-nav">📦 My Orders</a>
+                <a href="/pages/dashboard/index.html" class="btn-nav">🏠 Dashboard</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="step completed">
+                <div class="step-number">✓</div>
+                <div class="step-label">Select Service</div>
+            </div>
+            <div class="step completed">
+                <div class="step-number">✓</div>
+                <div class="step-label">Configure Order</div>
+            </div>
+            <div class="step active">
+                <div class="step-number">3</div>
+                <div class="step-label">Review & Pay</div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-label">Confirmation</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <!-- Payment Section -->
+            <div class="payment-section">
+                <h2 class="section-title">💳 Payment Method</h2>
+
+                <div id="alertBox" class="alert"></div>
+
+                <!-- Payment Methods -->
+                <div class="payment-methods">
+                    <div class="payment-method active" data-method="card">
+                        <div class="payment-icon">💳</div>
+                        <div class="payment-info">
+                            <h4>Credit / Debit Card</h4>
+                            <p>Secure payment via Visa, Mastercard, Amex</p>
+                        </div>
+                    </div>
+
+                    <div class="payment-method" data-method="bank">
+                        <div class="payment-icon">🏦</div>
+                        <div class="payment-info">
+                            <h4>Bank Transfer</h4>
+                            <p>Direct bank transfer (2-3 business days)</p>
+                        </div>
+                    </div>
+
+                    <div class="payment-method" data-method="wallet">
+                        <div class="payment-icon">👛</div>
+                        <div class="payment-info">
+                            <h4>Digital Wallet</h4>
+                            <p>PayPal, Apple Pay, Google Pay</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Payment Form -->
+                <div class="card-form active" id="cardForm">
+                    <form id="paymentForm">
+                        <div class="form-group">
+                            <label for="cardNumber">Card Number *</label>
+                            <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cardName">Cardholder Name *</label>
+                            <input type="text" id="cardName" placeholder="JOHN DOE" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cardExpiry">Expiry Date *</label>
+                                <input type="text" id="cardExpiry" placeholder="MM/YY" maxlength="5" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="cardCVV">CVV *</label>
+                                <input type="text" id="cardCVV" placeholder="123" maxlength="4" required>
+                            </div>
+                        </div>
+
+                        <div class="security-badges">
+                            <span>🔒 SSL Encrypted</span>
+                            <span>✓ PCI Compliant</span>
+                            <span>✓ Secure Payment</span>
+                        </div>
+
+                        <button type="submit" class="btn-primary" id="payBtn">
+                            Complete Payment
+                        </button>
+
+                        <button type="button" class="btn-secondary" onclick="window.history.back()">
+                            ← Back to Order Details
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Bank Transfer Info -->
+                <div class="card-form" id="bankForm">
+                    <div style="padding: 20px; background: #f8f9fa; border-radius: 10px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 15px;">Bank Transfer Details:</h4>
+                        <p style="margin-bottom: 10px;"><strong>Bank Name:</strong> National Bank</p>
+                        <p style="margin-bottom: 10px;"><strong>Account Number:</strong> 1234567890</p>
+                        <p style="margin-bottom: 10px;"><strong>Routing Number:</strong> 987654321</p>
+                        <p style="margin-bottom: 10px;"><strong>Reference:</strong> <span id="bankReference"></span></p>
+                        <p style="color: #666; font-size: 14px; margin-top: 15px;">
+                            Please include the reference number in your transfer. Your service will be activated within 2-3 business days after payment confirmation.
+                        </p>
+                    </div>
+                    <button class="btn-primary" onclick="confirmBankTransfer()">
+                        I've Completed the Transfer
+                    </button>
+                    <button class="btn-secondary" onclick="window.history.back()">
+                        ← Back to Order Details
+                    </button>
+                </div>
+
+                <!-- Digital Wallet Info -->
+                <div class="card-form" id="walletForm">
+                    <div style="padding: 20px; background: #f8f9fa; border-radius: 10px; margin-bottom: 20px;">
+                        <h4 style="margin-bottom: 15px;">Select Your Wallet:</h4>
+                        <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                            <button class="btn-primary" style="flex: 1; min-width: 150px;" onclick="processWalletPayment('paypal')">
+                                PayPal
+                            </button>
+                            <button class="btn-primary" style="flex: 1; min-width: 150px;" onclick="processWalletPayment('applepay')">
+                                Apple Pay
+                            </button>
+                            <button class="btn-primary" style="flex: 1; min-width: 150px;" onclick="processWalletPayment('googlepay')">
+                                Google Pay
+                            </button>
+                        </div>
+                    </div>
+                    <button class="btn-secondary" onclick="window.history.back()">
+                        ← Back to Order Details
+                    </button>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h2 class="section-title">📋 Order Summary</h2>
+
+                <div class="summary-item">
+                    <h4>Service</h4>
+                    <p id="summaryService">Loading...</p>
+                </div>
+
+                <div class="summary-item">
+                    <h4>Start Date</h4>
+                    <p id="summaryStartDate">-</p>
+                </div>
+
+                <div class="summary-item">
+                    <h4>Duration</h4>
+                    <p id="summaryDuration">-</p>
+                </div>
+
+                <div class="summary-item">
+                    <h4>Priority</h4>
+                    <p id="summaryPriority">-</p>
+                </div>
+
+                <div class="summary-item">
+                    <h4>Contact</h4>
+                    <p id="summaryContact">-</p>
+                </div>
+
+                <div class="price-breakdown">
+                    <div class="price-row">
+                        <span>Subtotal:</span>
+                        <span id="priceSubtotal">$0.00</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Priority Fee:</span>
+                        <span id="pricePriority">$0.00</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Tax (10%):</span>
+                        <span id="priceTax">$0.00</span>
+                    </div>
+                    <div class="price-row total">
+                        <span>Total:</span>
+                        <span id="priceTotal">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let orderData = null;
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            // Check if user is logged in
+            const tenant = localStorage.getItem('tenant');
+            if (!tenant) {
+                window.location.href = '/pages/auth/login.html';
+                return;
+            }
+
+            // Get pending order
+            const order = localStorage.getItem('pendingOrder');
+            if (!order) {
+                alert('No pending order found. Please create an order first.');
+                window.location.href = '/pages/dashboard/index.html';
+                return;
+            }
+            orderData = JSON.parse(order);
+
+            // Display order summary
+            displayOrderSummary();
+
+            // Setup payment method switching
+            setupPaymentMethods();
+
+            // Setup form handlers
+            setupFormHandlers();
+
+            // Generate bank reference
+            document.getElementById('bankReference').textContent = 'OSS-' + Date.now();
+        });
+
+        function displayOrderSummary() {
+            document.getElementById('summaryService').textContent = orderData.serviceName;
+            document.getElementById('summaryStartDate').textContent = 
+                new Date(orderData.startDate).toLocaleDateString('en-US', { 
+                    weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' 
+                });
+            document.getElementById('summaryDuration').textContent = 
+                `${orderData.duration} hour${orderData.duration !== 1 ? 's' : ''}`;
+            document.getElementById('summaryPriority').textContent = 
+                orderData.priority.charAt(0).toUpperCase() + orderData.priority.slice(1);
+            document.getElementById('summaryContact').textContent = 
+                `${orderData.contactPerson}\n${orderData.contactEmail}\n${orderData.contactPhone}`;
+
+            document.getElementById('priceSubtotal').textContent = `$${orderData.subtotal.toFixed(2)}`;
+            document.getElementById('pricePriority').textContent = `$${orderData.priorityFee.toFixed(2)}`;
+            document.getElementById('priceTax').textContent = `$${orderData.tax.toFixed(2)}`;
+            document.getElementById('priceTotal').textContent = `$${orderData.totalAmount.toFixed(2)}`;
+        }
+
+        function setupPaymentMethods() {
+            const methods = document.querySelectorAll('.payment-method');
+            const forms = {
+                'card': document.getElementById('cardForm'),
+                'bank': document.getElementById('bankForm'),
+                'wallet': document.getElementById('walletForm')
+            };
+
+            methods.forEach(method => {
+                method.addEventListener('click', () => {
+                    // Update active state
+                    methods.forEach(m => m.classList.remove('active'));
+                    method.classList.add('active');
+
+                    // Show corresponding form
+                    const selectedMethod = method.dataset.method;
+                    Object.values(forms).forEach(form => form.classList.remove('active'));
+                    forms[selectedMethod].classList.add('active');
+                });
+            });
+        }
+
+        function setupFormHandlers() {
+            // Card number formatting
+            document.getElementById('cardNumber').addEventListener('input', (e) => {
+                let value = e.target.value.replace(/\s/g, '');
+                let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+                e.target.value = formattedValue;
+            });
+
+            // Expiry date formatting
+            document.getElementById('cardExpiry').addEventListener('input', (e) => {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length >= 2) {
+                    value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                }
+                e.target.value = value;
+            });
+
+            // CVV numeric only
+            document.getElementById('cardCVV').addEventListener('input', (e) => {
+                e.target.value = e.target.value.replace(/\D/g, '');
+            });
+
+            // Form submission
+            document.getElementById('paymentForm').addEventListener('submit', handlePayment);
+        }
+
+        async function handlePayment(e) {
+            e.preventDefault();
+
+            const payBtn = document.getElementById('payBtn');
+            const originalText = payBtn.innerHTML;
+            
+            payBtn.disabled = true;
+            payBtn.innerHTML = '<span class="loading-spinner"></span>Processing Payment...';
+
+            // Simulate payment processing
+            setTimeout(() => {
+                // Create bill record
+                createBill();
+            }, 2000);
+        }
+
+        async function createBill() {
+            try {
+                const billData = {
+                    tenantId: orderData.tenantId,
+                    serviceId: orderData.serviceId,
+                    amount: orderData.totalAmount,
+                    billingPeriodStart: orderData.startDate,
+                    billingPeriodEnd: orderData.startDate, // Can be calculated based on duration
+                    status: 'paid',
+                    paymentMethod: 'credit_card',
+                    transactionId: 'TXN-' + Date.now(),
+                    metadata: {
+                        serviceName: orderData.serviceName,
+                        duration: orderData.duration,
+                        priority: orderData.priority,
+                        subtotal: orderData.subtotal,
+                        priorityFee: orderData.priorityFee,
+                        tax: orderData.tax
+                    }
+                };
+
+                // Store order completion data
+                localStorage.setItem('completedOrder', JSON.stringify({
+                    ...orderData,
+                    ...billData,
+                    completedAt: new Date().toISOString()
+                }));
+
+                // Clear pending order
+                localStorage.removeItem('pendingOrder');
+                localStorage.removeItem('selectedService');
+
+                // Redirect to confirmation
+                window.location.href = '/pages/orders/confirmation.html';
+
+            } catch (error) {
+                console.error('Error creating bill:', error);
+                showAlert('Payment failed. Please try again.', 'error');
+                
+                const payBtn = document.getElementById('payBtn');
+                payBtn.disabled = false;
+                payBtn.innerHTML = 'Complete Payment';
+            }
+        }
+
+        function confirmBankTransfer() {
+            const billData = {
+                tenantId: orderData.tenantId,
+                serviceId: orderData.serviceId,
+                amount: orderData.totalAmount,
+                billingPeriodStart: orderData.startDate,
+                status: 'pending',
+                paymentMethod: 'bank_transfer',
+                transactionId: 'BTR-' + Date.now()
+            };
+
+            localStorage.setItem('completedOrder', JSON.stringify({
+                ...orderData,
+                ...billData,
+                completedAt: new Date().toISOString()
+            }));
+
+            localStorage.removeItem('pendingOrder');
+            localStorage.removeItem('selectedService');
+
+            window.location.href = '/pages/orders/confirmation.html';
+        }
+
+        function processWalletPayment(wallet) {
+            const walletNames = {
+                'paypal': 'PayPal',
+                'applepay': 'Apple Pay',
+                'googlepay': 'Google Pay'
+            };
+
+            showAlert(`Redirecting to ${walletNames[wallet]}...`, 'success');
+
+            setTimeout(() => {
+                const billData = {
+                    tenantId: orderData.tenantId,
+                    serviceId: orderData.serviceId,
+                    amount: orderData.totalAmount,
+                    billingPeriodStart: orderData.startDate,
+                    status: 'paid',
+                    paymentMethod: wallet,
+                    transactionId: wallet.toUpperCase() + '-' + Date.now()
+                };
+
+                localStorage.setItem('completedOrder', JSON.stringify({
+                    ...orderData,
+                    ...billData,
+                    completedAt: new Date().toISOString()
+                }));
+
+                localStorage.removeItem('pendingOrder');
+                localStorage.removeItem('selectedService');
+
+                window.location.href = '/pages/orders/confirmation.html';
+            }, 1500);
+        }
+
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type}`;
+            alertBox.style.display = 'block';
+
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

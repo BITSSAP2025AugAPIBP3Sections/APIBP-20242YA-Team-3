@@ -12,10 +12,15 @@ const tenantSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    companyName: {
+        type: String,
+        trim: true,
+        default: ''
+    },
     address: {
         type: String,
-        required: true,
-        trim: true
+        trim: true,
+        default: ''
     },
     email: {
         type: String,
@@ -32,6 +37,11 @@ const tenantSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
+    },
+    status: {
+        type: String,
+        enum: ['active', 'trial', 'premium', 'suspended', 'terminated'],
+        default: 'active'
     }
 }, {
     timestamps: true

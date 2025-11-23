@@ -133,14 +133,26 @@ router.post('/v1/login', async (req, res) => {
  */
 router.get('/v1/tenants', async (req, res) => {
     try {
-        const tenants = await loadTenants();
-        // Remove passwords from response
-        const tenantsWithoutPasswords = tenants.map(tenant => {
-            const { password, ...rest } = tenant.toObject();
-            return rest;
-        });
-        res.json(tenantsWithoutPasswords);
+        await initializeDB();
+        console.log('Fetching all tenants from database...');
+        
+        const tenants = await Tenant.find({}).select('-password').sort({ id: 1 });
+        
+        console.log(`Found ${tenants.length} tenant(s) in database`);
+        
+        if (tenants.length === 0) {
+            console.log('No tenants found in database');
+            return res.json([]); // Return empty array instead of error
+        }
+        
+        // Convert to plain objects
+        const tenantsArray = tenants.map(tenant => tenant.toObject());
+        
+        console.log('Returning tenants:', tenantsArray.map(t => ({ id: t.id, name: t.name, email: t.email })));
+        
+        res.json(tenantsArray);
     } catch (error) {
+        console.error('Error fetching tenants:', error);
         res.status(500).json({ error: error.message });
     }
 });
@@ -239,12 +251,12 @@ router.get('/v1/tenants/:id', async (req, res) => {
  */
 router.post('/v1/tenants', async (req, res) => {
     try {
-        const { name, address, email, phone, password } = req.body;
+        const { name, email, phone, password, companyName, billingAddress, status } = req.body;
 
         // Validate required fields
-        if (!name || !address || !email || !phone || !password) {
+        if (!name || !email || !phone || !password) {
             return res.status(400).json({ 
-                error: 'Name, address, email, phone, and password are required' 
+                error: 'Name, email, phone, and password are required' 
             });
         }
 
@@ -256,14 +268,18 @@ router.post('/v1/tenants', async (req, res) => {
             return res.status(400).json({ error: 'Email already exists' });
         }
 
-        // Create new tenant
-        const newTenant = await saveTenant({
+        // Create new tenant with all provided fields
+        const tenantData = {
             name,
-            address,
             email,
             phone,
-            password
-        });
+            password,
+            address: billingAddress || '', // Use billingAddress as address
+            companyName: companyName || '',
+            status: status || 'active'
+        };
+
+        const newTenant = await saveTenant(tenantData);
 
         if (!newTenant) {
             return res.status(500).json({ error: 'Error saving tenant' });

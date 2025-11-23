@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { connectDB } = require('../config/database');
 const { Bill } = require('../models/Bill');
-const { addNotification } = require('../notification-module/notification-module');
+const { addNotification } = require('./notification.controller');
 
 // Initialize database connection
 let dbInitialized = false;
