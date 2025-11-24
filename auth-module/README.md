@@ -203,11 +203,6 @@ Add or remove fields in the HTML forms as needed for your requirements.
 ## Security Notes
 
 ⚠️ **Important**: This is a frontend implementation. For production use:
-- Implement proper JWT token authentication
-- Use HTTPS in production
-- Add CSRF protection
-- Implement rate limiting
-- Hash passwords on the backend
 - Add email verification
 - Implement session management
 
