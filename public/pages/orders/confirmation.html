@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - Evio-Tech</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .confirmation-container {
+            max-width: 800px;
+            width: 100%;
+        }
+
+        /* Success Animation */
+        .success-animation {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .checkmark-circle {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleIn 0.5s ease-out;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .checkmark {
+            font-size: 60px;
+            color: #00C851;
+            animation: checkmark 0.8s ease-in-out 0.3s both;
+        }
+
+        @keyframes checkmark {
+            0% {
+                transform: scale(0) rotate(-45deg);
+                opacity: 0;
+            }
+            50% {
+                transform: scale(1.2) rotate(0deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        .success-title {
+            color: white;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            animation: fadeInUp 0.6s ease-out 0.4s both;
+        }
+
+        .success-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 16px;
+            animation: fadeInUp 0.6s ease-out 0.5s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Order Details Card */
+        .order-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 0.6s ease-out 0.6s both;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .order-number {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .order-id {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .order-status {
+            padding: 8px 20px;
+            background: #d4edda;
+            color: #155724;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .order-status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        /* Order Details Grid */
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .detail-item {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .detail-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Service Info */
+        .service-info {
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .service-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .service-details {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* Price Breakdown */
+        .price-breakdown {
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            font-size: 15px;
+        }
+
+        .price-row.total {
+            border-top: 2px solid #e0e0e0;
+            margin-top: 15px;
+            padding-top: 15px;
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        /* Next Steps */
+        .next-steps {
+            padding: 25px;
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .next-steps h3 {
+            color: #856404;
+            font-size: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .next-steps ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .next-steps li {
+            padding: 8px 0;
+            color: #856404;
+            font-size: 14px;
+            display: flex;
+            align-items: start;
+            gap: 10px;
+        }
+
+        .next-steps li::before {
+            content: '✓';
+            color: #00C851;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+
+        .btn-secondary:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Download Button */
+        .download-section {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn-download {
+            background: #00C851;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-download:hover {
+            background: #00A840;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .order-card {
+                padding: 30px 20px;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .order-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .success-title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <!-- Success Animation -->
+        <div class="success-animation">
+            <div class="checkmark-circle">
+                <div class="checkmark">✓</div>
+            </div>
+            <h1 class="success-title" id="mainTitle">Order Confirmed!</h1>
+            <p class="success-subtitle" id="mainSubtitle">Thank you for your purchase. Your order has been successfully placed.</p>
+        </div>
+
+        <!-- Order Details Card -->
+        <div class="order-card">
+            <div class="order-header">
+                <div>
+                    <div class="order-number">Order Number</div>
+                    <div class="order-id" id="orderId">Loading...</div>
+                </div>
+                <div class="order-status" id="orderStatus">Paid</div>
+            </div>
+
+            <!-- Details Grid -->
+            <div class="details-grid">
+                <div class="detail-item">
+                    <div class="detail-label">Order Date</div>
+                    <div class="detail-value" id="orderDate">-</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Service Start Date</div>
+                    <div class="detail-value" id="startDate">-</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Duration</div>
+                    <div class="detail-value" id="duration">-</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">Priority</div>
+                    <div class="detail-value" id="priority">-</div>
+                </div>
+            </div>
+
+            <!-- Service Info -->
+            <div class="service-info">
+                <div class="service-name" id="serviceName">Loading...</div>
+                <div class="service-details">
+                    <strong>Contact Person:</strong> <span id="contactPerson">-</span><br>
+                    <strong>Contact Email:</strong> <span id="contactEmail">-</span><br>
+                    <strong>Contact Phone:</strong> <span id="contactPhone">-</span>
+                </div>
+                <div class="service-details" style="margin-top: 15px;" id="requirements"></div>
+            </div>
+
+            <!-- Price Breakdown -->
+            <div class="price-breakdown">
+                <div class="price-row">
+                    <span>Subtotal:</span>
+                    <span id="subtotal">$0.00</span>
+                </div>
+                <div class="price-row">
+                    <span>Priority Fee:</span>
+                    <span id="priorityFee">$0.00</span>
+                </div>
+                <div class="price-row">
+                    <span>Tax (10%):</span>
+                    <span id="tax">$0.00</span>
+                </div>
+                <div class="price-row total">
+                    <span>Total Paid:</span>
+                    <span id="total">$0.00</span>
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="next-steps" id="nextSteps">
+                <h3>📌 What Happens Next?</h3>
+                <ul>
+                    <li>You will receive a confirmation email shortly</li>
+                    <li>Our team will review your order within 24 hours</li>
+                    <li>Service activation will begin on your selected start date</li>
+                    <li>You can track your order status in "My Services" section</li>
+                </ul>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <a href="/pages/dashboard/index.html" class="btn btn-primary">
+                    🏠 Back to Dashboard
+                </a>
+                <a href="/pages/dashboard/my-services.html" class="btn btn-secondary">
+                    📦 View My Services
+                </a>
+            </div>
+
+            <!-- Download Invoice -->
+            <div class="download-section">
+                <button class="btn-download" onclick="downloadInvoice()">
+                    📄 Download Invoice
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let orderData = null;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // Get completed order
+            const order = localStorage.getItem('completedOrder');
+            if (!order) {
+                alert('No order confirmation found. Redirecting to dashboard...');
+                window.location.href = '/pages/dashboard/index.html';
+                return;
+            }
+            orderData = JSON.parse(order);
+
+            // Display order details
+            displayOrderConfirmation();
+        });
+
+        function displayOrderConfirmation() {
+            // Update title based on payment status
+            if (orderData.status === 'pending') {
+                document.getElementById('mainTitle').textContent = 'Order Received!';
+                document.getElementById('mainSubtitle').textContent = 
+                    'Your order has been received. Service will be activated once payment is confirmed.';
+                document.getElementById('orderStatus').textContent = 'Pending Payment';
+                document.getElementById('orderStatus').classList.add('pending');
+
+                // Update next steps for bank transfer
+                document.getElementById('nextSteps').innerHTML = `
+                    <h3>📌 What Happens Next?</h3>
+                    <ul>
+                        <li>Complete the bank transfer using the provided details</li>
+                        <li>Payment confirmation typically takes 2-3 business days</li>
+                        <li>You'll receive an email once payment is confirmed</li>
+                        <li>Service will be activated on your selected start date</li>
+                    </ul>
+                `;
+            }
+
+            // Order details
+            document.getElementById('orderId').textContent = orderData.transactionId || 'N/A';
+            document.getElementById('orderDate').textContent = 
+                new Date(orderData.completedAt).toLocaleDateString('en-US', { 
+                    year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+                });
+            document.getElementById('startDate').textContent = 
+                new Date(orderData.startDate).toLocaleDateString('en-US', { 
+                    year: 'numeric', month: 'short', day: 'numeric' 
+                });
+            document.getElementById('duration').textContent = 
+                `${orderData.duration} hour${orderData.duration !== 1 ? 's' : ''}`;
+            document.getElementById('priority').textContent = 
+                orderData.priority.charAt(0).toUpperCase() + orderData.priority.slice(1);
+
+            // Service info
+            document.getElementById('serviceName').textContent = orderData.serviceName;
+            document.getElementById('contactPerson').textContent = orderData.contactPerson;
+            document.getElementById('contactEmail').textContent = orderData.contactEmail;
+            document.getElementById('contactPhone').textContent = orderData.contactPhone;
+
+            if (orderData.requirements) {
+                document.getElementById('requirements').innerHTML = 
+                    `<strong>Special Requirements:</strong><br>${orderData.requirements}`;
+            }
+
+            // Price breakdown
+            document.getElementById('subtotal').textContent = `$${orderData.subtotal.toFixed(2)}`;
+            document.getElementById('priorityFee').textContent = `$${orderData.priorityFee.toFixed(2)}`;
+            document.getElementById('tax').textContent = `$${orderData.tax.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${orderData.totalAmount.toFixed(2)}`;
+        }
+
+        function downloadInvoice() {
+            // Generate simple text invoice
+            const invoice = `
+═══════════════════════════════════════════════════════
+              EVIO-TECH - PROFESSIONAL SERVICES MARKETPLACE
+                      INVOICE / RECEIPT
+═══════════════════════════════════════════════════════
+
+Order ID: ${orderData.transactionId}
+Date: ${new Date(orderData.completedAt).toLocaleString()}
+Status: ${orderData.status === 'paid' ? 'PAID' : 'PENDING'}
+
+───────────────────────────────────────────────────────
+SERVICE DETAILS
+───────────────────────────────────────────────────────
+
+Service Name: ${orderData.serviceName}
+Duration: ${orderData.duration} hour(s)
+Start Date: ${new Date(orderData.startDate).toLocaleDateString()}
+Priority: ${orderData.priority.toUpperCase()}
+
+───────────────────────────────────────────────────────
+CONTACT INFORMATION
+───────────────────────────────────────────────────────
+
+Contact Person: ${orderData.contactPerson}
+Email: ${orderData.contactEmail}
+Phone: ${orderData.contactPhone}
+
+${orderData.requirements ? `Special Requirements:\n${orderData.requirements}\n` : ''}
+───────────────────────────────────────────────────────
+PRICE BREAKDOWN
+───────────────────────────────────────────────────────
+
+Subtotal:                           $${orderData.subtotal.toFixed(2)}
+Priority Fee:                       $${orderData.priorityFee.toFixed(2)}
+Tax (10%):                          $${orderData.tax.toFixed(2)}
+                                   ─────────────
+TOTAL AMOUNT:                       $${orderData.totalAmount.toFixed(2)}
+
+Payment Method: ${orderData.paymentMethod?.replace('_', ' ').toUpperCase()}
+Transaction ID: ${orderData.transactionId}
+
+═══════════════════════════════════════════════════════
+       Thank you for choosing Evio-Tech - Professional Services Marketplace!
+         For support, contact: support@evio-tech.com
+═══════════════════════════════════════════════════════
+            `;
+
+            // Create and download file
+            const blob = new Blob([invoice], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `invoice-${orderData.transactionId}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

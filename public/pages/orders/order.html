@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Service - Evio-Tech</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .btn-back {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-back:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            left: 100%;
+            top: 20px;
+            width: 40px;
+            height: 2px;
+            background: #e0e0e0;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .step.active::after {
+            background: #667eea;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .step.active .step-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: #00C851;
+            color: white;
+        }
+
+        .step-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .step.active .step-label {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+        }
+
+        /* Order Form */
+        .order-form {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .input-help {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 20px;
+            height: fit-content;
+        }
+
+        .service-preview {
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .service-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .service-category {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .service-price {
+            font-size: 28px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .service-price span {
+            font-size: 14px;
+            font-weight: 400;
+            color: #999;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .summary-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .summary-value {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .summary-total {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .summary-total .summary-label {
+            font-size: 18px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .summary-total .summary-value {
+            font-size: 24px;
+            color: #667eea;
+        }
+
+        /* Buttons */
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .order-summary {
+                position: static;
+            }
+
+            .progress-steps {
+                gap: 20px;
+                overflow-x: auto;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">🛒</div>
+                <div>
+                    <h1 style="font-size: 20px; font-weight: 600;">Order Service</h1>
+                    <p style="font-size: 12px; opacity: 0.9;">Configure your service order</p>
+                </div>
+            </div>
+            <div class="nav-links">
+                <a href="/pages/dashboard/my-services.html" class="btn-back">📦 My Orders</a>
+                <a href="/pages/dashboard/index.html" class="btn-back">← Back to Services</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="step active completed">
+                <div class="step-number">✓</div>
+                <div class="step-label">Select Service</div>
+            </div>
+            <div class="step active">
+                <div class="step-number">2</div>
+                <div class="step-label">Configure Order</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-label">Review & Pay</div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div class="step-label">Confirmation</div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <!-- Order Form -->
+            <div class="order-form">
+                <h2 class="section-title">📋 Order Details</h2>
+
+                <div id="alertBox" class="alert"></div>
+
+                <form id="orderForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="startDate">Start Date *</label>
+                            <input type="date" id="startDate" required>
+                            <div class="input-help">When do you want to start using this service?</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="duration">Duration (Hours) *</label>
+                            <input type="number" id="duration" min="1" value="1" required>
+                            <div class="input-help">How many hours do you need?</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="priority">Service Priority</label>
+                        <select id="priority">
+                            <option value="standard">Standard (No rush)</option>
+                            <option value="high">High Priority (+20%)</option>
+                            <option value="urgent">Urgent (+50%)</option>
+                        </select>
+                        <div class="input-help">Higher priority may incur additional costs</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="requirements">Special Requirements</label>
+                        <textarea id="requirements" placeholder="Any specific requirements or notes for this service..."></textarea>
+                        <div class="input-help">Optional: Describe any special needs or preferences</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactPerson">Contact Person *</label>
+                        <input type="text" id="contactPerson" required placeholder="Primary contact name">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactEmail">Contact Email *</label>
+                        <input type="email" id="contactEmail" required placeholder="email@example.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactPhone">Contact Phone *</label>
+                        <input type="tel" id="contactPhone" required placeholder="+1 (555) 123-4567">
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="submitBtn">
+                        Proceed to Payment →
+                    </button>
+                </form>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h2 class="section-title">💳 Order Summary</h2>
+
+                <div class="service-preview">
+                    <div class="service-name" id="summaryServiceName">Loading...</div>
+                    <div class="service-category" id="summaryServiceCategory"></div>
+                    <div class="service-price">
+                        <span id="summaryPricePerHour">$0</span><span>/hour</span>
+                    </div>
+                </div>
+
+                <div class="summary-row">
+                    <span class="summary-label">Base Price</span>
+                    <span class="summary-value" id="summaryBasePrice">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Duration</span>
+                    <span class="summary-value" id="summaryDuration">0 hours</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Subtotal</span>
+                    <span class="summary-value" id="summarySubtotal">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Priority Fee</span>
+                    <span class="summary-value" id="summaryPriorityFee">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Tax (10%)</span>
+                    <span class="summary-value" id="summaryTax">$0.00</span>
+                </div>
+
+                <div class="summary-total">
+                    <div class="summary-row">
+                        <span class="summary-label">Total Amount</span>
+                        <span class="summary-value" id="summaryTotal">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedService = null;
+        let currentTenant = null;
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', () => {
+            // Check if user is logged in
+            const tenant = localStorage.getItem('tenant');
+            if (!tenant) {
+                window.location.href = '/pages/auth/login.html';
+                return;
+            }
+            currentTenant = JSON.parse(tenant);
+
+            // Get selected service
+            const service = localStorage.getItem('selectedService');
+            if (!service) {
+                alert('No service selected. Please select a service first.');
+                window.location.href = '/pages/dashboard/index.html';
+                return;
+            }
+            selectedService = JSON.parse(service);
+
+            // Pre-fill user data
+            document.getElementById('contactPerson').value = currentTenant.name;
+            document.getElementById('contactEmail').value = currentTenant.email;
+            document.getElementById('contactPhone').value = currentTenant.phone || '';
+
+            // Set minimum date to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('startDate').min = today;
+            document.getElementById('startDate').value = today;
+
+            // Display service info
+            displayServiceInfo();
+            
+            // Setup event listeners
+            setupEventListeners();
+        });
+
+        function displayServiceInfo() {
+            document.getElementById('summaryServiceName').textContent = selectedService.name;
+            document.getElementById('summaryServiceCategory').textContent = 
+                `${selectedService.categoryName} › ${selectedService.subServiceName}`;
+            document.getElementById('summaryPricePerHour').textContent = `$${selectedService.pricePerHour}`;
+            
+            // Initial calculation
+            calculateTotal();
+        }
+
+        function setupEventListeners() {
+            // Recalculate on duration or priority change
+            document.getElementById('duration').addEventListener('input', calculateTotal);
+            document.getElementById('priority').addEventListener('change', calculateTotal);
+
+            // Form submission
+            document.getElementById('orderForm').addEventListener('submit', handleSubmit);
+        }
+
+        function calculateTotal() {
+            const duration = parseInt(document.getElementById('duration').value) || 0;
+            const priority = document.getElementById('priority').value;
+            const basePrice = selectedService.pricePerHour;
+
+            // Calculate priority multiplier
+            let priorityMultiplier = 0;
+            if (priority === 'high') priorityMultiplier = 0.20;
+            if (priority === 'urgent') priorityMultiplier = 0.50;
+
+            // Calculations
+            const subtotal = basePrice * duration;
+            const priorityFee = subtotal * priorityMultiplier;
+            const subtotalWithPriority = subtotal + priorityFee;
+            const tax = subtotalWithPriority * 0.10;
+            const total = subtotalWithPriority + tax;
+
+            // Update UI
+            document.getElementById('summaryBasePrice').textContent = `$${basePrice.toFixed(2)}`;
+            document.getElementById('summaryDuration').textContent = `${duration} hour${duration !== 1 ? 's' : ''}`;
+            document.getElementById('summarySubtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('summaryPriorityFee').textContent = priorityFee > 0 ? `$${priorityFee.toFixed(2)}` : '$0.00';
+            document.getElementById('summaryTax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('summaryTotal').textContent = `$${total.toFixed(2)}`;
+        }
+
+        async function handleSubmit(e) {
+            e.preventDefault();
+
+            const duration = parseInt(document.getElementById('duration').value);
+            const priority = document.getElementById('priority').value;
+            const basePrice = selectedService.pricePerHour;
+
+            // Calculate totals
+            let priorityMultiplier = 0;
+            if (priority === 'high') priorityMultiplier = 0.20;
+            if (priority === 'urgent') priorityMultiplier = 0.50;
+
+            const subtotal = basePrice * duration;
+            const priorityFee = subtotal * priorityMultiplier;
+            const subtotalWithPriority = subtotal + priorityFee;
+            const tax = subtotalWithPriority * 0.10;
+            const total = subtotalWithPriority + tax;
+
+            // Prepare order data
+            const orderData = {
+                tenantId: currentTenant.id,
+                serviceId: selectedService.id,
+                serviceName: selectedService.name,
+                pricePerHour: basePrice,
+                duration: duration,
+                startDate: document.getElementById('startDate').value,
+                priority: priority,
+                requirements: document.getElementById('requirements').value,
+                contactPerson: document.getElementById('contactPerson').value,
+                contactEmail: document.getElementById('contactEmail').value,
+                contactPhone: document.getElementById('contactPhone').value,
+                subtotal: subtotal,
+                priorityFee: priorityFee,
+                tax: tax,
+                totalAmount: total
+            };
+
+            // Store order data for checkout
+            localStorage.setItem('pendingOrder', JSON.stringify(orderData));
+
+            // Redirect to checkout
+            window.location.href = '/pages/orders/checkout.html';
+        }
+
+        function showAlert(message, type) {
+            const alertBox = document.getElementById('alertBox');
+            alertBox.textContent = message;
+            alertBox.className = `alert alert-${type}`;
+            alertBox.style.display = 'block';
+
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

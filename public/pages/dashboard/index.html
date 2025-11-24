@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Evio-Tech</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .logo-text h1 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .user-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info {
+            text-align: right;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-email {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .header-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-logout {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .welcome-section h2 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .welcome-section p {
+            color: #666;
+            font-size: 16px;
+        }
+
+        /* Search and Filter Section */
+        .search-filter-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-bar {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 15px 45px 15px 45px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+            color: #999;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 10px 20px;
+            background: #f5f7fa;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .filter-tab:hover {
+            background: #e8eaf0;
+        }
+
+        .filter-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Services Grid */
+        .services-section h3 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .category-section {
+            margin-bottom: 40px;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .category-info h4 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .category-info p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+        }
+
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .service-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .service-category {
+            font-size: 12px;
+            color: #666;
+            background: #f5f7fa;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .service-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+            white-space: nowrap;
+        }
+
+        .service-price span {
+            font-size: 14px;
+            font-weight: 400;
+            color: #999;
+        }
+
+        .service-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .service-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-select {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-select:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-details {
+            padding: 10px 20px;
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-details:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .btn-close {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: #f5f7fa;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-close:hover {
+            background: #e0e0e0;
+        }
+
+        .modal-body {
+            margin-bottom: 25px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .detail-value {
+            color: #333;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .user-section {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-tabs {
+                overflow-x: auto;
+                flex-wrap: nowrap;
+                padding-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo-section">
+                <div class="logo-icon">🚀</div>
+                <div class="logo-text">
+                    <h1>Evio-Tech</h1>
+                    <p>Your trusted service provider</p>
+                </div>
+            </div>
+            <div class="user-section">
+                <div class="user-info">
+                    <div class="user-name" id="userName">Loading...</div>
+                    <div class="user-email" id="userEmail"></div>
+                </div>
+                <a href="/pages/dashboard/my-services.html" class="header-btn">📦 My Orders</a>
+                <button class="btn-logout" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h2>Welcome back, <span id="welcomeName">User</span>! 👋</h2>
+            <p>Explore our comprehensive range of services and find the perfect solution for your needs.</p>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="search-filter-section">
+            <div class="search-bar">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search services by name...">
+            </div>
+            <div class="filter-tabs" id="filterTabs">
+                <div class="filter-tab active" data-category="all">All Services</div>
+            </div>
+        </div>
+
+        <!-- Services Section -->
+        <div class="services-section" id="servicesContainer">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading services...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Detail Modal -->
+    <div class="modal" id="serviceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalServiceName">Service Details</h3>
+                <button class="btn-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Details will be populated here -->
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-select" style="flex: 1;" onclick="selectService()">Select Service</button>
+                <button class="btn-details" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allServices = [];
+        let categories = [];
+        let currentTenant = null;
+        let selectedService = null;
+        let currentFilter = 'all';
+        let searchQuery = '';
+
+        // Category icons mapping
+        const categoryIcons = {
+            'Cloud Services': '☁️',
+            'Software Development': '💻',
+            'Data Analytics': '📊',
+            'Security Services': '🔒',
+            'Consulting': '💼',
+            'Support': '🛠️',
+            'Infrastructure': '🏗️',
+            'AI & ML': '🤖'
+        };
+
+        // Initialize
+        window.addEventListener('DOMContentLoaded', async () => {
+            // Check if user is logged in
+            const tenant = localStorage.getItem('tenant');
+            if (!tenant) {
+                window.location.href = '/pages/auth/login.html';
+                return;
+            }
+
+            currentTenant = JSON.parse(tenant);
+            displayUserInfo();
+            await loadServices();
+            setupEventListeners();
+        });
+
+        // Display user information
+        function displayUserInfo() {
+            document.getElementById('userName').textContent = currentTenant.name;
+            document.getElementById('userEmail').textContent = currentTenant.email;
+            document.getElementById('welcomeName').textContent = currentTenant.name.split(' ')[0];
+        }
+
+        // Load services from API
+        async function loadServices() {
+            try {
+                const response = await fetch('/api/v1/services');
+                if (!response.ok) throw new Error('Failed to load services');
+                
+                allServices = await response.json();
+                
+                // Load categories
+                const categoriesResponse = await fetch('/api/v1/categories');
+                if (categoriesResponse.ok) {
+                    const categoriesData = await categoriesResponse.json();
+                    categories = categoriesData;
+                }
+
+                renderFilterTabs();
+                renderServices();
+            } catch (error) {
+                console.error('Error loading services:', error);
+                document.getElementById('servicesContainer').innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <h3>Unable to load services</h3>
+                        <p>Please try again later or contact support.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Render filter tabs
+        function renderFilterTabs() {
+            const filterTabs = document.getElementById('filterTabs');
+            const uniqueCategories = [...new Set(allServices.map(s => s.categoryName))];
+            
+            let html = '<div class="filter-tab active" data-category="all">All Services</div>';
+            uniqueCategories.forEach(category => {
+                html += `<div class="filter-tab" data-category="${category}">${category}</div>`;
+            });
+            
+            filterTabs.innerHTML = html;
+
+            // Add click handlers
+            filterTabs.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    filterTabs.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentFilter = tab.dataset.category;
+                    renderServices();
+                });
+            });
+        }
+
+        // Render services
+        function renderServices() {
+            const container = document.getElementById('servicesContainer');
+            
+            // Filter services
+            let filteredServices = allServices;
+            
+            if (currentFilter !== 'all') {
+                filteredServices = filteredServices.filter(s => s.categoryName === currentFilter);
+            }
+            
+            if (searchQuery) {
+                filteredServices = filteredServices.filter(s => 
+                    s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    s.categoryName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    s.subServiceName.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+            }
+
+            if (filteredServices.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🔍</div>
+                        <h3>No services found</h3>
+                        <p>Try adjusting your search or filter criteria.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Group by category
+            const groupedServices = {};
+            filteredServices.forEach(service => {
+                if (!groupedServices[service.categoryName]) {
+                    groupedServices[service.categoryName] = [];
+                }
+                groupedServices[service.categoryName].push(service);
+            });
+
+            let html = '';
+            Object.keys(groupedServices).forEach(categoryName => {
+                const categoryServices = groupedServices[categoryName];
+                const icon = categoryIcons[categoryName] || '📦';
+                
+                html += `
+                    <div class="category-section">
+                        <div class="category-header">
+                            <div class="category-icon">${icon}</div>
+                            <div class="category-info">
+                                <h4>${categoryName}</h4>
+                                <p>${categoryServices.length} service${categoryServices.length > 1 ? 's' : ''} available</p>
+                            </div>
+                        </div>
+                        <div class="services-grid">
+                            ${categoryServices.map(service => `
+                                <div class="service-card" onclick="showServiceDetails(${service.id})">
+                                    <div class="service-header">
+                                        <div>
+                                            <div class="service-name">${service.name}</div>
+                                            <div class="service-category">${service.subServiceName}</div>
+                                        </div>
+                                        <div class="service-price">
+                                            $${service.pricePerHour}<span>/hr</span>
+                                        </div>
+                                    </div>
+                                    <div class="service-description">
+                                        High-quality ${service.name.toLowerCase()} services tailored to your needs.
+                                    </div>
+                                    <div class="service-footer">
+                                        <button class="btn-details" onclick="event.stopPropagation(); showServiceDetails(${service.id})">Details</button>
+                                        <button class="btn-select" onclick="event.stopPropagation(); quickSelectService(${service.id})">Select</button>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Show service details in modal
+        function showServiceDetails(serviceId) {
+            selectedService = allServices.find(s => s.id === serviceId);
+            if (!selectedService) return;
+
+            document.getElementById('modalServiceName').textContent = selectedService.name;
+            document.getElementById('modalBody').innerHTML = `
+                <div class="detail-row">
+                    <span class="detail-label">Service Name</span>
+                    <span class="detail-value">${selectedService.name}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Category</span>
+                    <span class="detail-value">${selectedService.categoryName}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Sub-Category</span>
+                    <span class="detail-value">${selectedService.subServiceName}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Price per Hour</span>
+                    <span class="detail-value" style="color: #667eea; font-weight: 600; font-size: 18px;">$${selectedService.pricePerHour}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Service ID</span>
+                    <span class="detail-value">#${selectedService.id}</span>
+                </div>
+                <div style="margin-top: 20px; padding: 15px; background: #f5f7fa; border-radius: 10px;">
+                    <p style="color: #666; font-size: 14px; line-height: 1.6;">
+                        ${selectedService.name} is a premium service that provides comprehensive solutions 
+                        for your ${selectedService.categoryName.toLowerCase()} needs. Our expert team ensures 
+                        high-quality delivery with competitive pricing at $${selectedService.pricePerHour} per hour.
+                    </p>
+                </div>
+            `;
+
+            document.getElementById('serviceModal').classList.add('active');
+        }
+
+        // Quick select service
+        function quickSelectService(serviceId) {
+            selectedService = allServices.find(s => s.id === serviceId);
+            selectService();
+        }
+
+        // Select service
+        function selectService() {
+            if (!selectedService) return;
+
+            // Store selected service
+            localStorage.setItem('selectedService', JSON.stringify(selectedService));
+
+            // Navigate to order configuration page
+            window.location.href = '/pages/orders/order.html';
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('serviceModal').classList.remove('active');
+            selectedService = null;
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                renderServices();
+            });
+
+            // Close modal on outside click
+            document.getElementById('serviceModal').addEventListener('click', (e) => {
+                if (e.target.id === 'serviceModal') {
+                    closeModal();
+                }
+            });
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('tenant');
+                localStorage.removeItem('selectedService');
+                window.location.href = '/pages/auth/login.html';
+            }
+        }
+    </script>
+
+    <!-- Auth Helper for JWT authentication -->
+    <script src="/js/auth-helper.js"></script>
+</body>
+</html>
