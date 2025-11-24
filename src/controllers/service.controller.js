@@ -231,6 +231,31 @@ const typeDefs = gql`
     }
 
     """
+    Input type for creating a new category.
+    """
+    input CategoryInput {
+        """
+        Category name
+        """
+        name: String!
+    }
+
+    """
+    Input type for creating a new subcategory.
+    """
+    input SubCategoryInput {
+        """
+        Parent category ID
+        """
+        categoryId: Int!
+        
+        """
+        SubCategory name
+        """
+        name: String!
+    }
+
+    """
     Root query type for the Service GraphQL API.
     Provides read-only access to service data with various filtering options.
     """
@@ -279,6 +304,28 @@ const typeDefs = gql`
     Provides write operations for service management.
     """
     type Mutation {
+        """
+        Create a new service category with auto-generated ID.
+        System automatically assigns the next available category ID.
+        
+        Args:
+            input: Category creation details
+        
+        Returns: The newly created category
+        """
+        createCategory(input: CategoryInput!): Category
+
+        """
+        Create a new subcategory within an existing category with auto-generated ID.
+        System automatically assigns the next available subcategory ID.
+        
+        Args:
+            input: SubCategory creation details including parent category ID
+        
+        Returns: The newly created subcategory with category information
+        """
+        createSubCategory(input: SubCategoryInput!): SubService
+
         """
         Create a new service in a specified category and sub-service.
         
@@ -384,6 +431,101 @@ const resolvers = {
     },
 
     Mutation: {
+        /**
+         * Resolver for creating a new category
+         */
+        createCategory: async (_, { input }) => {
+            await initializeDB();
+            
+            const { name } = input;
+            
+            if (!name || !name.trim()) {
+                throw new Error('Category name is required');
+            }
+            
+            // Check if category with same name already exists
+            const existingCategory = await Category.findOne({ 
+                category: { $regex: new RegExp(`^${name}$`, 'i') } 
+            });
+            
+            if (existingCategory) {
+                throw new Error(`Category with name '${name}' already exists with ID ${existingCategory.id}`);
+            }
+            
+            // Find max category ID and generate new one
+            const categories = await Category.find({}).sort({ id: -1 }).limit(1);
+            const maxId = categories.length > 0 ? categories[0].id : 0;
+            const newCategoryId = maxId + 1;
+            
+            // Create new category
+            const newCategory = new Category({
+                id: newCategoryId,
+                category: name.trim(),
+                subServices: []
+            });
+            
+            await newCategory.save();
+            
+            return {
+                id: newCategory.id,
+                name: newCategory.category,
+                subServices: []
+            };
+        },
+
+        /**
+         * Resolver for creating a new subcategory
+         */
+        createSubCategory: async (_, { input }) => {
+            await initializeDB();
+            
+            const { categoryId, name } = input;
+            
+            if (!name || !name.trim()) {
+                throw new Error('SubCategory name is required');
+            }
+            
+            // Find the category
+            const category = await Category.findOne({ id: categoryId });
+            if (!category) {
+                throw new Error(`Category with ID ${categoryId} not found`);
+            }
+            
+            // Check if subcategory with same name already exists in this category
+            const existingSubService = category.subServices.find(
+                sub => sub.name.toLowerCase() === name.trim().toLowerCase()
+            );
+            
+            if (existingSubService) {
+                throw new Error(`SubCategory with name '${name}' already exists in this category with ID ${existingSubService.id}`);
+            }
+            
+            // Generate new subcategory ID
+            // Pattern: categoryId * 100 + next sequential number
+            const baseId = categoryId * 100;
+            const maxSubId = category.subServices.length > 0
+                ? Math.max(...category.subServices.map(s => s.id))
+                : baseId;
+            
+            // If max is less than base, start from base + 1, otherwise increment
+            const newSubServiceId = maxSubId < baseId ? baseId + 1 : maxSubId + 1;
+            
+            // Create new subcategory
+            const newSubService = {
+                id: newSubServiceId,
+                name: name.trim(),
+                services: []
+            };
+            
+            category.subServices.push(newSubService);
+            await category.save();
+            
+            return {
+                id: newSubService.id,
+                name: newSubService.name
+            };
+        },
+
         /**
          * Resolver for creating a new service
          */
@@ -1049,6 +1191,240 @@ router.get('/v1/categories', async (req, res) => {
         }));
         
         res.json(categories);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /v1/categories:
+ *   post:
+ *     summary: Create a new service category
+ *     description: |
+ *       Creates a new service category with auto-generated ID.
+ *       The system automatically assigns the next available category ID.
+ *       
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Service Managers with category-create permissions
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Anonymous Requests without valid JWT tokens
+ *       - Non-admin users
+ *     tags: [Services]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Category name
+ *                 example: "Food Services"
+ *     responses:
+ *       201:
+ *         description: Category created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   description: Auto-generated category ID
+ *                 name:
+ *                   type: string
+ *                   description: Category name
+ *                 subServices:
+ *                   type: array
+ *                   description: Empty array of sub-services
+ *       400:
+ *         description: Invalid input
+ *       401:
+ *         description: Unauthorized
+ */
+router.post('/v1/categories', authenticateToken, requireAdmin, async (req, res) => {
+    try {
+        await initializeDB();
+        
+        const { name } = req.body;
+        
+        if (!name || !name.trim()) {
+            return res.status(400).json({ error: 'Category name is required' });
+        }
+        
+        // Check if category with same name already exists
+        const existingCategory = await Category.findOne({ 
+            category: { $regex: new RegExp(`^${name}$`, 'i') } 
+        });
+        
+        if (existingCategory) {
+            return res.status(400).json({ 
+                error: 'Category with this name already exists',
+                existingId: existingCategory.id
+            });
+        }
+        
+        // Find max category ID and generate new one
+        const categories = await Category.find({}).sort({ id: -1 }).limit(1);
+        const maxId = categories.length > 0 ? categories[0].id : 0;
+        const newCategoryId = maxId + 1;
+        
+        // Create new category
+        const newCategory = new Category({
+            id: newCategoryId,
+            category: name.trim(),
+            subServices: []
+        });
+        
+        await newCategory.save();
+        
+        res.status(201).json({
+            id: newCategory.id,
+            name: newCategory.category,
+            subServices: []
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /v1/categories/{categoryId}/subcategories:
+ *   post:
+ *     summary: Create a new sub-service category
+ *     description: |
+ *       Creates a new sub-service within an existing category with auto-generated ID.
+ *       The system automatically assigns the next available subcategory ID based on the category ID.
+ *       
+ *       **WHO CAN USE:**
+ *       - System Administrators with admin role credentials
+ *       - Service Managers with subcategory-create permissions
+ *       
+ *       **WHO CANNOT USE:**
+ *       - Anonymous Requests without valid JWT tokens
+ *       - Non-admin users
+ *     tags: [Services]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: categoryId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Category ID to add the subcategory to
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: SubCategory name
+ *                 example: "Personal Chef Services"
+ *     responses:
+ *       201:
+ *         description: SubCategory created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   description: Auto-generated subcategory ID
+ *                 name:
+ *                   type: string
+ *                   description: SubCategory name
+ *                 categoryId:
+ *                   type: integer
+ *                   description: Parent category ID
+ *                 categoryName:
+ *                   type: string
+ *                   description: Parent category name
+ *                 services:
+ *                   type: array
+ *                   description: Empty array of services
+ *       400:
+ *         description: Invalid input
+ *       404:
+ *         description: Category not found
+ *       401:
+ *         description: Unauthorized
+ */
+router.post('/v1/categories/:categoryId/subcategories', authenticateToken, requireAdmin, async (req, res) => {
+    try {
+        await initializeDB();
+        
+        const categoryId = parseInt(req.params.categoryId);
+        const { name } = req.body;
+        
+        if (!name || !name.trim()) {
+            return res.status(400).json({ error: 'SubCategory name is required' });
+        }
+        
+        if (isNaN(categoryId)) {
+            return res.status(400).json({ error: 'Invalid category ID' });
+        }
+        
+        // Find the category
+        const category = await Category.findOne({ id: categoryId });
+        if (!category) {
+            return res.status(404).json({ error: 'Category not found' });
+        }
+        
+        // Check if subcategory with same name already exists in this category
+        const existingSubService = category.subServices.find(
+            sub => sub.name.toLowerCase() === name.trim().toLowerCase()
+        );
+        
+        if (existingSubService) {
+            return res.status(400).json({ 
+                error: 'SubCategory with this name already exists in this category',
+                existingId: existingSubService.id
+            });
+        }
+        
+        // Generate new subcategory ID
+        // Pattern: categoryId * 100 + next sequential number
+        const baseId = categoryId * 100;
+        const maxSubId = category.subServices.length > 0
+            ? Math.max(...category.subServices.map(s => s.id))
+            : baseId;
+        
+        // If max is less than base, start from base + 1, otherwise increment
+        const newSubServiceId = maxSubId < baseId ? baseId + 1 : maxSubId + 1;
+        
+        // Create new subcategory
+        const newSubService = {
+            id: newSubServiceId,
+            name: name.trim(),
+            services: []
+        };
+        
+        category.subServices.push(newSubService);
+        await category.save();
+        
+        res.status(201).json({
+            id: newSubService.id,
+            name: newSubService.name,
+            categoryId: category.id,
+            categoryName: category.category,
+            services: []
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
