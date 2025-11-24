@@ -3,7 +3,7 @@ const router = express.Router();
 const { connectDB } = require('../config/database');
 const { Bill } = require('../models/Bill');
 const { addNotification } = require('./notification.controller');
-const { authenticateToken, requireOwnerOrAdmin } = require('../middleware/auth.middleware');
+const { authenticateToken } = require('../middleware/auth.middleware');
 
 // Initialize database connection
 let dbInitialized = false;

@@ -118,7 +118,8 @@ router.post('/v1/login', async (req, res) => {
         });
 
         // Don't send password in response
-        const { password: _, ...tenantWithoutPassword } = tenant.toObject();
+        const tenantWithoutPassword = tenant.toObject();
+        delete tenantWithoutPassword.password;
         
         res.json({
             ...tenantWithoutPassword,
@@ -243,7 +244,8 @@ router.get('/v1/tenants/:id', authenticateToken, requireOwnerOrAdmin, async (req
         }
 
         // Remove password from response
-        const { password, ...tenantWithoutPassword } = tenant.toObject();
+        const tenantWithoutPassword = tenant.toObject();
+        delete tenantWithoutPassword.password;
         res.json(tenantWithoutPassword);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -342,7 +344,8 @@ router.post('/v1/tenants', async (req, res) => {
         });
 
         // Remove password from response
-        const { password: _, ...tenantWithoutPassword } = newTenant.toObject();
+        const tenantWithoutPassword = newTenant.toObject();
+        delete tenantWithoutPassword.password;
         
         res.status(201).json({
             ...tenantWithoutPassword,
@@ -453,7 +456,7 @@ router.post('/v1/tenants/admin', async (req, res) => {
                         error: 'Admin privileges required to create admin users' 
                     });
                 }
-            } catch (err) {
+            } catch {
                 return res.status(401).json({ 
                     error: 'Invalid or expired token' 
                 });
@@ -505,7 +508,8 @@ router.post('/v1/tenants/admin', async (req, res) => {
         });
 
         // Remove password from response
-        const { password: _, ...tenantWithoutPassword } = newTenant.toObject();
+        const tenantWithoutPassword = newTenant.toObject();
+        delete tenantWithoutPassword.password;
         
         res.status(201).json({
             ...tenantWithoutPassword,
@@ -605,7 +609,8 @@ router.put('/v1/tenants/:id', async (req, res) => {
         await tenant.save();
 
         // Remove password from response
-        const { password: _, ...tenantWithoutPassword } = tenant.toObject();
+        const tenantWithoutPassword = tenant.toObject();
+        delete tenantWithoutPassword.password;
         res.json(tenantWithoutPassword);
     } catch (error) {
         res.status(500).json({ error: error.message });

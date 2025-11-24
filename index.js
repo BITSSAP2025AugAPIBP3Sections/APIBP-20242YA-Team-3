@@ -58,7 +58,7 @@ async function startServer() {
                     styleSrc: ["'self'", "'unsafe-inline'"],
                     scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
                     scriptSrcAttr: ["'unsafe-inline'"], // Allow inline event handlers
-                    imgSrc: ["'self'", "data:", "https:"],
+                    imgSrc: ["'self'", 'data:', 'https:'],
                 }
             },
             crossOriginEmbedderPolicy: false
@@ -170,7 +170,7 @@ async function startServer() {
                 // User is authenticated and has admin role
                 req.user = decoded; // Attach user info to request
                 next();
-            } catch (err) {
+            } catch {
                 return res.status(403).send(`
                     <!DOCTYPE html>
                     <html>
@@ -198,7 +198,7 @@ async function startServer() {
         // Add logging middleware
         app.use(log4js.connectLogger(accessLogger, {
             level: 'info',
-            format: (req, res, format) => format(`:remote-addr - ":method :url HTTP/:http-version" :status :content-length ":referrer" ":user-agent"`)
+            format: (req, res, format) => format(':remote-addr - ":method :url HTTP/:http-version" :status :content-length ":referrer" ":user-agent"')
         }));
 
         // Swagger UI route
@@ -236,7 +236,7 @@ async function startServer() {
         app.use('/api', notificationRouter);
 
         // Add error handling
-        app.use((err, req, res, next) => {
+        app.use((err, req, res) => {
             errorLogger.error('Error:', err.stack);
             res.status(500).json({ error: 'Something broke!' });
         });

@@ -1,7 +1,7 @@
 const express = require('express');
 const { connectDB } = require('../config/database');
 const { Notification } = require('../models/Notification');
-const { access: accessLogger, error: errorLogger, debug: debugLogger } = require('../utils/logger');
+const { access: accessLogger, error: errorLogger } = require('../utils/logger');
 const { authenticateToken } = require('../middleware/auth.middleware');
 
 const router = express.Router();

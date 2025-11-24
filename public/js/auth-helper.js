@@ -50,24 +50,19 @@ async function authenticatedFetch(url, options = {}) {
         'Authorization': `Bearer ${token}`
     };
     
-    try {
-        const response = await fetch(url, {
-            ...options,
-            headers
-        });
-        
-        // If unauthorized, redirect to login
-        if (response.status === 401 || response.status === 403) {
-            removeAuthToken();
-            window.location.href = '/pages/auth/login.html';
-            throw new Error('Session expired. Please login again.');
-        }
-        
-        return response;
-    } catch (error) {
-        // Network error or other fetch error
-        throw error;
+    const response = await fetch(url, {
+        ...options,
+        headers
+    });
+    
+    // If unauthorized, redirect to login
+    if (response.status === 401 || response.status === 403) {
+        removeAuthToken();
+        window.location.href = '/pages/auth/login.html';
+        throw new Error('Session expired. Please login again.');
     }
+    
+    return response;
 }
 
 // Redirect to login if not authenticated
