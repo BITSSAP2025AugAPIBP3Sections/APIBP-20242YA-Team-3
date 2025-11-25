@@ -571,7 +571,7 @@ router.post('/v1/tenants/admin', async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/v1/tenants/:id', async (req, res) => {
+router.put('/v1/tenants/:id', authenticateToken, requireOwnerOrAdmin, async (req, res) => {
     try {
         const { name, address, email, phone, password } = req.body;
         const tenantId = parseInt(req.params.id);
@@ -658,7 +658,7 @@ router.put('/v1/tenants/:id', async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/v1/tenants/:id', async (req, res) => {
+router.delete('/v1/tenants/:id', authenticateToken, requireAdmin, async (req, res) => {
     try {
         const tenantId = parseInt(req.params.id);
         

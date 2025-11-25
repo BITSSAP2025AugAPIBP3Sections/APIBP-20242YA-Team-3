@@ -1020,7 +1020,7 @@ router.put('/v1/services/:serviceId', authenticateToken, requireAdmin, async (re
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/v1/services/:serviceId', async (req, res) => {
+router.delete('/v1/services/:serviceId', authenticateToken, requireAdmin, async (req, res) => {
     try {
         await initializeDB();
         
