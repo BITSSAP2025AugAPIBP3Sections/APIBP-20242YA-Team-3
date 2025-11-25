@@ -58,3 +58,13 @@
 [2025-11-24T16:28:21.464] [DEBUG] default - GraphQL Apollo Server initialized
 [2025-11-24T16:28:21.466] [DEBUG] default - Security middleware initialized (Helmet, CORS, Rate Limiting)
 [2025-11-24T16:28:21.469] [DEBUG] default - Server startup complete
+[2025-11-25T15:46:45.102] [DEBUG] default - Starting service management API...
+[2025-11-25T15:46:45.104] [DEBUG] default - Initializing middleware...
+[2025-11-25T15:46:45.143] [DEBUG] default - GraphQL Apollo Server initialized
+[2025-11-25T15:46:45.145] [DEBUG] default - Security middleware initialized (Helmet, CORS, Rate Limiting)
+[2025-11-25T15:46:45.147] [DEBUG] default - Server startup complete
+[2025-11-25T15:50:45.357] [DEBUG] default - Starting service management API...
+[2025-11-25T15:50:45.360] [DEBUG] default - Initializing middleware...
+[2025-11-25T15:50:45.401] [DEBUG] default - GraphQL Apollo Server initialized
+[2025-11-25T15:50:45.402] [DEBUG] default - Security middleware initialized (Helmet, CORS, Rate Limiting)
+[2025-11-25T15:50:45.405] [DEBUG] default - Server startup complete

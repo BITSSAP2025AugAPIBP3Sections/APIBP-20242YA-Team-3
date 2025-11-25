@@ -523,14 +523,120 @@
             </div>
         </div>
 
+        <!-- Quick Actions -->
+        <div style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 30px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);">
+            <h3 style="margin-bottom: 15px; color: #333;">⚡ Quick Actions</h3>
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                <a href="/pages/admin/service-management.html" style="flex: 1; min-width: 250px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 10px; text-decoration: none; display: flex; align-items: center; gap: 15px; transition: transform 0.3s ease;">
+                    <div style="font-size: 32px;">🛠️</div>
+                    <div>
+                        <div style="font-weight: 600; font-size: 16px; margin-bottom: 5px;">Manage Services</div>
+                        <div style="font-size: 13px; opacity: 0.9;">Categories, Sub-Categories & Services</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
         <!-- Tabs -->
         <div class="tabs">
-            <button class="tab active" onclick="switchTab('orders')">📋 Orders Management</button>
-            <button class="tab" onclick="switchTab('users')">👥 Users Management</button>
+            <button class="tab active" onclick="switchTab('orders')">📋 Orders</button>
+            <button class="tab" onclick="switchTab('users')">👥 Users</button>
+        </div>
+
+        <!-- Categories Management Section -->
+        <div id="categoriesSection" class="content-section active">
+            <div class="action-bar">
+                <div class="search-box">
+                    <input type="text" id="categorySearch" placeholder="Search categories..." oninput="searchCategories()">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <button class="btn btn-success" onclick="openAddCategoryModal()">➕ Add Category</button>
+            </div>
+
+            <div class="data-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Category Name</th>
+                            <th>Sub-Categories</th>
+                            <th>Total Services</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="categoriesTableBody">
+                        <tr><td colspan="6" class="loading"><div class="spinner"></div><p>Loading categories...</p></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Sub-Categories Management Section -->
+        <div id="subcategoriesSection" class="content-section">
+            <div class="action-bar">
+                <div class="search-box">
+                    <input type="text" id="subcategorySearch" placeholder="Search sub-categories..." oninput="searchSubCategories()">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <select class="filter-select" id="subcategoryCategoryFilter" onchange="filterSubCategories()">
+                    <option value="all">All Categories</option>
+                </select>
+                <button class="btn btn-success" onclick="openAddSubCategoryModal()">➕ Add Sub-Category</button>
+            </div>
+
+            <div class="data-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Sub-Category Name</th>
+                            <th>Parent Category</th>
+                            <th>Services Count</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subcategoriesTableBody">
+                        <tr><td colspan="5" class="loading"><div class="spinner"></div><p>Loading sub-categories...</p></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Services Management Section -->
+        <div id="servicesSection" class="content-section">
+            <div class="action-bar">
+                <div class="search-box">
+                    <input type="text" id="serviceSearch" placeholder="Search services..." oninput="searchServices()">
+                    <span class="search-icon">🔍</span>
+                </div>
+                <select class="filter-select" id="serviceCategoryFilter" onchange="filterServices()">
+                    <option value="all">All Categories</option>
+                </select>
+                <button class="btn btn-success" onclick="openAddServiceModal()">➕ Add Service</button>
+            </div>
+
+            <div class="data-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Service Name</th>
+                            <th>Category</th>
+                            <th>Sub-Category</th>
+                            <th>Price/Hour</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="servicesTableBody">
+                        <tr><td colspan="6" class="loading"><div class="spinner"></div><p>Loading services...</p></td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Orders Management Section -->
-        <div id="ordersSection" class="content-section active">
+        <div id="ordersSection" class="content-section">
             <div class="action-bar">
                 <div class="search-box">
                     <input type="text" id="orderSearch" placeholder="Search by Order ID, Service Name, or Customer..." oninput="searchOrders()">

@@ -326,3 +326,31 @@
 [2025-11-24T16:28:46.100] [INFO] access - ::1 - "GET /favicon.ico HTTP/1.1" 500 1630 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
 [2025-11-24T16:28:51.285] [INFO] access - ::1 - "GET /favicon.ico HTTP/1.1" 500 1630 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
 [2025-11-24T16:28:51.687] [INFO] access - ::1 - "GET /favicon.ico HTTP/1.1" 500 1630 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-25T15:46:45.147] [INFO] access - Server is running on http://localhost:3000
+[2025-11-25T15:46:45.147] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-25T15:46:45.147] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-25T15:46:45.811] [INFO] access - MongoDB connection initialized
+[2025-11-25T15:46:45.811] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-25T15:46:45.812] [INFO] access - Notifications system initialized
+[2025-11-25T15:46:45.812] [INFO] access - GraphQL introspection enabled
+[2025-11-25T15:46:56.124] [INFO] access - ::1 - "POST /api/v1/login HTTP/1.1" 200 528 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-25T15:46:57.736] [INFO] access - ::1 - "GET /favicon.ico HTTP/1.1" 500 1630 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-25T15:46:57.751] [INFO] access - ::1 - "GET /api/v1/bills HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-25T15:46:57.806] [INFO] access - ::1 - "GET /api/v1/tenants HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-25T15:50:45.405] [INFO] access - Server is running on http://localhost:3000
+[2025-11-25T15:50:45.405] [INFO] access - GraphQL endpoint: http://localhost:3000/graphql
+[2025-11-25T15:50:45.405] [INFO] access - REST API documentation: http://localhost:3000/api-docs
+[2025-11-25T15:50:46.050] [INFO] access - MongoDB connection initialized
+[2025-11-25T15:50:46.051] [INFO] access - Notifications MongoDB connection initialized
+[2025-11-25T15:50:46.051] [INFO] access - Notifications system initialized
+[2025-11-25T15:50:46.051] [INFO] access - GraphQL introspection enabled
+[2025-11-25T15:50:52.524] [INFO] access - ::1 - "GET /favicon.ico HTTP/1.1" 500 1630 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-25T15:50:52.626] [INFO] access - ::1 - "GET /api/v1/bills HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-25T15:50:52.698] [INFO] access - ::1 - "GET /api/v1/tenants HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-25T15:51:01.186] [INFO] access - ::1 - "GET /favicon.ico HTTP/1.1" 500 1630 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-25T15:51:01.247] [INFO] access - ::1 - "GET /api/v1/categories HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-25T15:51:01.252] [INFO] access - ::1 - "GET /api/v1/subcategories HTTP/1.1" 500 1615 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-25T15:51:01.295] [INFO] access - ::1 - "GET /api/v1/services HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-25T15:51:36.145] [INFO] access - ::1 - "GET /favicon.ico HTTP/1.1" 500 1630 "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-25T15:51:36.165] [INFO] access - ::1 - "GET /api/v1/bills HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
+[2025-11-25T15:51:36.205] [INFO] access - ::1 - "GET /api/v1/tenants HTTP/1.1" 304 - "" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36"
