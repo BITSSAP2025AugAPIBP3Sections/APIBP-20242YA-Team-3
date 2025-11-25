@@ -1430,6 +1430,264 @@ router.post('/v1/categories/:categoryId/subcategories', authenticateToken, requi
     }
 });
 
+/**
+ * @swagger
+ * /v1/subcategories:
+ *   get:
+ *     summary: Get all subcategories
+ *     tags: [Services]
+ *     responses:
+ *       200:
+ *         description: List of all subcategories
+ */
+router.get('/v1/subcategories', async (req, res) => {
+    try {
+        await initializeDB();
+        const categories = await Category.find({});
+        
+        const allSubCategories = [];
+        categories.forEach(category => {
+            category.subServices.forEach(subService => {
+                allSubCategories.push({
+                    id: subService.id,
+                    subServiceName: subService.name,
+                    categoryId: category.id,
+                    categoryName: category.category,
+                    description: subService.description || ''
+                });
+            });
+        });
+        
+        res.json(allSubCategories);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /v1/subcategories:
+ *   post:
+ *     summary: Create a new subcategory
+ *     tags: [Services]
+ *     security:
+ *       - bearerAuth: []
+ */
+router.post('/v1/subcategories', authenticateToken, requireAdmin, async (req, res) => {
+    try {
+        await initializeDB();
+        
+        const { categoryId, name, description } = req.body;
+        
+        if (!name || !name.trim()) {
+            return res.status(400).json({ error: 'SubCategory name is required' });
+        }
+        
+        if (!categoryId) {
+            return res.status(400).json({ error: 'Category ID is required' });
+        }
+        
+        // Find the category
+        const category = await Category.findOne({ id: parseInt(categoryId) });
+        if (!category) {
+            return res.status(404).json({ error: 'Category not found' });
+        }
+        
+        // Check if subcategory with same name already exists in this category
+        const existingSubService = category.subServices.find(
+            sub => sub.name.toLowerCase() === name.trim().toLowerCase()
+        );
+        
+        if (existingSubService) {
+            return res.status(400).json({ 
+                error: 'SubCategory with this name already exists in this category',
+                existingId: existingSubService.id
+            });
+        }
+        
+        // Generate new subcategory ID
+        const baseId = parseInt(categoryId) * 100;
+        const maxSubId = category.subServices.length > 0
+            ? Math.max(...category.subServices.map(s => s.id))
+            : baseId;
+        
+        const newSubServiceId = maxSubId < baseId ? baseId + 1 : maxSubId + 1;
+        
+        // Create new subcategory
+        const newSubService = {
+            id: newSubServiceId,
+            name: name.trim(),
+            description: description || '',
+            services: []
+        };
+        
+        category.subServices.push(newSubService);
+        await category.save();
+        
+        res.status(201).json({
+            id: newSubService.id,
+            subServiceName: newSubService.name,
+            categoryId: category.id,
+            categoryName: category.category,
+            description: newSubService.description
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /v1/subcategories/{id}:
+ *   put:
+ *     summary: Update a subcategory
+ *     tags: [Services]
+ *     security:
+ *       - bearerAuth: []
+ */
+router.put('/v1/subcategories/:id', authenticateToken, requireAdmin, async (req, res) => {
+    try {
+        await initializeDB();
+        
+        const subCategoryId = parseInt(req.params.id);
+        const { name, description } = req.body;
+        
+        let updated = false;
+        const categories = await Category.find({});
+        
+        for (let category of categories) {
+            const subServiceIndex = category.subServices.findIndex(s => s.id === subCategoryId);
+            if (subServiceIndex !== -1) {
+                if (name) category.subServices[subServiceIndex].name = name.trim();
+                if (description !== undefined) category.subServices[subServiceIndex].description = description;
+                
+                await category.save();
+                
+                res.json({
+                    id: category.subServices[subServiceIndex].id,
+                    subServiceName: category.subServices[subServiceIndex].name,
+                    categoryId: category.id,
+                    categoryName: category.category,
+                    description: category.subServices[subServiceIndex].description || ''
+                });
+                updated = true;
+                break;
+            }
+        }
+        
+        if (!updated) {
+            return res.status(404).json({ error: 'SubCategory not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /v1/subcategories/{id}:
+ *   delete:
+ *     summary: Delete a subcategory
+ *     tags: [Services]
+ *     security:
+ *       - bearerAuth: []
+ */
+router.delete('/v1/subcategories/:id', authenticateToken, requireAdmin, async (req, res) => {
+    try {
+        await initializeDB();
+        
+        const subCategoryId = parseInt(req.params.id);
+        let deleted = false;
+        
+        const categories = await Category.find({});
+        
+        for (let category of categories) {
+            const subServiceIndex = category.subServices.findIndex(s => s.id === subCategoryId);
+            if (subServiceIndex !== -1) {
+                category.subServices.splice(subServiceIndex, 1);
+                await category.save();
+                deleted = true;
+                break;
+            }
+        }
+        
+        if (!deleted) {
+            return res.status(404).json({ error: 'SubCategory not found' });
+        }
+        
+        res.json({ success: true, message: 'SubCategory deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /v1/categories/{id}:
+ *   put:
+ *     summary: Update a category
+ *     tags: [Services]
+ *     security:
+ *       - bearerAuth: []
+ */
+router.put('/v1/categories/:id', authenticateToken, requireAdmin, async (req, res) => {
+    try {
+        await initializeDB();
+        
+        const categoryId = parseInt(req.params.id);
+        const { name, description } = req.body;
+        
+        const category = await Category.findOne({ id: categoryId });
+        if (!category) {
+            return res.status(404).json({ error: 'Category not found' });
+        }
+        
+        if (name) category.category = name.trim();
+        if (description !== undefined) category.description = description;
+        
+        await category.save();
+        
+        res.json({
+            id: category.id,
+            name: category.category,
+            description: category.description || '',
+            subServices: category.subServices.map(sub => ({
+                id: sub.id,
+                name: sub.name
+            }))
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+/**
+ * @swagger
+ * /v1/categories/{id}:
+ *   delete:
+ *     summary: Delete a category
+ *     tags: [Services]
+ *     security:
+ *       - bearerAuth: []
+ */
+router.delete('/v1/categories/:id', authenticateToken, requireAdmin, async (req, res) => {
+    try {
+        await initializeDB();
+        
+        const categoryId = parseInt(req.params.id);
+        
+        const result = await Category.deleteOne({ id: categoryId });
+        
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'Category not found' });
+        }
+        
+        res.json({ success: true, message: 'Category deleted successfully' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // ============================================================================
 // EXPORTS
 // ============================================================================
